@@ -41,7 +41,7 @@ function SignUp(props) {
                     <View>
                     <TouchableHighlight style={styles.mt_25}>
                       <View style={styles.button}>
-                        <Text style={[styles.color_white, styles.font_16]}>Sign Up</Text>
+                        <Text onPress={() => props.navigation.navigate('Welcome')} style={[styles.color_white, styles.font_16]}>Sign Up</Text>
                       </View>
                     </TouchableHighlight>
                     </View>
