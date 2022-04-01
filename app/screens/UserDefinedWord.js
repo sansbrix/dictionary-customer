@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   ScrollView
 } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function UserDefinedWord(props) {
   return (
@@ -16,7 +17,9 @@ function UserDefinedWord(props) {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>Back</Text>
+              <Text style={styles.back}>
+              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+              </Text>
               <Text style={styles.heading}>User Defined Word</Text>
             </View>
           </View>
@@ -72,7 +75,7 @@ function UserDefinedWord(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
+    backgroundColor: "#ffffff",
   },
   heading: {
     marginTop: "2%",
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "15%",
+    height: "18%",
     width: "100%",
   },
   innerContainer: {
@@ -114,7 +117,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   back: {
-    marginTop: "2%",
+    marginTop: "10%",
     fontSize: 15,
     color: "#ffffff",
   },

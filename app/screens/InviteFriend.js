@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableHighlight 
 } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function InviteFriend(props) {
     return (
@@ -16,7 +17,9 @@ function InviteFriend(props) {
             <View styles={styles.container}>
               <View style={styles.bg_white}>
                 <View style={styles.view}>
-                  <Text style={styles.back}>Back</Text>
+                  <Text style={styles.back}>
+                  <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+                  </Text>
                   <Text style={styles.register}>Send an invitation to join dictionary app with you!</Text>
                   <Text style={styles.heading}>Invite a Friend</Text>
                 </View>
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     back: {
-      marginTop: '2%',
+      marginTop: '10%',
       fontSize: 15,
       color: '#ffffff',
     },

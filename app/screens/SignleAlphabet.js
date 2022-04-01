@@ -8,6 +8,7 @@ import {
     ScrollView,
     TextInput,
 } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const image = require("../../assets/images/cat.png");
 
@@ -18,7 +19,9 @@ function SingleAlphabet(props) {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>Back</Text>
+              <Text style={styles.back}>
+              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+              </Text>
               <Text style={styles.heading}>Learn #Alphabet_name</Text>
             </View>
           </View>
@@ -49,7 +52,7 @@ function SingleAlphabet(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
+    backgroundColor: "#ffffff",
   },
   row: {
     display: 'flex',
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "19%",
+    height: "21%",
     width: "100%",
   },
   innerContainer: {
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 125
   },
   back: {
-    marginTop: "2%",
+    marginTop: "10%",
     fontSize: 15,
     color: "#ffffff",
   },

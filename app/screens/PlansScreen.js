@@ -5,6 +5,7 @@ import {
   View, 
   SafeAreaView,
 } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function PlansScreen(props) {
     return (
@@ -14,7 +15,9 @@ function PlansScreen(props) {
             <View styles={styles.container}>
               <View style={styles.bg_white}>
                 <View style={styles.view}>
-                  <Text style={styles.back}>Back</Text>
+                  <Text style={styles.back}>
+                  <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+                  </Text>
                   <Text style={styles.register}>Congratulations! Enjoy your free trial for 1 day!!!</Text>
                   <Text style={styles.heading}>More Subscriptions</Text>
                 </View>
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     back: {
-      marginTop: '2%',
+      marginTop: '10%',
       fontSize: 15,
       color: '#ffffff',
     },

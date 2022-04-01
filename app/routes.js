@@ -31,94 +31,95 @@ const Routes = () => (
    <Stack.Navigator>
      {/* <Stack.Screen
        name="Welcome"
-       component={Welcome Page}
-      //  options={{ title: 'Welcome' }}
-     /> */}
-     {/* <Stack.Screen 
+       component={WelcomePage}
+     />
+     <Stack.Screen 
          name="Sign Up" 
          component={SignUp}
-         // options={{ title: 'Signup' }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Login"
          component={Login}
-         // options={{ title: 'Login' }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Email Verification"
          component={OTPEmailVerification}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Plans"
          component={PlansScreen}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Free Trial Plan"
          component={FreeTrialPlan}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="1 Month Plan"
          component={AMonthTrialPlan}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="3 Months Plan"
          component={ThreeMonthsPlan}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="6 Months Plan"
          component={SixMonthsPlan}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="12 Months Plan"
          component={TwelveMonthsPlan}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Plan Payment"
          component={PlanPayment}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Payment Verification"
          component={PaymentOTPVerification}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Update Profile"
          component={UpdateProfile}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Learning Track"
          component={LearningTrack}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Invite A Friend"
          component={InviteFriend}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Translate Word"
          component={TranslateWord}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Words"
          component={Words}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Words Quiz"
          component={WordsQuiz}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Sentences"
          component={Sentence}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Add User-defined Word"
          component={UserDefinedWord}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
          name="Alphabets"
          component={Alphabets}
-      /> */}
+      />
       <Stack.Screen
          name="Signle Alphabet"
          component={SingleAlphabet}
+      /> */}
+      <Stack.Screen
+         name="Menu"
+         component={MainMenu}
       />
    </Stack.Navigator>
  </NavigationContainer>

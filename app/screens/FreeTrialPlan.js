@@ -5,6 +5,7 @@ import {
   View, 
   SafeAreaView,
 } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function FreeTrialPlan(props) {
     return (
@@ -14,7 +15,9 @@ function FreeTrialPlan(props) {
             <View styles={styles.container}>
               <View style={styles.bg_white}>
                 <View style={styles.view}>
-                  <Text style={styles.back}>Back</Text>
+                  <Text style={styles.back}>
+                  <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+                  </Text>
                   <Text style={styles.heading}>Free Trial Plan Details</Text>
                   <Text style={styles.register}>This is one day free Subscription. It has been active, as you have registered with us.</Text>
                   <View style={[styles.p_20, styles.outer_container]}>
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     back: {
-      marginTop: '2%',
+      marginTop: '10%',
       fontSize: 15,
       color: '#ffffff',
     },

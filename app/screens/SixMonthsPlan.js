@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableHighlight
 } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function SixMonthsPlan(props) {
     return (
@@ -17,7 +18,9 @@ function SixMonthsPlan(props) {
               <View styles={styles.container1}>
                 <View style={styles.bg_white}>
                   <View style={styles.view}>
-                    <Text style={styles.back}>Back</Text>
+                    <Text style={styles.back}>
+                    <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+                    </Text>
                     <Text style={styles.heading}>6 Months Plan Details</Text>
                     <Text style={styles.register}>After completion of this subscription you will be good to communicate in respective languages!</Text>
                     <View style={[styles.p_20, styles.outer_container]}>
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
       width: '100%',
     },
     back: {
-      marginTop: '2%',
+      marginTop: '10%',
       fontSize: 15,
       color: '#ffffff',
     },

@@ -5,14 +5,13 @@ import {
     View, 
     SafeAreaView, 
     Image,
-    ScrollView,
-    TouchableHighlight
+    ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const cat_image = require("../../assets/images/cat.png");
 
-function Words(props) {
+function ProfileMenu(props) {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -22,98 +21,50 @@ function Words(props) {
               <Text style={styles.back}>
               <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
               </Text>
-              <Text style={styles.register}>#lesson name</Text>
-              <Text style={styles.heading}>Lesson Wise Words</Text>
+              <Text style={styles.heading}>#User Name</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.pb_5, styles.outer_container]}>
+              <View style={[styles.p_20, styles.outer_container]}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
+                  <Ionicons name="md-language" size={32} color="#ff5733" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Word 1</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
+                    <Text style={styles.plan_label}>#Language</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
+                  <Ionicons name="md-play" size={32} color="#ff5733" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Word 2</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
+                    <Text style={styles.plan_label}>#Level</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
+                  <Ionicons name="md-settings" size={32} color="#ff5733" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Word 3</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
+                    <Text style={styles.plan_label}>Settings</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
+                  <Ionicons name="md-link" size={32} color="#ff5733" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Word 4</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
+                    <Text style={styles.plan_label}>Invite a Friend</Text>
                   </View>
                 </View>
-                <View>
-                  <TouchableHighlight style={styles.mt_25}>
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Take Quiz
-                      </Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
-              </View>
-              <View style={styles.bottom_div}>
-              <View style={[styles.plans_div, styles.bot_leraning]}>
-                  <View style={styles.dot}></View>
+                <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
+                  <Ionicons name="md-book" size={32} color="#ff5733" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Lesson 1 (0%)</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
-                    </Text>
+                    <Text style={styles.plan_label}>Dictionary Menu</Text>
                   </View>
                 </View>
               </View>
@@ -121,7 +72,6 @@ function Words(props) {
           </View>
         </View>
       </ScrollView>
-
     </SafeAreaView>
   );
 }
@@ -129,11 +79,11 @@ function Words(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
+    backgroundColor: "#ffffff",
   },
 
   heading: {
-    marginTop: "1%",
+    marginTop: "2%",
     fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
@@ -164,7 +114,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "20%",
+    height: "22%",
     width: "100%",
   },
   innerContainer: {
@@ -191,7 +141,6 @@ const styles = StyleSheet.create({
     width: "70%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: -8
   },
   color_white: {
     color: "#ffffff",
@@ -209,9 +158,6 @@ const styles = StyleSheet.create({
   },
   p_20: {
     padding: 20,
-  },
-  pb_5: {
-    paddingBottom: 5
   },
   another_link: {
     marginTop: 5,
@@ -238,7 +184,7 @@ const styles = StyleSheet.create({
   dot: {
     height: 20,
     width: 20,
-    backgroundColor: "#ffc30f",
+    backgroundColor: "#ff5733",
     borderRadius: 50,
     marginTop: 11,
   },
@@ -265,27 +211,15 @@ const styles = StyleSheet.create({
     height: 40,
   },
   cat_image_container: {
-    marginLeft: 0,
-    marginRight: 2,
+    marginLeft: 15,
+    marginRight: 15,
     padding: 0,
     height: 40,
-    width: 40,
+    width: 45,
+    borderColor: "#900C3F",
+    borderRightWidth: 4,
+    borderRadius: 10,
   },
-  bottom_div: {
-      height: 100,
-      width: '100%',
-      backgroundColor: '#900C3F',
-      position: 'relative',
-      bottom: -10,
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingBottom: 10
-  },
-  bot_leraning: {
-    backgroundColor: '#a2476a'
-  }
 });
 
-export default Words;
+export default ProfileMenu;

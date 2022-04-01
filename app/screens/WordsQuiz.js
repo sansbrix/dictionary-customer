@@ -8,6 +8,7 @@ import {
     ScrollView,
     TouchableHighlight
 } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const cat_image = require("../../assets/images/cat.png");
 
@@ -18,7 +19,9 @@ function WordsQuiz(props) {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>Back</Text>
+              <Text style={styles.back}>
+              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
+              </Text>
               <Text style={styles.register}>#lesson name</Text>
               <Text style={styles.heading}>Choose Correct Word</Text>
             </View>
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "19%",
+    height: "21%",
     width: "100%",
   },
   innerContainer: {
@@ -146,12 +149,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   back: {
-    marginTop: "2%",
+    marginTop: "10%",
     fontSize: 15,
     color: "#ffffff",
   },
   register: {
-    marginTop: "12%",
+    marginTop: "9%",
     fontSize: 15,
     color: "#ffffff",
   },
