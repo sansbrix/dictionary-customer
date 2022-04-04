@@ -48,7 +48,7 @@ function FreeTrialPlan(props) {
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Add on uptp 5 user defined words!</Text>
+                          <Text style={styles.plan_label}>Add on up to 5 user-defined words!</Text>
                       </View>
                     </View>
                 </View>

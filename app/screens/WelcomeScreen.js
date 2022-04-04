@@ -1,6 +1,5 @@
 import React from 'react';
-import { 
-    Button, 
+import {
     StyleSheet, 
     Text, 
     View, 
@@ -26,7 +25,8 @@ const WelcomeScreen = ({props}) => {
         <View style={styles.d_flex}>
           <TouchableHighlight style={styles.m_top}>
             <View style={styles.button}>
-              <Text style={[styles.color_white, styles.font_16]}>
+              <Text style={[styles.color_white, styles.font_16]}
+              onPress={() => props.navigation.navigate('SignUp')}>
                 Sign Up
               </Text>
             </View>

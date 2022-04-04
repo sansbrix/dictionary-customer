@@ -5,11 +5,12 @@ import {
   TextInput, 
   View, 
   SafeAreaView,
-  TouchableHighlight 
+  TouchableHighlight,
+  ScrollView
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-function SignUp(props) {
+const SignUp = (props) => {
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -20,27 +21,84 @@ function SignUp(props) {
                   <Text style={styles.back}>
                   <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
                   </Text>
-                  <Text style={styles.register}>Register with us to learn invaluable dictionary!!!</Text>
+                  {/* <Text style={styles.register}>Register with us to learn invaluable dictionary!!!</Text> */}
                   <Text style={styles.heading}>Sign Up</Text>
                 </View>
               </View>
+              <ScrollView>
               <View style={styles.darkContainer}>
-                <View style={styles.innerContainer}>
+              <View style={styles.innerContainer}>
                   <View style={styles.p_20}>
-                    <View> 
-                      <Text style={styles.label}>Your Email</Text>
-                      <TextInput
-                      style={[styles.input, styles.color_white]}
-                      placeholder="Email"
-                      />
-                    </View>
-                    <View>
-                      <Text style={styles.label}>Your Password</Text>
-                      <TextInput
-                        style={[styles.input, styles.color_white]}
-                        placeholder="Password"
-                      />
-                    </View>
+                  <View>
+                  <Text style={styles.label}>First Name</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="First Name"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Last Name</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Last Name"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Email</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Email"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Password</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Password"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Country</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Country"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>City</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="City"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Nationality</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Nationality"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Native Langugae</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Native Language"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Mobile Number</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="Mobile Number"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>DOB</Text>
+                  <TextInput
+                    style={[styles.input, styles.color_white]}
+                    placeholder="DOB"
+                  />
+                </View>
                     <View>
                     <TouchableHighlight style={styles.mt_25}>
                       <View style={styles.button}>
@@ -54,6 +112,7 @@ function SignUp(props) {
                   </View>
                 </View>
               </View>
+              </ScrollView>
             </View>
         </SafeAreaView>
     );
@@ -65,7 +124,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#ccc',
     },
     heading: {
-      marginTop: '1%',
+      marginTop: '12%',
       fontSize: 30,
       fontWeight: 'bold',
       color: '#ffffff'
@@ -94,7 +153,7 @@ const styles = StyleSheet.create({
     },
     bg_white: {
       backgroundColor: '#ffffff',
-      height: '25%',
+      height: '22%',
       width: '100%',
     },
     innerContainer: {

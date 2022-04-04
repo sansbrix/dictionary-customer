@@ -31,10 +31,9 @@ export default function RootStackNavigator() {
     return (
         <RootStack.Navigator>
             <RootStack.Group screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
-                {/* <RootStack.Screen name="MainMenu" component={MainMenu} /> */}
-                {/* <RootStack.Screen name="Login" component={Login} /> */}
                 <RootStack.Screen name="Welcome" component={WelcomeScreen}/>
-                {/* <RootStack.Screen name="Signup" component={SignUp} /> */}
+                <RootStack.Screen name="MainMenu" component={MainMenu} />
+                <RootStack.Screen name="Signup" component={SignUp} />
                 {/* <RootStack.Screen name="ProfileMenu" component={ProfileMenu} /> */}
                  {/* <RootStack.Screen name="Email Verification" component={OTPEmailVerification} /> */}
                 {/* <RootStack.Screen name="Plans" component={PlansScreen} /> */}

@@ -27,17 +27,17 @@ function TranslateWord(props) {
                     <ScrollView>
                     <View style={styles.p_20}>
                         <View>
-                        <Text style={styles.label}>From</Text>
-                        <TextInput
-                            style={[styles.input, styles.color_white]}
-                            placeholder="Arabic / Other"
-                        />
-                        </View>
-                        <View>
                         <Text style={styles.label}>To</Text>
                         <TextInput
                             style={[styles.input, styles.color_white]}
                             placeholder="Other / Arabic"
+                        />
+                        </View>
+                        <View>
+                        <Text style={styles.label}>From</Text>
+                        <TextInput
+                            style={[styles.input, styles.color_white]}
+                            placeholder="Arabic / Other"
                         />
                         </View>
                         <View>
