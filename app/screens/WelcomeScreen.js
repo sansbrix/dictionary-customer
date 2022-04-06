@@ -10,7 +10,7 @@ import {
   import Ionicons from '@expo/vector-icons/Ionicons';
 
 const image = require('../../assets/images/bg-2.jpeg');
-const logo = require('../../assets/images/logo.jpeg')
+const logo = require('../../assets/images/logo1.png')
 
 const WelcomeScreen = (props) => {
     return (

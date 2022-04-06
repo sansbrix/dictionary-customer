@@ -6,9 +6,10 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const UpdateProfile = (props) => {
   return (
@@ -17,19 +18,23 @@ const UpdateProfile = (props) => {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-            <TouchableOpacity style={{ ...styles.back,
-                borderRadius: 100, 
-                backgroundColor: "#9D908D", 
-                marginTop: 50, 
-                marginLeft: 1, 
-                width: 35,height: 35, 
-                justifyContent: "center", 
-                alignItems: "center" 
+              <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 1,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate('ProfileMenu')}>
-                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                onPress={() => props.navigation.navigate("ProfileMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
-                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
                   </Text>
                 </Text>
               </TouchableOpacity>
@@ -41,6 +46,16 @@ const UpdateProfile = (props) => {
               <View style={styles.p_20}>
                 <View>
                   <Text style={styles.label}>First Name</Text>
+                  <DropDownPicker
+                      items={[
+                          {label: 'English', value: 'en'},
+                          {label: 'Deutsch', value: 'de'},
+                          {label: 'French', value: 'fr'},
+                      ]}
+                      defaultIndex={0}
+                      containerStyle={{height: 40}}
+                      onChangeItem={item => console.log(item.label, item.value)}
+                  />
                   <TextInput
                     style={[styles.input, styles.color_white]}
                     placeholder="First Name"
@@ -110,9 +125,11 @@ const UpdateProfile = (props) => {
                   />
                 </View>
                 <View>
-                {/* show popup profile has been updated */}
-                  <TouchableOpacity style={styles.mt_25}
-                    onPress={()=>props.navigation.navigate('ProfileMenu')}>
+                  {/* show popup profile has been updated */}
+                  <TouchableOpacity
+                    style={styles.mt_25}
+                    onPress={() => props.navigation.navigate("ProfileMenu")}
+                  >
                     <View style={styles.button}>
                       <Text style={[styles.color_white, styles.font_16]}>
                         Update
@@ -127,7 +144,7 @@ const UpdateProfile = (props) => {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

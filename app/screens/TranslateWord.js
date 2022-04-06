@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     },
     bottom_heading: {
         fontSize: 17,
-        color: '#756765',
+        color: '#ffffff',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 12

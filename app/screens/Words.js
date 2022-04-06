@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   plan_sub_label_paid: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#756765",
+    color: "#ffffff",
     marginLeft: 10,
   },
   image: {
