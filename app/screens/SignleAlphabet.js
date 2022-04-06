@@ -6,7 +6,7 @@ import {
     SafeAreaView, 
     Image,
     ScrollView,
-    TextInput,
+    TouchableOpacity
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -19,9 +19,22 @@ function SingleAlphabet(props) {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>
-              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
-              </Text>
+            <TouchableOpacity style={{ ...styles.back,
+                borderRadius: 100, 
+                backgroundColor: "#9D908D", 
+                marginTop: 50, 
+                marginLeft: 1, 
+                width: 35,height: 35, 
+                justifyContent: "center", 
+                alignItems: "center" 
+                }}
+                onPress={() => props.navigation.navigate('Alphabets')}>
+                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                  <Text style={styles.back}>
+                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
+                </Text>
+              </TouchableOpacity>
               <Text style={styles.heading}>Learn #Alphabet_name</Text>
             </View>
           </View>
@@ -69,27 +82,27 @@ const styles = StyleSheet.create({
     width: "100%",
     margin: 5,
     padding: 10,
-    color: "#301934",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    backgroundColor: "#f6edfa",
+    backgroundColor: "#F4F9EB",
   },
   view: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
     borderBottomEndRadius: 50,
     paddingLeft: 20,
   },
   darkContainer: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "21%",
+    height: "25%",
     width: "100%",
   },
   innerContainer: {
@@ -111,7 +124,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#ffc30f",
+    backgroundColor: "#756765",
     padding: 10,
     borderRadius: 20,
     width: "70%",
@@ -127,7 +140,7 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
   },
   mt_25: {
     marginTop: 25,
@@ -138,7 +151,7 @@ const styles = StyleSheet.create({
   another_link: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -150,7 +163,7 @@ const styles = StyleSheet.create({
   plans_div: {
     width: "100%",
     padding: 15,
-    backgroundColor: "#f6edfa",
+    backgroundColor: "#F4F9EB",
     display: "flex",
     flexDirection: "row",
     marginTop: "auto",
@@ -160,13 +173,13 @@ const styles = StyleSheet.create({
   dot: {
     height: 20,
     width: 20,
-    backgroundColor: "#ff5733",
+    backgroundColor: "#756765",
     borderRadius: 50,
     marginTop: 11,
   },
   plan_label: {
     fontSize: 20,
-    color: "#301934",
+    color: "#82A4B7",
     fontWeight: "bold",
     marginLeft: 12,
     marginTop: 6,
@@ -180,7 +193,7 @@ const styles = StyleSheet.create({
   plan_sub_label_paid: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#ffc30f",
+    color: "#756765",
     marginLeft: 10,
   },
   image: {
@@ -195,7 +208,7 @@ const styles = StyleSheet.create({
     padding: 0,
     height: 40,
     width: 45,
-    borderColor: "#900C3F",
+    borderColor: "#9D908D",
     borderRightWidth: 4,
     borderLeftWidth: 4,
     borderRadius: 10,

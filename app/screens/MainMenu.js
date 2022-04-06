@@ -4,62 +4,84 @@ import {
     Text, 
     View, 
     SafeAreaView, 
-    Image,
+    TouchableOpacity,
     ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const cat_image = require("../../assets/images/cat.png");
-
-function MainMenu(props) {
+const MainMenu = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>
-              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
-              </Text>
+            <TouchableOpacity style={{ ...styles.back,
+                borderRadius: 100, 
+                backgroundColor: "#9D908D", 
+                marginTop: 50, 
+                marginLeft: 1, 
+                width: 35,height: 35, 
+                justifyContent: "center", 
+                alignItems: "center" 
+                }}
+                onPress={() => props.navigation.navigate('ProfileMenu')}>
+                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                  <Text style={styles.back}>
+                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
+                </Text>
+              </TouchableOpacity>
               <Text style={styles.heading}>Main Menu</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
               <View style={[styles.p_20, styles.outer_container]}>
+
+              <TouchableOpacity onPress={() => props.navigation.navigate('Translate Word')}>
                 <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Ionicons name="md-book" size={32} color="#ff5733" />
+                  <View style={styles.cat_image_container} >
+                  <Ionicons name="md-book" size={32} color="#756765" />
                   </View>
                   <View>
                     <Text style={styles.plan_label}>Dictionary</Text>
-                    
                   </View>
                 </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Ionicons name="md-bookmarks" size={32} color="#ff5733" />
+              </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => props.navigation.navigate('Learning Track')}>
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                    <Ionicons name="md-bookmarks" size={32} color="#756765" />
+                    </View>
+                    <View>
+                      <Text style={styles.plan_label}>Learning</Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.plan_label}>Learning</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={() => props.navigation.navigate('Add User-defined Word')}>
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                    <Ionicons name="md-pencil" size={32} color="#756765" />
+                    </View>
+                    <View>
+                      <Text style={styles.plan_label}>User Defined Words</Text>
+                    </View>
                   </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Ionicons name="md-pencil" size={32} color="#ff5733" />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={() =>props.navigation.navigate('Alphabets')}>
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                    <Ionicons name="md-text" size={32} color="#756765" />
+                    </View>
+                    <View>
+                      <Text style={styles.plan_label}>Alphabets</Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.plan_label}>User Defined Words</Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Ionicons name="md-text" size={32} color="#ff5733" />
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Alphabets</Text>
-                  </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -86,28 +108,28 @@ const styles = StyleSheet.create({
     margin: 5,
     borderWidth: 1,
     padding: 10,
-    borderColor: "#301934",
-    color: "#301934",
+    borderColor: "#82A4B7",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
   },
   view: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
     borderBottomEndRadius: 50,
     paddingLeft: 20,
   },
   darkContainer: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "22%",
+    height: "25%",
     width: "100%",
   },
   innerContainer: {
@@ -128,7 +150,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#ffc30f",
+    backgroundColor: "#756765",
     padding: 10,
     borderRadius: 20,
     width: "70%",
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
   },
   mt_25: {
     marginTop: 25,
@@ -155,7 +177,7 @@ const styles = StyleSheet.create({
   another_link: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -167,7 +189,7 @@ const styles = StyleSheet.create({
   plans_div: {
     width: "100%",
     padding: 15,
-    backgroundColor: "#f6edfa",
+    backgroundColor: "#F4F9EB",
     display: "flex",
     flexDirection: "row",
     marginTop: "auto",
@@ -177,13 +199,13 @@ const styles = StyleSheet.create({
   dot: {
     height: 20,
     width: 20,
-    backgroundColor: "#ff5733",
+    backgroundColor: "#756765",
     borderRadius: 50,
     marginTop: 11,
   },
   plan_label: {
     fontSize: 17,
-    color: "#301934",
+    color: "#82A4B7",
     fontWeight: "bold",
     marginLeft: 10,
   },
@@ -196,7 +218,7 @@ const styles = StyleSheet.create({
   plan_sub_label_paid: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#ffc30f",
+    color: "#756765",
     marginLeft: 10,
   },
   image: {
@@ -209,7 +231,7 @@ const styles = StyleSheet.create({
     padding: 0,
     height: 40,
     width: 45,
-    borderColor: "#900C3F",
+    borderColor: "#9D908D",
     borderRightWidth: 4,
     borderRadius: 10,
   },

@@ -5,39 +5,42 @@ import {
     View, 
     ImageBackground,
     Image,
-    TouchableHighlight
+    TouchableOpacity
   } from 'react-native';
   import Ionicons from '@expo/vector-icons/Ionicons';
 
-const image = require('../../assets/images/welcome_screen.jpeg');
+const image = require('../../assets/images/bg-2.jpeg');
 const logo = require('../../assets/images/logo.jpeg')
 
-const WelcomeScreen = ({props}) => {
+const WelcomeScreen = (props) => {
     return (
         <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <Ionicons style={styles.first} name="md-book" size={32} color="#ff5733" />
-        <Ionicons style={styles.second} name="md-language" size={32} color="#ff5733" />
-        <Ionicons style={styles.third} name="md-text" size={32} color="#ff5733" />
+        <Ionicons style={styles.first} name="md-book" size={32} color="#9D908D" />
+        <Ionicons style={styles.second} name="md-language" size={32} color="#9D908D" />
+        <Ionicons style={styles.third} name="md-text" size={32} color="#9D908D" />
         <View style={styles.logo_container}>
         <Image source={logo} style={styles.logo}></Image>
         </View>
         <View style={styles.d_flex}>
-          <TouchableHighlight style={styles.m_top}>
+          <TouchableOpacity style={styles.m_top}
+          onPress={() => props.navigation.navigate('Signup')}>
             <View style={styles.button}>
               <Text style={[styles.color_white, styles.font_16]}
-              onPress={() => props.navigation.navigate('SignUp')}>
+              >
                 Sign Up
               </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.m_top}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.m_top}
+          onPress={() => props.navigation.navigate('Login')}>
             <View style={styles.button}>
-              <Text style={[styles.color_white, styles.font_16]}>
+              <Text style={[styles.color_white, styles.font_16]}
+              >
                 Login
               </Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
         </ImageBackground>
     </View>
@@ -79,7 +82,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#ffc30f",
+    backgroundColor: "#756765",
+    color: "#ffffff",
     padding: 10,
     borderRadius: 20,
     width: "70%",
@@ -102,6 +106,9 @@ const styles = StyleSheet.create({
     position: 'relative',
     left: 300,
     top: 100
+  },
+  color_white: {
+    color: "#ffffff"
   }
 
 });

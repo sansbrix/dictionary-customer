@@ -4,15 +4,12 @@ import {
   Text,
   View,
   SafeAreaView,
-  Image,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const cat_image = require("../../assets/images/cat.png");
-
-function WordsQuiz(props) {
+const LearningMenu = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -31,7 +28,7 @@ function WordsQuiz(props) {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("LearningMenu")}
+                onPress={() => props.navigation.navigate("Learning Track")}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
@@ -39,76 +36,50 @@ function WordsQuiz(props) {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.register}>#lesson name</Text>
-              <Text style={styles.heading}>Choose Correct Word</Text>
+              <Text style={styles.heading}>Enhance Your Learning</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.pb_5, styles.outer_container]}>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
-                  </View>
-                </View>
-                <View>
-                  <TouchableOpacity style={styles.mt_25} onPress={() => props.navigation.navigate('LearningMenu')}>
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Submit
-                      </Text>
+              <View style={[styles.p_20, styles.outer_container]}>
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate("Words Quiz")}
+                >
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                      <Ionicons name="md-film" size={32} color="#756765" />
                     </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.bottom_div}>
-                <Text style={styles.bottom_heading}>#random word</Text>
-                <Text style={styles.bottom_heading}>#random word</Text>
-                <Text style={styles.bottom_heading}>#random word</Text>
-                <Text style={styles.bottom_heading}>#random word</Text>
+                    <View>
+                      <Text style={styles.plan_label}>Memory cards</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate("Words")}
+                >
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                      <Ionicons name="md-bug" size={32} color="#756765" />
+                    </View>
+                    <View>
+                      <Text style={styles.plan_label}>Words with pictures</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate("Sentences")}
+                >
+                  <View style={styles.plans_div}>
+                    <View style={styles.cat_image_container}>
+                      <Ionicons name="md-chatbox" size={32} color="#756765" />
+                    </View>
+                    <View>
+                      <Text style={styles.plan_label}>Sentences</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -116,7 +87,7 @@ function WordsQuiz(props) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -125,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    marginTop: "1%",
+    marginTop: "3%",
     fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
@@ -156,7 +127,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "23%",
+    height: "30%",
     width: "100%",
   },
   innerContainer: {
@@ -171,7 +142,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   register: {
-    marginTop: "9%",
+    marginTop: "12%",
     fontSize: 15,
     color: "#ffffff",
   },
@@ -200,9 +171,6 @@ const styles = StyleSheet.create({
   },
   p_20: {
     padding: 20,
-  },
-  pb_5: {
-    paddingBottom: 5,
   },
   another_link: {
     marginTop: 5,
@@ -256,34 +224,15 @@ const styles = StyleSheet.create({
     height: 40,
   },
   cat_image_container: {
-    marginLeft: 0,
-    marginRight: 2,
+    marginLeft: 15,
+    marginRight: 15,
     padding: 0,
     height: 40,
-    width: 40,
-  },
-  bottom_div: {
-    height: 100,
-    width: "100%",
-    backgroundColor: "#9D908D",
-    position: "relative",
-    bottom: -10,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingBottom: 10,
-  },
-  bot_leraning: {
-    backgroundColor: "#a2476a",
-  },
-  bottom_heading: {
-    fontSize: 17,
-    color: "#756765",
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: 12,
+    width: 45,
+    borderColor: "#9D908D",
+    borderRightWidth: 4,
+    borderRadius: 10,
   },
 });
 
-export default WordsQuiz;
+export default LearningMenu;

@@ -4,7 +4,7 @@ import {
   Text, 
   View, 
   SafeAreaView,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -16,9 +16,22 @@ function Sentence(props) {
             <View styles={styles.container}>
               <View style={styles.bg_white}>
                 <View style={styles.view}>
-                  <Text style={styles.back}>
-                  <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
-                  </Text>
+                <TouchableOpacity style={{ ...styles.back,
+                    borderRadius: 100, 
+                    backgroundColor: "#9D908D", 
+                    marginTop: 50, 
+                    marginLeft: 1, 
+                    width: 35,height: 35, 
+                    justifyContent: "center", 
+                    alignItems: "center" 
+                    }}
+                    onPress={() => props.navigation.navigate('LearningMenu')}>
+                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                      <Text style={styles.back}>
+                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                      </Text>
+                    </Text>
+                  </TouchableOpacity>
                   <Text style={styles.heading}>Sentences</Text>
                   <Text style={styles.register}>#lesson name</Text>
                   <View style={[styles.p_20, styles.outer_container]}>
@@ -57,11 +70,11 @@ function Sentence(props) {
               </View>
               <View style={styles.darkContainer}>
                   <View style={styles.innerContainer}>
-                  <TouchableHighlight style={styles.mt_10}>
+                  <TouchableOpacity style={styles.mt_10}>
                       <View style={styles.button}>
                         <Text style={[styles.color_white, styles.font_16]}>Next</Text>
                       </View>
-                  </TouchableHighlight>
+                  </TouchableOpacity>
                   </View>
                 </View>
             </View>
@@ -72,7 +85,7 @@ function Sentence(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#ccc',
+      backgroundColor: '#ffffff',
     },
 
     heading: {
@@ -86,32 +99,32 @@ const styles = StyleSheet.create({
       margin: 5,
       borderWidth: 1,
       padding: 10,
-      borderColor: '#301934',
-      color: '#301934',
+      borderColor: '#82A4B7',
+      color: '#82A4B7',
       marginLeft: 'auto',
       marginRight: 'auto',
       borderRadius: 10,
-      backgroundColor: '#301934'
+      backgroundColor: '#82A4B7'
     },
     view: {
-      backgroundColor: '#301934',
+      backgroundColor: '#82A4B7',
       height: '100%',
       width: '100%',
       borderBottomEndRadius: 50,
       paddingLeft: 20,
     },
     darkContainer: {
-      backgroundColor: '#301934',
+      backgroundColor: '#82A4B7',
       height: '100%',
       width: '100%',
     },
     bg_white: {
-      backgroundColor: '#900C3F',
+      backgroundColor: '#9D908D',
       height: '55%',
       width: '100%',
     },
     innerContainer: {
-      backgroundColor: '#900C3F',
+      backgroundColor: '#9D908D',
       borderTopLeftRadius: 50,
       height: '100%',
       width: '100%',
@@ -128,7 +141,7 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: "center",
-        backgroundColor: "#ffc30f",
+        backgroundColor: "#756765",
         padding: 10,
         borderRadius: 20,
         width: '70%',
@@ -144,7 +157,7 @@ const styles = StyleSheet.create({
     label: {
       marginTop: 5,
       fontSize: 15,
-      color: '#301934'
+      color: '#82A4B7'
     },
     mt_25: {
       marginTop: 25
@@ -155,7 +168,7 @@ const styles = StyleSheet.create({
     another_link: {
       marginTop: 5,
       fontSize: 15,
-      color: '#301934',
+      color: '#82A4B7',
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -178,13 +191,13 @@ const styles = StyleSheet.create({
     dot: {
         height: 20,
         width: 20,
-        backgroundColor: '#ff5733',
+        backgroundColor: '#756765',
         borderRadius: 50,
         marginTop: 5
     },
     plan_label: {
         fontSize: 17,
-        color: '#301934',
+        color: '#82A4B7',
         fontWeight: 'bold',
         marginLeft: 10
     },
@@ -197,12 +210,12 @@ const styles = StyleSheet.create({
     plan_sub_label_paid: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: '#ffc30f',
+        color: '#756765',
         marginLeft: 10
     },
     bottom_heading: {
         fontSize: 16,
-        color: '#ffc30f',
+        color: '#756765',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 15

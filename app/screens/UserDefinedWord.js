@@ -5,7 +5,7 @@ import {
   TextInput,
   View,
   SafeAreaView,
-  TouchableHighlight,
+  TouchableOpacity,
   ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,9 +17,22 @@ function UserDefinedWord(props) {
         <View styles={styles.container}>
           <View style={styles.bg_white}>
             <View style={styles.view}>
-              <Text style={styles.back}>
-              <Ionicons name="md-arrow-back" size={24} color="#ff5733" />
-              </Text>
+            <TouchableOpacity style={{ ...styles.back,
+                borderRadius: 100, 
+                backgroundColor: "#9D908D", 
+                marginTop: 50, 
+                marginLeft: 1, 
+                width: 35,height: 35, 
+                justifyContent: "center", 
+                alignItems: "center" 
+                }}
+                onPress={() => props.navigation.navigate('MainMenu')}>
+                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                  <Text style={styles.back}>
+                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
+                </Text>
+              </TouchableOpacity>
               <Text style={styles.heading}>User Defined Word</Text>
             </View>
           </View>
@@ -55,13 +68,14 @@ function UserDefinedWord(props) {
                   />
                 </View>
                 <View>
-                  <TouchableHighlight style={styles.mt_25}>
+                  <TouchableOpacity style={styles.mt_25}
+                  onPress={() => props.navigation.navigate('MainMenu')}>
                     <View style={styles.button}>
                       <Text style={[styles.color_white, styles.font_16]}>
                         Add
                       </Text>
                     </View>
-                  </TouchableHighlight>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -78,36 +92,37 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   heading: {
-    marginTop: "2%",
+    marginTop: "5%",
     fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
+    marginBottom: 60,
   },
   input: {
     width: "100%",
     margin: 5,
     padding: 10,
-    color: "#301934",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    backgroundColor: "#f6edfa",
+    backgroundColor: "#F4F9EB",
   },
   view: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
     borderBottomEndRadius: 50,
     paddingLeft: 20,
   },
   darkContainer: {
-    backgroundColor: "#301934",
+    backgroundColor: "#82A4B7",
     height: "100%",
     width: "100%",
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "18%",
+    height: "20%",
     width: "100%",
   },
   innerContainer: {
@@ -128,7 +143,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#ffc30f",
+    backgroundColor: "#756765",
     padding: 10,
     borderRadius: 20,
     width: "70%",
@@ -144,7 +159,7 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
   },
   mt_25: {
     marginTop: 25,
@@ -155,7 +170,7 @@ const styles = StyleSheet.create({
   another_link: {
     marginTop: 5,
     fontSize: 15,
-    color: "#301934",
+    color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
   },
