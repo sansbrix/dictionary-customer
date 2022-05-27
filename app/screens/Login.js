@@ -30,7 +30,7 @@ const Login = (props) => {
     ...defaultErrors
   })
 
-  onLoginClickHandler = () => {
+  const onLoginClickHandler = () => {
     // Change the state
     setErrors({ ...defaultErrors });
     UserLogin(data).then(async (response_) => {
