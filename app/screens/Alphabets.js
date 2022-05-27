@@ -9,8 +9,42 @@ import {
   TextInput,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { listData } from "../api";
+import { consoleErrors } from "../helper";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const Alphabets = (props) => {
+  const [data, setData] = React.useState([]);
+  const [lang, setlang] = React.useState([]);
+
+  React.useEffect(() => {
+    listData({param: 'l'})
+      .then((response) => {
+        const languages = response.data.data.map((lan) => {
+          return {
+            label: lan["country"]["country"]+"-"+lan["language"],
+            value: lan["id"]
+          };
+        });
+        setlang(languages)
+        console.log(languages)
+      })
+      .catch((error) => consoleErrors(error));
+  }, []);
+
+  const onChangeLanguageHandler = (lang_id) => {
+    listData({lang_id: lang_id})
+      .then((response) => {
+        var output = [];
+        for (let i = 0; i < response.data.data.length; i += 4) {
+          output.push([...response.data.data.slice(i, i + 4)]);
+        }
+        console.log(output);
+        setData(output);
+      })
+      .catch((error) => consoleErrors(error));
+    };
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -45,207 +79,43 @@ const Alphabets = (props) => {
               <View style={[styles.p_20, styles.outer_container]}>
                 <View>
                   <Text style={styles.label}>Select Language</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
-                    placeholder="Select Language"
-                  />
+                  <DropDownPicker
+                    items={lang}
+                    defaultIndex={0}
+                    containerStyle={{height: 40}}
+                    onChangeItem={(item) => onChangeLanguageHandler(item.value)}
+                />
                 </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
+
+                {data.slice(0,4).map((arr, index) => {
+                  return (
+                    <View style={styles.row} key={`alph_row${index}`}>
+                      {(() => {
+                        if (Array.isArray(arr)) {
+                          return arr.map((item, ind) => {
+                            return (
+                              <TouchableOpacity
+                                key={`alpha_col-${ind}`}
+                                onPress={() =>
+                                  props.navigation.navigate("Signle Alphabet",{alpha_id: item.id})
+                                }
+                              >
+                                <View style={styles.cat_image_container}>
+                                  <Text style={styles.plan_label}>
+                                    {item.alphabet}
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+                            );
+                          });
+                        } else {
+                          return null;
+                        }
+                        
+                      })()}
                     </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Signle Alphabet")}
-                  >
-                    <View style={styles.cat_image_container}>
-                      <Text style={styles.plan_label}>A</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                  );
+                })}
               </View>
             </View>
           </View>

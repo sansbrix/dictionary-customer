@@ -9,8 +9,103 @@ import {
   TextInput
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {translateWordApi, listData} from "../api";
+import {consoleErrors} from "../helper";
+import DropDownPicker from "react-native-dropdown-picker";
+import Autocomplete from 'react-native-autocomplete-input';
+const TranslateWord=(props)=> {
 
-function TranslateWord(props) {
+  const [words, setwords] = React.useState([]);
+  const [from, setFrom] = React.useState([]);
+  const [data, setData] = React.useState({
+    from : "arabic",
+    to : "other",
+    word : ""
+  });
+
+  const [word, setWord] = React.useState("");
+
+  const defaultErrors = {
+    from : "",
+    word : "",
+    to : "",
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+
+  const onToHandler = (value) => {
+    const to = value;
+    if(to == 'arabic') {
+      setData({...data, from: 'other', to: value})
+    } else {
+      setData({...data, from: 'arabic' ,to: value})
+    }
+  }
+
+  
+
+  const fetchWords = () => {
+    listData({
+      "param" : "w",
+      "u_defined" : false,
+      ...data,
+      "word": word
+    }).then((response) => {
+      console.log("Respons---", response)
+      setwords([
+        ...response?.data?.data
+      ])
+      
+    }).catch((error) => {
+      console.log(error);consoleErrors(error)});
+  }
+
+  React.useState(() => {
+    fetchWords();
+  }, [word]);
+
+  const onTranslateWordClickHandler = () => {
+    // Change the state
+    setErrors({ ...defaultErrors });
+    console.log("Data", data);
+    translateWordApi(data).then((response_) => {
+      try {
+        response = response_.data;
+        console.log("response", response)
+        if(!response.status) {
+          if(response.error) {
+            const errors_ = response.error;
+            let errorsResponse = {};
+            Object.keys(errors_).forEach((er) => {
+              if(Array.isArray(errors_[er])) {
+                errorsResponse[er] = errors_[er][0];
+              }
+            });
+            // Set the state
+            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          } else {
+            setErrors({...defaultErrors, message: response.message, status: response.status});
+          }
+        } else {
+          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          // setTimeout(() => {
+          //   props.navigation.navigate('ProfileMenu')
+          // }, 3000);
+        }
+      } catch(e) {
+        console.log("Error", e);
+      }
+      
+    }).catch((err) => {
+      console.log("err1", err.status)
+      console.log("err", JSON.stringify(err));
+    })
+    
+  }
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -40,31 +135,74 @@ function TranslateWord(props) {
                     <ScrollView>
                     <View style={styles.p_20}>
                         <View>
+                        {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                         <Text style={styles.label}>To</Text>
-                        <TextInput
-                            style={[styles.input, styles.color_white]}
+                        {/* <TextInput
+                            onChangeText={(value) => setData({...data, to: value})}
+                            style={[styles.input]}
                             placeholder="Other / Arabic"
+                        /> */}
+                        <DropDownPicker
+                            items={[
+                              {label: 'Arabic', value: 'arabic'},
+                              {label: 'Other', value: 'other'}
+                            ]}
+                            // defaultIndex={0}
+                            value={data.to}
+                            containerStyle={{height: 40}}
+                            placeholder="Other / Arabic"
+                            onChangeItem={(item) => onToHandler(item.value)}
                         />
+                        {errors.to ? <Text style={{color: 'red'}}>{errors.to}</Text> : null}
                         </View>
                         <View>
                         <Text style={styles.label}>From</Text>
-                        <TextInput
-                            style={[styles.input, styles.color_white]}
+                        {/* <TextInput
+                            onChangeText={(value) => setData({...data, from: value})}
+                            style={[styles.input]}
                             placeholder="Arabic / Other"
+                        /> */}
+                        <DropDownPicker
+                            items={[
+                              {label: 'Other', value: 'other'},
+                              {label: 'Arabic', value: 'arabic'},
+                            ]}
+                            value={data.from}
+                            // defaultIndex={0}
+                            containerStyle={{height: 40}}
+                            placeholder="Other / Arabic"
                         />
+                        {errors.from ? <Text style={{color: 'red'}}>{errors.from}</Text> : null}
                         </View>
                         <View>
-                        <Text style={styles.label}>Word to translate</Text>
+                        {/* <Text style={styles.label}>Word to translate</Text>
                         <TextInput
-                            style={[styles.input, styles.color_white]}
+                            onChangeText={(value) => setData({...data, word: value})}
+                            style={[styles.input]}
                             placeholder="Word"
-                        />
+                        /> */}
+                        {/* render() { */}
+                              <Autocomplete
+                                data={words}
+                                value={word}
+                                onChangeText={(text) => setData({word: text})}
+                                flatListProps={{
+                                  keyExtractor: (_, idx) => idx,
+                                  renderItem: ({item}) => {
+                                  console.log(item.id); return(<Text>{item.id}</Text>)},
+                                }}
+                              />
+                            {/* ); */}
+                          {/* } */}
+                        {errors.word ? <Text style={{color: 'red'}}>{errors.word}</Text> : null}
                         </View>
                         <View>
-                        <TouchableOpacity style={styles.mt_25}>
+                        <TouchableOpacity style={styles.mt_25}
+                        onPress={() =>  onTranslateWordClickHandler() }
+                        >
                             <View style={styles.button}>
                             <Text style={[styles.color_white, styles.font_16]}>
-                                Update
+                                Translate
                             </Text>
                             </View>
                         </TouchableOpacity>

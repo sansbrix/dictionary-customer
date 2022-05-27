@@ -9,9 +9,69 @@ import {
   ScrollView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import DropDownPicker from "react-native-dropdown-picker";
+import {getUserProfile, UpdateUserProfile} from "../api";
+import { consoleErrors } from "../helper";
 
 const UpdateProfile = (props) => {
+  const [data, setData] = React.useState({
+    param: "",
+
+  });
+
+  const defaultErrors = {
+    param: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  });
+
+  React.useEffect(() => {
+    getUserProfile().then((response) => {
+      console.log("Response", response.data);
+      setData({
+        ...response.data,
+      })
+    }).catch((error) => consoleErrors(error));
+  }, []);
+
+  onProfileUpdateClickHandler = () => {
+    console.log("Data")
+    // Change the state
+    setErrors({ ...defaultErrors });
+    UpdateUserProfile(data).then((response_) => {
+      try {
+        response = response_.data;
+        if(!response.status) {
+          if(response.error) {
+            const errors_ = response.error;
+            let errorsResponse = {};
+            Object.keys(errors_).forEach((er) => {
+              if(Array.isArray(errors_[er])) {
+                errorsResponse[er] = errors_[er][0];
+              }
+            });
+            // Set the state
+            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          } else {
+            setErrors({...defaultErrors, message: response.message, status: response.status});
+          }
+        } else {
+          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          setTimeout(() => {
+            props.navigation.navigate('ProfileMenu')
+          }, 3000);
+        }
+      } catch(e) {
+        console.log("Error", e);
+      }
+      
+    }).catch((error) => {
+      consoleErrors(error);
+    })
+    
+  }
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -45,90 +105,124 @@ const UpdateProfile = (props) => {
             <View style={styles.innerContainer}>
               <View style={styles.p_20}>
                 <View>
+                {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                   <Text style={styles.label}>First Name</Text>
-                  <DropDownPicker
-                      items={[
-                          {label: 'English', value: 'en'},
-                          {label: 'Deutsch', value: 'de'},
-                          {label: 'French', value: 'fr'},
-                      ]}
-                      defaultIndex={0}
-                      containerStyle={{height: 40}}
-                      onChangeItem={item => console.log(item.label, item.value)}
-                  />
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, first_name: value})}
+                    style={[styles.input]}
                     placeholder="First Name"
+                    value={data.first_name}
+                    
                   />
+                  {errors.first_name ? <Text style={{color: 'red'}}>{errors.first_name}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Last Name</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, last_name: value})}
+                    style={[styles.input]}
                     placeholder="Last Name"
+                    value={data.last_name}
                   />
+                  {errors.last_name ? <Text style={{color: 'red'}}>{errors.last_name}</Text> : null}
                 </View>
-                <View>
+                {/* <View>
                   <Text style={styles.label}>Email</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, email: value})}
+                    style={[styles.input]}
                     placeholder="Email"
                   />
-                </View>
+                  {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
+                </View> */}
                 <View>
                   <Text style={styles.label}>Password</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    secureTextEntry={true}
+                    onChangeText={(value) => setData({...data, password: value})}
+                    style={[styles.input]}
                     placeholder="Password"
+                    value={data.password}
                   />
+                  {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Country</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, country: value})}
+                    style={[styles.input]}
                     placeholder="Country"
+                    value={data.country}
                   />
+                  {errors.country ? <Text style={{color: 'red'}}>{errors.country}</Text> : null}
+                </View>
+                <View>
+                  <Text style={styles.label}>State</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, state: value})}
+                    style={[styles.input]}
+                    placeholder="State"
+                    value={data.state}
+                  />
+                  {errors.state ? <Text style={{color: 'red'}}>{errors.state}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>City</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, city: value})}
+                    style={[styles.input]}
                     placeholder="City"
+                    value={data.city}
                   />
+                  {errors.city ? <Text style={{color: 'red'}}>{errors.city}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Nationality</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, nationality: value})}
+                    style={[styles.input]}
                     placeholder="Nationality"
+                    value={data.nationality}
                   />
+                  {errors.nationality ? <Text style={{color: 'red'}}>{errors.nationality}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Native Langugae</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, native_language: value})}
+                    style={[styles.input]}
                     placeholder="Native Language"
+                    value={data.native_language}
                   />
+                  {errors.native_language ? <Text style={{color: 'red'}}>{errors.native_language}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Mobile Number</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, mobile_number: value})}
+                    style={[styles.input]}
                     placeholder="Mobile Number"
+                    value={data.mobile_number}
                   />
+                  {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>DOB</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, date_of_birth: value})}
+                    style={[styles.input]}
                     placeholder="DOB"
+                    value={data.date_of_birth}
                   />
+                  {errors.date_of_birth ? <Text style={{color: 'red'}}>{errors.date_of_birth}</Text> : null}
                 </View>
                 <View>
                   {/* show popup profile has been updated */}
                   <TouchableOpacity
                     style={styles.mt_25}
-                    onPress={() => props.navigation.navigate("ProfileMenu")}
+                    onPress={() => onProfileUpdateClickHandler()
+                      // props.navigation.navigate("ProfileMenu")
+                    }
                   >
                     <View style={styles.button}>
                       <Text style={[styles.color_white, styles.font_16]}>

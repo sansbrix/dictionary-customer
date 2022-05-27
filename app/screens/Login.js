@@ -8,9 +8,73 @@ import {
   TouchableOpacity,
   ScrollView
 } from 'react-native';
+import {UserLogin} from "../api";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as SecureStore from 'expo-secure-store';
 
 const Login = (props) => {
+  const [data, setData] = React.useState({
+    email: "",
+    password: ""
+  });
+
+  const defaultErrors = {
+    email: "",
+    password: "",
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+
+  onLoginClickHandler = () => {
+    // Change the state
+    setErrors({ ...defaultErrors });
+    UserLogin(data).then(async (response_) => {
+      try {
+        response = response_.data;
+        console.log(response);
+        if(!response.status) {
+          if(response.error) {
+            const errors_ = response.error;
+            let errorsResponse = {};
+            Object.keys(errors_).forEach((er) => {
+              if(Array.isArray(errors_[er])) {
+                errorsResponse[er] = errors_[er][0];
+              }
+            });
+            // Set the state
+            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          } else if(response.email_not_verified){
+            props.navigation.navigate("Email Verification", {email: data.email});
+          } else {
+            setErrors({...defaultErrors, message: response.message, status: response.status});
+          }
+        } else {
+          await SecureStore.setItemAsync('access_token', response.token);
+          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          setTimeout(() => {
+            showMessage({
+              message: "Simple message",
+              type: "info",
+            });
+            props.navigation.navigate('ProfileMenu')
+          }, 3000);
+        }
+      } catch(e) {
+        console.log("Error", e);
+      }
+      
+    }).catch((err) => {
+      console.log("err1", err.status)
+      console.log("err", JSON.stringify(err));
+    })
+    
+  }
+
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -43,22 +107,28 @@ const Login = (props) => {
                 <View style={styles.innerContainer}>
                   <View style={styles.p_20}>
                     <View> 
+                    {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                       <Text style={styles.label}>Your Email</Text>
                       <TextInput
-                      style={[styles.input, styles.color_white]}
+                      onChangeText={(value) => setData({...data, email: value})}
+                      style={[styles.input]}
                       placeholder="Email"
                       />
+                      {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
                     </View>
                     <View>
                       <Text style={styles.label}>Your Password</Text>
                       <TextInput
-                        style={[styles.input, styles.color_white]}
+                        secureTextEntry={true}
+                        onChangeText={(value) => setData({...data, password: value})}
+                        style={[styles.input]}
                         placeholder="Password"
                       />
+                      {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
                     </View>
                     <View>
                     <TouchableOpacity style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                    onPress={() => props.navigation.navigate('ProfileMenu')}>
+                    onPress={() =>  onLoginClickHandler() }>
                         <Text style={[styles.color_white, styles.font_16]}>Login</Text>
                     </TouchableOpacity>
                     </View>

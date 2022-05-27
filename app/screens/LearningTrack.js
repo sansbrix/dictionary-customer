@@ -9,10 +9,29 @@ import {
     TouchableOpacity
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {listData} from '../api'
+import { consoleErrors } from "../helper";
 
 const cat_image = require("../../assets/images/cat.png");
 
-function LearningTrack(props) {
+const LearningTrack = (props) => {
+  
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    listData({"param" : "cat"}).then((response) => {
+      console.log("Response", response.data);
+      setData([
+        ...response.data?.data,
+      ])
+    }).catch((error) => consoleErrors(error));
+  }, []);
+
+  onLessonClickHandler = (cat_id) => {
+    // localStorage.setItem("cat_id", cat_id)
+    props.navigation.navigate('LearningMenu', {cat_id : cat_id})
+  }
+  
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -42,7 +61,9 @@ function LearningTrack(props) {
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
               <View style={[styles.p_20, styles.outer_container]}>
-              <TouchableOpacity onPress={()=>props.navigation.navigate('LearningMenu')}>
+              {data.map((item,index)=>{
+                return (
+                  <TouchableOpacity key={`learning-${index}`} onPress={() =>onLessonClickHandler(item.id)}>
                 <View style={styles.plans_div}>
                   <View style={styles.dot}></View>
                   <View style={styles.cat_image_container}>
@@ -53,89 +74,15 @@ function LearningTrack(props) {
                     ></Image>
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Lesson 1 (0%)</Text>
+                    <Text style={styles.plan_label}>Lesson {index+1} (0%)</Text>
                     <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
+                      {item.category}
                     </Text>
                   </View>
                 </View>
               </TouchableOpacity>
-
-              <TouchableOpacity onPress={()=>props.navigation.navigate('LearningMenu')}>
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Lesson 2</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
-                    </Text>
-                  </View>
-                </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>props.navigation.navigate('LearningMenu')}>
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Lesson 3</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
-                    </Text>
-                  </View>
-                </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>props.navigation.navigate('LearningMenu')}>
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Lesson 4</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
-                    </Text>
-                  </View>
-                </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>props.navigation.navigate('LearningMenu')}>
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Lesson 5</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Category Name
-                    </Text>
-                  </View>
-                </View>
-                </TouchableOpacity>
+                )
+              })}
               </View>
             </View>
           </View>

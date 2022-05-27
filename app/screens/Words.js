@@ -9,10 +9,12 @@ import {
     TouchableOpacity
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import {listData} from "../api"
+import { consoleErrors } from "../helper";
 const cat_image = require("../../assets/images/cat.png");
 
-function Words(props) {
+const Words = (props) => {
+  const cat_id = props.route.params.cat_id;
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -28,7 +30,7 @@ function Words(props) {
                 justifyContent: "center", 
                 alignItems: "center" 
                 }}
-                onPress={() => props.navigation.navigate('LearningMenu')}>
+                onPress={() => props.navigation.navigate('LearningMenu',{cat_id: cat_id})}>
                 <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
                   <Text style={styles.back}>
                       <Ionicons name="md-arrow-back" size={24} color="#756765" />
@@ -42,7 +44,10 @@ function Words(props) {
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
               <View style={[styles.p_20, styles.pb_5, styles.outer_container]}>
-                <View style={styles.plans_div}>
+               {data.slice(0,2).map((item,index)=>{
+                 console.log(index, "index")
+                return (
+                  <View style={styles.plans_div} key={`word-${index}`}>
                   <View style={styles.cat_image_container}>
                     <Image
                       source={cat_image}
@@ -51,66 +56,23 @@ function Words(props) {
                     ></Image>
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Word 1</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
+                    <Text style={styles.plan_label}>Word:{item.word}</Text>
+                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
+                      Latin Formal:{item.latin_formal}
+                    </Text>
+                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
+                      Latin Slanged:{item.latin_slanged}
+                    </Text>
+                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
+                      Slanged Arabic:{item.slanged_arabic}
+                    </Text>
+                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
+                      Arabic Word:{item.arabic_word}
                     </Text>
                   </View>
                 </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Word 2</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Word 3</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Word 4</Text>
-                    <Text style={styles.plan_sub_label_paid}>
-                      #Oher words (arabic,latin,formal, etc... )
-                    </Text>
-                  </View>
-                </View>
-                {/* <View>
-                  <TouchableOpacity style={styles.mt_25}>
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Take Quiz
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View> */}
+                )
+               })}
               </View>
               <View style={styles.bottom_div}>
               <View style={[styles.plans_div, styles.bot_leraning]}>
@@ -124,7 +86,7 @@ function Words(props) {
                   </View>
                   <View>
                     <Text style={styles.plan_label}>Lesson 1 (0%)</Text>
-                    <Text style={styles.plan_sub_label_paid}>
+                    <Text style={[styles.plan_sub_label_paid, styles.color_white]}>
                       #Category Name
                     </Text>
                   </View>
@@ -270,8 +232,10 @@ const styles = StyleSheet.create({
   plan_sub_label_paid: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#ffffff",
     marginLeft: 10,
+  },
+  sub_label_color: {
+    color: '#756765'
   },
   image: {
     width: 40,

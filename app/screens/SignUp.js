@@ -8,9 +8,64 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import {sendOtp, UserSignup} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { consoleErrors } from "../helper";
+
 
 const SignUp = (props) => {
+  const [disable, disableButton] = React.useState(false);
+  const [data, setData] = React.useState({
+    email: "",
+    password: "",
+    mobile_number: "",
+  });
+
+  const defaultErrors = {
+    email: "",
+    password: "",
+    mobile_number: "",
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+  onSignUpClickHandler = () => {
+    disableButton(true);
+    // Change the state
+    setErrors({ ...defaultErrors });
+    UserSignup(data).then((response_) => {
+      const response = response_.data;
+      if(!response.status) {
+        if(response.error) {
+          const errors_ = response.error;
+          let errorsResponse = {};
+          Object.keys(errors_).forEach((er) => {
+            if(Array.isArray(errors_[er])) {
+              errorsResponse[er] = errors_[er][0];
+            }
+          });
+          // Set the state
+          setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+        } else {
+          setErrors({...defaultErrors, message: response.message, status: response.status});
+        }
+      } else {
+        setErrors({ ...defaultErrors, message: response.message, status: response.status });
+        setTimeout(() => {
+          props.navigation.navigate("Login");
+        }, 3000);
+      }
+
+    }).catch((err) => {
+      consoleErrors(err);
+      console.log("err1", err.status)
+      console.log("err", JSON.stringify(err));
+    }).finally(() => disableButton(false));
+    
+  }
   // console.log(props);
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
@@ -59,24 +114,40 @@ const SignUp = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               <View>
+                {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                 <Text style={styles.label}>Email</Text>
                 <TextInput
-                  style={[styles.input, styles.color_white]}
+                  onChangeText={(value) => setData({...data, email: value})}
+                  style={[styles.input]}
                   placeholder="Email"
                 />
+                {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
+              </View>
+              <View>
+                <Text style={styles.label}>Mobile</Text>
+                <TextInput
+                  onChangeText={(value) => setData({...data, mobile_number: value})}
+                  style={[styles.input]}
+                  placeholder="Mobile Number"
+                />
+                {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
               </View>
               <View>
                 <Text style={styles.label}>Password</Text>
                 <TextInput
-                  style={[styles.input, styles.color_white]}
+                  secureTextEntry={true}
+                  onChangeText={(value) => setData({...data, password: value})}
+                  style={[styles.input]}
                   placeholder="Password"
                 />
+                {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
               </View>
               <View>
                 <TouchableOpacity
+                  disabled={disable}
                   style={{ ...styles.mt_25, ...styles.mb_25, ...styles.button }}
                   onPress={() =>
-                    props.navigation.navigate("Email Verification")
+                    onSignUpClickHandler()
                   }
                 >
                   <Text style={[styles.color_white, styles.font_16]}>

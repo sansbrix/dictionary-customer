@@ -9,8 +9,104 @@ import {
   ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {addUserDefinedWords, listData} from "../api";
+import { consoleErrors } from "../helper";
+import DropDownPicker from "react-native-dropdown-picker";
 
 function UserDefinedWord(props) {
+  const [cat, setCat] = React.useState([]);
+  const [cntry, setCntry] = React.useState([]);
+  const [data, setData] = React.useState({
+    category_id: "",
+    country_id: "",
+    arabic_word: "",
+    slanged_arabic: "",
+    status: 'pending'
+  });
+
+  const defaultErrors = {
+    category_id: "",
+    country_id: "",
+    arabic_word: "",
+    slanged_arabic: "",
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+
+  React.useEffect(() => {
+    listData({param: 'cat'})
+      .then((response) => {
+        const categories = response.data.data.map((cat) => {
+          return {
+            label: cat["category"],
+            value: cat["id"]
+          };
+        });
+        setCat(categories)
+        console.log(categories)
+      })
+      .catch((error) => consoleErrors(error));
+
+      listData({param: 'c'})
+      .then((response) => {
+        const countries = response.data.data.map((cntry) => {
+          return {
+            label: cntry["country"],
+            value: cntry["id"]
+          };
+        });
+        setCntry(countries)
+        console.log(countries)
+      })
+      .catch((error) => consoleErrors(error));
+  }, []);
+
+  const onAddUserDefinedClickHandler = () => {
+    // Change the state
+    setErrors({ ...defaultErrors });
+    console.log('-------', data, '******')
+    addUserDefinedWords(data).then((response_) => {
+      return;
+      try {
+        response = response_.data;
+        console.log("response", response_);
+        if(!response.status) {
+          if(response.error) {
+            const errors_ = response.error;
+            let errorsResponse = {};
+            Object.keys(errors_).forEach((er) => {
+              if(Array.isArray(errors_[er])) {
+                errorsResponse[er] = errors_[er][0];
+              }
+            });
+            // Set the state
+            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          } else {
+            setErrors({...defaultErrors, message: response.message, status: response.status});
+          }
+        } else {
+          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          setTimeout(() => {
+            props.navigation.navigate('MainMenu')
+          }, 3000);
+        }
+      } catch(e) {
+        console.log(e.line);
+        console.log("Error", e);
+      }
+      
+    }).catch((error) => {
+      console.log("Rspon", error)
+      consoleErrors(error);
+      // setErrors({ ...error.response.data.errors });
+      // console.log("errors",errors)
+    })
+    
+  }
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -40,36 +136,57 @@ function UserDefinedWord(props) {
             <View style={styles.innerContainer}>
               <View style={styles.p_20}>
                 <View>
+                {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                   <Text style={styles.label}>Select Category</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
+                  {/* <TextInput
+                    onChangeText={(value) => setData({...data, category_id: value})}
+                    style={[styles.input]}
                     placeholder="Select Category"
-                  />
+                  /> */}
+                  <DropDownPicker
+                    items={cat}
+                    defaultIndex={0}
+                    containerStyle={{height: 40}}
+                    onChangeItem={(item) => setData({...data, category_id: item.value})}
+                />
+                  {errors.category_id ? <Text style={{color: 'red'}}>{errors.category_id}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Select Country</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
+                  {/* <TextInput
+                    onChangeText={(value) => setData({...data, country_id: value})}
+                    style={[styles.input]}
                     placeholder="Select Country"
-                  />
+                  /> */}
+                  <DropDownPicker
+                    items={cntry}
+                    defaultIndex={0}
+                    containerStyle={{height: 40}}
+                    onChangeItem={(item) => setData({...data, country_id: item.value})}
+                />
+                  {errors.country_id ? <Text style={{color: 'red'}}>{errors.country_id}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Arabic Word</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, arabic_word: value})}
+                    style={[styles.input]}
                     placeholder="Arabic Word"
                   />
+                  {errors.arabic_word ? <Text style={{color: 'red'}}>{errors.arabic_word}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Slanged Arabic Word</Text>
                   <TextInput
-                    style={[styles.input, styles.color_white]}
+                    onChangeText={(value) => setData({...data, slanged_arabic: value})}
+                    style={[styles.input]}
                     placeholder="Slanged Arabic Word"
                   />
+                  {errors.slanged_arabic ? <Text style={{color: 'red'}}>{errors.slanged_arabic}</Text> : null}
                 </View>
                 <View>
                   <TouchableOpacity style={styles.mt_25}
-                  onPress={() => props.navigation.navigate('MainMenu')}>
+                  onPress={() => onAddUserDefinedClickHandler()}>
                     <View style={styles.button}>
                       <Text style={[styles.color_white, styles.font_16]}>
                         Add

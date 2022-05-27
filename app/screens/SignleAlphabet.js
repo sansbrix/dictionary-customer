@@ -9,10 +9,22 @@ import {
     TouchableOpacity
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { listData } from "../api";
+import { consoleErrors } from "../helper";
 const image = require("../../assets/images/cat.png");
 
-function SingleAlphabet(props) {
+const SingleAlphabet = (props) => {
+  const [data, setData] = React.useState({});
+  const alpha_id = props.route.params.alpha_id;
+  console.log(alpha_id, "idddd")
+  React.useEffect(() => {
+    listData({alpha_id: alpha_id})
+      .then((response) => { 
+        setData(response.data.data);
+        console.log(response.data.data, "------")
+      })
+      .catch((error) => consoleErrors(error));
+  }, []);
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -35,16 +47,14 @@ function SingleAlphabet(props) {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>Learn #Alphabet_name</Text>
+              <Text style={styles.heading}>Learn #{data.alphabet}</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
               <View style={[styles.p_20, styles.outer_container]}>
              <View style={[styles.row, styles.mt_10]}>
-                <View style={styles.cat_image_container}>
-                    <Text style={styles.plan_label}>A</Text> 
-                </View>
+                    <Text style={[styles.plan_label, styles.mt_25]}>{data.alphabet}</Text> 
              </View>
              <View style={[styles.row, styles.mt_25]}>
                 <Image source={image} resizeMode="cover" style={styles.image}></Image>

@@ -8,8 +8,20 @@ import {
     ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {getUserProfile} from "../api";
+import { consoleErrors } from "../helper";
 
 const ProfileMenu = (props) => {
+  const [data, setData] = React.useState({});
+
+  React.useEffect(() => {
+    getUserProfile({}).then((response) => {
+
+      console.log("Respons---user", response?.data?.user)
+      setData(response?.data?.user)
+    }).catch((error) => {
+      console.log(error);consoleErrors(error)});
+  }, []);
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -32,7 +44,7 @@ const ProfileMenu = (props) => {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>#User Name</Text>
+              <Text style={styles.heading}>{data?.first_name} {data?.last_name}</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>

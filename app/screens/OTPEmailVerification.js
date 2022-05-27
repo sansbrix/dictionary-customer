@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,103 @@ import {
   ScrollView
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { confirmOtp, sendOtp } from "../api";
+import { consoleErrors } from "../helper";
 
 function OTPEmailVerification(props) {
+  const [otp, setOtp] = React.useState("XXXX");
+
+  const ref_input1 = useRef();
+  const ref_input2 = useRef();
+  const ref_input3 = useRef();
+  const ref_input4 = useRef();
+  
+  const [errors, setErrors] = React.useState({
+    message: "",
+    status: undefined,
+  });
+
+  React.useEffect(() => {
+    console.log(props.route.params)
+    if(!props.route.params.email) {
+      props.navigation.navigate("Login");
+    }
+    resendOtpHandler();
+  }, []);
+
+ const resendOtpHandler = () => {
+    sendOtp({
+      email: props.route.params.email,
+    }).then((res) => {
+      const response = res.data;
+      console.log("response", response);
+      setErrors({ ...defaultErrors, message: response.message, status: response.status });
+      setTimeout(() => {
+        // props.navigation.navigate("Email Verification", {email: data.email});
+      }, 3000);
+    }).catch((err) => consoleErrors(err));
+  }
+
+  const changeTempValue = (temp, index, value) => {
+    
+    let str = temp.split('');
+    str[index] = value ? value : 'X';
+    console.log(str);
+    return str.join('');
+  }
+
+  const setOtpField = (index, value) => {
+    try{
+      let temp = `${otp}`;
+      if (index == 0) {
+        temp = changeTempValue(temp, index, value);
+        if(value != "") {
+          ref_input2.current.focus();
+        }
+      } else if (index == 1) {
+        temp = changeTempValue(temp, index, value);
+        if(value != "") {
+          ref_input3.current.focus();
+        }
+      } else if (index == 2) {
+        temp = changeTempValue(temp, index, value);
+        if(value != "") {
+          ref_input4.current.focus();
+        }
+      } else if (index == 3) {
+        temp = changeTempValue(temp, index, value);
+      }
+
+      if(!temp.includes("X")) {
+        onSubmitOtpHandler(temp);
+      }
+
+      setOtp(temp);
+   
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const defaultErrors = {
+    message: "",
+    status: undefined,
+  }
+  const onSubmitOtpHandler = (otp) => {
+    confirmOtp({
+      email: props.route.params.email,
+      otp: otp,
+    }).then((resp) => {
+      const response = resp.data;
+      console.log("response", response);
+      setErrors({ ...defaultErrors, message: response.message, status: response.status });
+      setTimeout(() => {
+        // props.navigation.navigate("Email Verification", {email: data.email});
+      }, 3000);
+    })
+    .catch((err) => consoleErrors(err));
+  }
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -37,7 +132,7 @@ function OTPEmailVerification(props) {
                 </Text>
               </TouchableOpacity>
               <Text style={styles.register}>
-                OTP sent to your registered email, please check.
+                Please check your email and enter received OTP
               </Text>
               <Text style={styles.heading}>Email Verification</Text>
             </View>
@@ -48,27 +143,36 @@ function OTPEmailVerification(props) {
                 <View>
                   <Text style={styles.label}>Enter OTP</Text>
                   <View style={styles.d_flex}>
-                    <TextInput style={[styles.input, styles.color_white]} />
-                    <TextInput style={[styles.input, styles.color_white]} />
-                    <TextInput style={[styles.input, styles.color_white]} />
-                    <TextInput style={[styles.input, styles.color_white]} />
+                    <TextInput 
+                      ref={ref_input1}
+                      style={styles.input} 
+                      autoFocus={true} 
+                      returnKeyType="next"
+                      onChangeText={(value) => { setOtpField(0, value);}}
+                      />
+                    <TextInput 
+                      style={styles.input} 
+                      returnKeyType="next"
+                      onChangeText={(value) => { setOtpField(1, value);}}
+                      ref={ref_input2}
+                      />
+                    <TextInput 
+                      style={styles.input} 
+                      returnKeyType="next"
+                      onChangeText={(value) => { setOtpField(2, value);}}
+                      ref={ref_input3}
+                      />
+                    <TextInput 
+                      style={styles.input} 
+                      returnKeyType="next"
+                      onChangeText={(value) => { setOtpField(3, value);}}
+                      ref={ref_input4}
+                      />
                   </View>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={styles.mt_25}
-                    onPress={() => props.navigation.navigate("Login")}
-                  >
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Submit
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    props.navigation.navigate("Email Verification")
+                    resendOtpHandler()
                   }
                 >
                   <View style={styles.mt_25}>

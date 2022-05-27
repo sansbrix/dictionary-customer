@@ -8,8 +8,60 @@ import {
   TouchableOpacity 
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {sendInvite} from "../api"
 
 function InviteFriend(props) {
+
+  const [data, setData] = React.useState({
+    email: ""
+  });
+
+  const defaultErrors = {
+    email: "",
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+
+  onInviteFriendClickHandler = () => {
+    // Change the state
+    setErrors({ ...defaultErrors });
+    sendInvite(data).then((response_) => {
+      try {
+        response = response_.data;
+        if(!response.status) {
+          if(response.error) {
+            const errors_ = response.error;
+            let errorsResponse = {};
+            Object.keys(errors_).forEach((er) => {
+              if(Array.isArray(errors_[er])) {
+                errorsResponse[er] = errors_[er][0];
+              }
+            });
+            // Set the state
+            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          } else {
+            setErrors({...defaultErrors, message: response.message, status: response.status});
+          }
+        } else {
+          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          setTimeout(() => {
+            props.navigation.navigate('ProfileMenu')
+          }, 3000);
+        }
+      } catch(e) {
+        console.log("Error", e);
+      }
+      
+    }).catch((err) => {
+      console.log("err1", err.status)
+      console.log("err", JSON.stringify(err));
+    })
+    
+  }
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -41,16 +93,20 @@ function InviteFriend(props) {
                 <View style={styles.innerContainer}>
                   <View style={styles.p_20}>
                     <View> 
+                    {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                       <Text style={styles.label}>Enter Email</Text>
                       <View style={styles.d_flex}>
                         <TextInput
-                        style={[styles.input, styles.color_white]}
+                        onChangeText={(value) => setData({...data, email: value})}
+                        style={[styles.input]}
+                        placeholder="Email"
                         />
+                        {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
                       </View>
                     </View>
                     <View>
                     <TouchableOpacity style={styles.mt_25}
-                      onPress={()=> props.navigation.navigate('ProfileMenu')}>
+                      onPress={() =>  onInviteFriendClickHandler() }>
                       <View style={styles.button}>
                         <Text style={[styles.color_white, styles.font_16]}>Send Invite</Text>
                       </View>

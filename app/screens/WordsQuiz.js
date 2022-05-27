@@ -12,7 +12,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const cat_image = require("../../assets/images/cat.png");
 
-function WordsQuiz(props) {
+const WordsQuiz = (props) => {
+  console.log(props.route.params.cat_id, "params")
+  const cat_id = props.route.params.cat_id
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -31,7 +33,7 @@ function WordsQuiz(props) {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("LearningMenu")}
+                onPress={() => props.navigation.navigate("LearningMenu", {cat_id: cat_id})}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>

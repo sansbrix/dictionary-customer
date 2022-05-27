@@ -4,11 +4,25 @@ import {
   Text, 
   View, 
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
+import { listData } from "../api";
+import { consoleErrors } from "../helper";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-function Sentence(props) {
+const Sentence = (props) =>{
+  const [data, setData] = React.useState({});
+  const cat_id = props.route.params.cat_id;
+  console.log(cat_id, "idddd")
+  React.useEffect(() => {
+    listData({cat_id: cat_id, param: 's'})
+      .then((response) => { 
+        setData(response.data.data);
+        console.log(response.data.data, "------")
+      })
+      .catch((error) => consoleErrors(error));
+  }, []);
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -25,7 +39,7 @@ function Sentence(props) {
                     justifyContent: "center", 
                     alignItems: "center" 
                     }}
-                    onPress={() => props.navigation.navigate('LearningMenu')}>
+                    onPress={() => props.navigation.navigate('LearningMenu', {cat_id: cat_id})}>
                     <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
                       <Text style={styles.back}>
                           <Ionicons name="md-arrow-back" size={24} color="#756765" />
