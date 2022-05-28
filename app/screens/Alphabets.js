@@ -8,21 +8,20 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import {listData, sendOtp, UserSignup} from "../api";
+import {listData} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { consoleErrors } from "../helper";
-import DropDownPicker from "react-native-dropdown-picker";
-
+import {Picker} from '@react-native-picker/picker';
 
 const Alphabets = (props) => {
-  const[disable, disableButton]=React.useState(false);
-  const [data, setData] = React.useState([]);
+  const [disable, disableButton] = React.useState(false);
   const [lang, setlang] = React.useState([]);
+  const [selectedLang, setSelectedLang] = React.useState("");
+  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     listData({param: 'l'})
       .then((response) => {
-        console.log(response)
         const languages = response.data.data.map((lan) => {
           return {
             label: lan["country"]["country"]+"-"+lan["language"],
@@ -36,6 +35,7 @@ const Alphabets = (props) => {
   }, []);
 
   const onChangeLanguageHandler = (lang_id) => {
+    setSelectedLang(lang_id);
     listData({lang_id: lang_id})
       .then((response) => {
         var output = [];
@@ -47,8 +47,7 @@ const Alphabets = (props) => {
       })
       .catch((error) => consoleErrors(error));
     };
-    // --------
-  // console.log(props);
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -70,7 +69,7 @@ const Alphabets = (props) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("MainMenu")}
+            onPress={() => props.navigation.navigate("Welcome")}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>
@@ -78,7 +77,7 @@ const Alphabets = (props) => {
               </Text>
             </Text>
           </TouchableOpacity>
-          <Text style={styles.heading}>Alphabets</Text>
+          <Text style={styles.heading}>Signup</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -95,45 +94,48 @@ const Alphabets = (props) => {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-             <View>
-                  <Text style={[styles.label, styles.mt_5]}>Select Language</Text>
-                  <DropDownPicker
-                    items={lang}
-                    defaultIndex={0}
-                    containerStyle={{height: 40}}
-                    onChangeItem={(item) => onChangeLanguageHandler(item.value)}
-                />
-             </View>
-
+              <View>
+                <Picker
+                  style={styles.input}
+                  selectedValue={selectedLang}
+                  onValueChange={(itemValue, itemIndex) =>
+                    onChangeLanguageHandler(itemValue)
+                  }>
+                    <Picker.Item label="Please Select Language" value={""}/>
+                    {lang.map((lan, index) => <Picker.Item key={`lan-${index}`} label={lan.label} value={lan.value} />)}
+                </Picker>
+              </View>
+              <View>
               {data.slice(0,4).map((arr, index) => {
-                return (
-                  <View style={styles.row} key={`alph_row${index}`}>
-                    {(() => {
-                      if (Array.isArray(arr)) {
-                        return arr.map((item, ind) => {
-                          return (
-                            <TouchableOpacity
-                              key={`alpha_col-${ind}`}
-                              onPress={() =>
-                                props.navigation.navigate("Signle Alphabet",{alpha_id: item.id})
-                              }
-                            >
-                              <View style={styles.cat_image_container}>
-                                <Text style={styles.plan_label}>
-                                  {item.alphabet}
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          );
-                        });
-                      } else {
-                        return null;
-                      }
-                      
-                    })()}
-                  </View>
-                );
-              })}
+                  return (
+                    <View style={styles.row} key={`alph_row${index}`}>
+                      {(() => {
+                        if (Array.isArray(arr)) {
+                          return arr.map((item, ind) => {
+                            return (
+                              <TouchableOpacity
+                                key={`alpha_col-${ind}`}
+                                onPress={() =>
+                                  props.navigation.navigate("Signle Alphabet",{alpha_id: item.id})
+                                }
+                              >
+                                <View style={styles.cat_image_container}>
+                                  <Text style={styles.plan_label}>
+                                    {item.alphabet}
+                                  </Text>
+                                </View>
+                              </TouchableOpacity>
+                            );
+                          });
+                        } else {
+                          return null;
+                        }
+                        
+                      })()}
+                    </View>
+                  );
+                })}
+              </View>
             </ScrollView>
           </View>
         </View>
@@ -142,6 +144,30 @@ const Alphabets = (props) => {
   );
 };
 const styles = StyleSheet.create({
+  row: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  plan_label: {
+    fontSize: 20,
+    color: "#82A4B7",
+    fontWeight: "bold",
+    marginLeft: 12,
+    marginTop: 6,
+  },
+  cat_image_container: {
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 10,
+    padding: 0,
+    height: 40,
+    width: 45,
+    borderColor: "#9D908D",
+    borderRightWidth: 4,
+    borderLeftWidth: 4,
+    borderRadius: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
