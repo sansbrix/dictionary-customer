@@ -117,7 +117,7 @@ const TranslateWord=(props)=> {
     const suggestions = items
       .map(item => ({
         id: item.id,
-        title: item.word,
+        title: data.from == "arabic" ? item.arabic_word : item.word,
       }))
     setSuggestionsList(suggestions)
     setLoading(false)
@@ -255,14 +255,14 @@ const TranslateWord=(props)=> {
                 </View>
                 </View>
               </View>
-              {/* <View style={styles.darkContainer}>
+              <View style={styles.darkContainer}>
                 <View style={styles.innerContainer}> 
                   <Text style={styles.bottom_heading}>Translated word (Arabic)</Text>  
                   <Text style={styles.bottom_heading}>Translated word (Slanged)</Text>  
                   <Text style={styles.bottom_heading}>Translated word (Latin)</Text>  
                   <Text style={styles.bottom_heading}>Translated word (Formal latin)</Text>  
                 </View>
-              </View> */}
+              </View>
             </View>
           </ScrollView>
       </SafeAreaView>

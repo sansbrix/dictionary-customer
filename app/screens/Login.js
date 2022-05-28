@@ -12,6 +12,7 @@ import {UserLogin} from "../api";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as SecureStore from 'expo-secure-store';
+import { consoleErrors } from '../helper';
 
 const Login = (props) => {
   const [data, setData] = React.useState({
@@ -69,8 +70,9 @@ const Login = (props) => {
       }
       
     }).catch((err) => {
-      console.log("err1", err.status)
-      console.log("err", JSON.stringify(err));
+      consoleErrors(err);
+      // console.log("err1", err.status)
+      // console.log("err", JSON.stringify(err));
     })
     
   }

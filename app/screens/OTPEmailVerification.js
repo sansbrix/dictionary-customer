@@ -204,6 +204,8 @@ const styles = StyleSheet.create({
     width: "15%",
     margin: 5,
     padding: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
     color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "33%",
+    height: "40%",
     width: "100%",
   },
   innerContainer: {
@@ -273,7 +275,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   another_link: {
-    marginTop: 5,
+    marginTop: 2,
     fontSize: 15,
     color: "#82A4B7",
     marginLeft: "auto",

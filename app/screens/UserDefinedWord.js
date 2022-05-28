@@ -16,7 +16,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 function UserDefinedWord(props) {
   const [cat, setCat] = React.useState([]);
   const [cntry, setCntry] = React.useState([]);
+  const [lng, setLngs] = React.useState([]);
   const [data, setData] = React.useState({
+    language_id: "",
     category_id: "",
     country_id: "",
     arabic_word: "",
@@ -25,6 +27,7 @@ function UserDefinedWord(props) {
   });
 
   const defaultErrors = {
+    language_id: "",
     category_id: "",
     country_id: "",
     arabic_word: "",
@@ -51,6 +54,19 @@ function UserDefinedWord(props) {
       })
       .catch((error) => consoleErrors(error));
 
+      listData({param: 'l'})
+      .then((response) => {
+        const languages = response.data.data.map((lng) => {
+          return {
+            label: lng["language"],
+            value: lng["id"]
+          };
+        });
+        setLngs(languages)
+        console.log(languages)
+      })
+      .catch((error) => consoleErrors(error));
+
       listData({param: 'c'})
       .then((response) => {
         const countries = response.data.data.map((cntry) => {
@@ -68,9 +84,8 @@ function UserDefinedWord(props) {
   const onAddUserDefinedClickHandler = () => {
     // Change the state
     setErrors({ ...defaultErrors });
-    console.log('-------', data, '******')
+    console.log(data)
     addUserDefinedWords(data).then((response_) => {
-      return;
       try {
         response = response_.data;
         console.log("response", response_);
@@ -96,14 +111,13 @@ function UserDefinedWord(props) {
         }
       } catch(e) {
         console.log(e.line);
-        console.log("Error", e);
+        console.log(e);
       }
       
     }).catch((error) => {
-      console.log("Rspon", error)
+      console.log(error)
       consoleErrors(error);
-      // setErrors({ ...error.response.data.errors });
-      // console.log("errors",errors)
+      setErrors({ ...error.response.data.errors });
     })
     
   }
@@ -135,29 +149,19 @@ function UserDefinedWord(props) {
           <View style={styles.darkContainer}>
             <View style={styles.innerContainer}>
               <View style={styles.p_20}>
-                <View>
-                {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
-                  <Text style={styles.label}>Select Category</Text>
-                  {/* <TextInput
-                    onChangeText={(value) => setData({...data, category_id: value})}
-                    style={[styles.input]}
-                    placeholder="Select Category"
-                  /> */}
+              {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+              <View>
+                  <Text style={styles.label}>Select Country</Text>
                   <DropDownPicker
-                    items={cat}
+                    items={lng}
                     defaultIndex={0}
                     containerStyle={{height: 40}}
-                    onChangeItem={(item) => setData({...data, category_id: item.value})}
+                    onChangeItem={(item) => setData({...data, language_id: item.value})}
                 />
-                  {errors.category_id ? <Text style={{color: 'red'}}>{errors.category_id}</Text> : null}
+                  {errors.language_id ? <Text style={{color: 'red'}}>{errors.language_id}</Text> : null}
                 </View>
                 <View>
-                  <Text style={styles.label}>Select Country</Text>
-                  {/* <TextInput
-                    onChangeText={(value) => setData({...data, country_id: value})}
-                    style={[styles.input]}
-                    placeholder="Select Country"
-                  /> */}
+                  <Text style={styles.label}>Select Language</Text>
                   <DropDownPicker
                     items={cntry}
                     defaultIndex={0}
@@ -165,6 +169,16 @@ function UserDefinedWord(props) {
                     onChangeItem={(item) => setData({...data, country_id: item.value})}
                 />
                   {errors.country_id ? <Text style={{color: 'red'}}>{errors.country_id}</Text> : null}
+                </View>
+                <View>
+                  <Text style={styles.label}>Select Category</Text>
+                  <DropDownPicker
+                    items={cat}
+                    defaultIndex={0}
+                    containerStyle={{height: 40}}
+                    onChangeItem={(item) => setData({...data, category_id: item.value})}
+                />
+                  {errors.category_id ? <Text style={{color: 'red'}}>{errors.category_id}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Arabic Word</Text>

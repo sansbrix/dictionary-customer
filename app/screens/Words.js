@@ -15,6 +15,33 @@ const cat_image = require("../../assets/images/cat.png");
 
 const Words = (props) => {
   const cat_id = props.route.params.cat_id;
+  const [data, setData] = React.useState([]);
+  const defaultErrors = {
+    message: "",
+    status: undefined,
+  }
+
+  const [errors, setErrors] = React.useState({
+    ...defaultErrors
+  })
+
+  React.useEffect(() => {
+      listData({param : "w",
+      u_defined : false,
+      category_id : cat_id })
+      .then((response) => {
+        const countries = response.data.data.map((cntry) => {
+          return {
+            label: cntry["country"],
+            value: cntry["id"]
+          };
+        });
+        setCntry(countries)
+        console.log(countries)
+      })
+      .catch((error) => consoleErrors(error));
+  }, []);
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
