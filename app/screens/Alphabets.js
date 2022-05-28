@@ -2,20 +2,22 @@ import React from "react";
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  TextInput,
 } from "react-native";
+import {listData} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { listData } from "../api";
 import { consoleErrors } from "../helper";
-import DropDownPicker from "react-native-dropdown-picker";
+import {Picker} from '@react-native-picker/picker';
 
 const Alphabets = (props) => {
-  const [data, setData] = React.useState([]);
+  const [disable, disableButton] = React.useState(false);
   const [lang, setlang] = React.useState([]);
+  const [selectedLang, setSelectedLang] = React.useState("");
+  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     listData({param: 'l'})
@@ -33,6 +35,7 @@ const Alphabets = (props) => {
   }, []);
 
   const onChangeLanguageHandler = (lang_id) => {
+    setSelectedLang(lang_id);
     listData({lang_id: lang_id})
       .then((response) => {
         var output = [];
@@ -48,46 +51,62 @@ const Alphabets = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-              <TouchableOpacity
-                style={{
-                  ...styles.back,
-                  borderRadius: 100,
-                  backgroundColor: "#9D908D",
-                  marginTop: 50,
-                  marginLeft: 1,
-                  width: 35,
-                  height: 35,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => props.navigation.navigate("MainMenu")}
-              >
-                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-                  <Text style={styles.back}>
-                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                  </Text>
-                </Text>
-              </TouchableOpacity>
-              <Text style={styles.heading}>Alphabets</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.outer_container]}>
-                <View>
-                  <Text style={styles.label}>Select Language</Text>
-                  <DropDownPicker
-                    items={lang}
-                    defaultIndex={0}
-                    containerStyle={{height: 40}}
-                    onChangeItem={(item) => onChangeLanguageHandler(item.value)}
-                />
-                </View>
-
-                {data.slice(0,4).map((arr, index) => {
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              borderRadius: 100,
+              backgroundColor: "#9D908D",
+              marginTop: 50,
+              marginLeft: 17,
+              width: 35,
+              height: 35,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => props.navigation.navigate("Welcome")}
+          >
+            <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+              <Text style={styles.back}>
+                <Ionicons name="md-arrow-back" size={24} color="#756765" />
+              </Text>
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.heading}>Signup</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              <View>
+                <Picker
+                  style={styles.input}
+                  selectedValue={selectedLang}
+                  onValueChange={(itemValue, itemIndex) =>
+                    onChangeLanguageHandler(itemValue)
+                  }>
+                    <Picker.Item label="Please Select Language" value={""}/>
+                    {lang.map((lan, index) => <Picker.Item key={`lan-${index}`} label={lan.label} value={lan.value} />)}
+                </Picker>
+              </View>
+              <View>
+              {data.slice(0,4).map((arr, index) => {
                   return (
                     <View style={styles.row} key={`alph_row${index}`}>
                       {(() => {
@@ -117,29 +136,49 @@ const Alphabets = (props) => {
                   );
                 })}
               </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
   row: {
     display: "flex",
     justifyContent: "center",
     flexDirection: "row",
   },
+  plan_label: {
+    fontSize: 20,
+    color: "#82A4B7",
+    fontWeight: "bold",
+    marginLeft: 12,
+    marginTop: 6,
+  },
+  cat_image_container: {
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 10,
+    padding: 0,
+    height: 40,
+    width: 45,
+    borderColor: "#9D908D",
+    borderRightWidth: 4,
+    borderLeftWidth: 4,
+    borderRadius: 10,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   heading: {
-    marginTop: "1%",
+    marginTop: "11%",
+    marginLeft: 17,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
+    marginBottom: 15,
   },
   input: {
     width: "100%",
@@ -164,25 +203,27 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   bg_white: {
-    backgroundColor: "#ffffff",
-    height: "19%",
+    backgroundColor: "#FFFFFF",
+    height: "22%",
     width: "100%",
+    // flex: 0.4,
   },
   innerContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 50,
     height: "100%",
     width: "100%",
+    flex: 0.4,
   },
   back: {
     marginTop: "10%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   register: {
     marginTop: "12%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   button: {
     alignItems: "center",
@@ -194,7 +235,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   color_white: {
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   font_16: {
     fontSize: 16,
@@ -207,6 +248,9 @@ const styles = StyleSheet.create({
   mt_25: {
     marginTop: 25,
   },
+  mb_25: {
+    marginBottom: 25,
+  },
   p_20: {
     padding: 20,
   },
@@ -217,63 +261,5 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
-  outer_container: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  plans_div: {
-    width: "100%",
-    padding: 15,
-    backgroundColor: "#F4F9EB",
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "auto",
-    marginBottom: 4,
-    borderRadius: 10,
-  },
-  dot: {
-    height: 20,
-    width: 20,
-    backgroundColor: "#756765",
-    borderRadius: 50,
-    marginTop: 11,
-  },
-  plan_label: {
-    fontSize: 20,
-    color: "#82A4B7",
-    fontWeight: "bold",
-    marginLeft: 12,
-    marginTop: 6,
-  },
-  plan_sub_label: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "green",
-    marginLeft: 10,
-  },
-  plan_sub_label_paid: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#756765",
-    marginLeft: 10,
-  },
-  image: {
-    width: 40,
-    height: 40,
-  },
-  cat_image_container: {
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
-    padding: 0,
-    height: 40,
-    width: 45,
-    borderColor: "#9D908D",
-    borderRightWidth: 4,
-    borderLeftWidth: 4,
-    borderRadius: 10,
-  },
 });
-
 export default Alphabets;
