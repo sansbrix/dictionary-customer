@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -13,23 +13,21 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {translateWordApi, listData} from "../api";
 import {consoleErrors} from "../helper";
-import DropDownPicker from "react-native-dropdown-picker";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import {Picker} from '@react-native-picker/picker';
 
 import Feather from 'react-native-vector-icons/Feather';
 Feather.loadFont()
 
 const TranslateWord=(props)=> {
 
-  const [words, setwords] = React.useState([]);
-  const [from, setFrom] = React.useState([]);
+  const [allWords, setAllWords] = React.useState([]);
+
   const [data, setData] = React.useState({
     from : "arabic",
     to : "other",
     word : ""
   });
-
-  const [word, setWord] = React.useState("");
 
   const defaultErrors = {
     from : "",
@@ -43,14 +41,7 @@ const TranslateWord=(props)=> {
     ...defaultErrors
   })
 
-  const onToHandler = (value) => {
-    const to = value;
-    if(to == 'arabic') {
-      setData({...data, from: 'other', to: value})
-    } else {
-      setData({...data, from: 'arabic' ,to: value})
-    }
-  }
+  const selectedWord = () => Array.isArray(allWords) ? allWords.find((val) => val.id == selectedItem) : null;
 
   const onTranslateWordClickHandler = () => {
     // Change the state
@@ -117,9 +108,10 @@ const TranslateWord=(props)=> {
     const suggestions = items
       .map(item => ({
         id: item.id,
-        title: item.word,
+        title: data.from == "other" ? item.word: item.arabic_word,
       }))
-    setSuggestionsList(suggestions)
+    setSuggestionsList(suggestions);
+    setAllWords(items);
     setLoading(false)
   }, [])
 
@@ -157,112 +149,114 @@ const TranslateWord=(props)=> {
                   <ScrollView>
                   <View style={styles.p_20}>
                       <View>
-                      {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
-                      <Text style={styles.label}>To</Text>
-                      {/* <AutocompleteDropdown
-                        clearOnFocus={false}
-                        closeOnBlur={true}
-                        closeOnSubmit={false}
-                        initialValue={{ id: '1' }} 
-                        onSelectItem={(item) => {console.log(item)}}
-                        dataSet={[
-                          { id: '1', title: 'Arabic' },
-                          { id: '2', title: 'Other' },
-                        ]}
-                      />; */}
-                      {errors.to ? <Text style={{color: 'red'}}>{errors.to}</Text> : null}
+                          <Text style={styles.label}>From</Text>
+                          <Picker
+                            style={styles.input}
+                            selectedValue={data.from}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setData({...data, from: itemValue, to: itemValue == "other" ? "arabic": "other"})
+                            }>
+                            <Picker.Item label="Other" value="other" />
+                            <Picker.Item label="Arabic" value="arabic" />
+                          </Picker>
+                          {errors.from ? <Text style={{color: 'red'}}>{errors.from}</Text> : null}
                       </View>
                       <View>
-                      <Text style={styles.label}>From</Text>
-                      <TextInput
-                          onChangeText={(value) => setData({...data, from: value})}
-                          style={[styles.input]}
-                          placeholder="Arabic / Other"
-                      />
-                      <AutocompleteDropdown
-                        ref={searchRef}
-                        controller={controller => {
-                          dropdownController.current = controller
-                        }}
-                        // initialValue={'1'}
-                        direction={Platform.select({ ios: 'down' })}
-                        dataSet={suggestionsList}
-                        onChangeText={getSuggestions}
-                        onSelectItem={item => {
-                          item && setSelectedItem(item.id)
-                        }}
-                        debounce={600}
-                        suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
-                        onClear={onClearPress}
-                        //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
-                        onOpenSuggestionsList={onOpenSuggestionsList}
-                        loading={loading}
-                        useFilter={false} // set false to prevent rerender twice
-                        textInputProps={{
-                          placeholder: 'Type 3+ letters (dolo...)',
-                          autoCorrect: false,
-                          autoCapitalize: 'none',
-                          style: {
-                            borderRadius: 5,
-                            backgroundColor: 'rgb(244, 249, 235)',
-                            color: 'black',
-                            paddingLeft: 18,
-                            width: '100%',
-                          },
-                        }}
-                        rightButtonsContainerStyle={{
-                          top: 7,
-                          right: 0,
-                          height: 40,
-                          alignSelf: 'center',
-                        }}
-                        inputContainerStyle={{
-                          backgroundColor: '#fff',
-                          width: '100%'
-                        }}
-                        suggestionsListContainerStyle={{
-                          backgroundColor: '#fff',
-                          width: '100%'
-                        }}
-                        containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                        renderItem={(item, text) => <Text style={{ color: 'black', padding: 15 }}>{item.title}</Text>}
-                        ChevronIconComponent={<Feather name="chevron-down" size={20} color="black" />}
-                        ClearIconComponent={<Feather name="x-circle" size={18} color="black" />}
-                        inputHeight={50}
-                        showChevron={false}
-                        // closeOnBlur={false}
-                        //  showClear={false}
-                      />
-                      {errors.from ? <Text style={{color: 'red'}}>{errors.from}</Text> : null}
+                          {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+                          <Text style={styles.label}>To</Text>
+                          <Picker
+                            style={styles.input}
+                            selectedValue={data.to}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setData({...data, to: itemValue, from: itemValue == "other" ? "arabic": "other"})
+                            }>
+                            <Picker.Item label="Arabic" value="arabic" />
+                            <Picker.Item label="Other" value="other" />
+                          </Picker>
+                          {errors.to ? <Text style={{color: 'red'}}>{errors.to}</Text> : null}
                       </View>
                       <View>
-            
-                      {errors.word ? <Text style={{color: 'red'}}>{errors.word}</Text> : null}
+                          <AutocompleteDropdown
+                            ref={searchRef}
+                            controller={controller => {
+                              dropdownController.current = controller
+                            }}
+                            direction={Platform.select({ ios: 'down', android: 'up', web: 'up' })}
+                            dataSet={suggestionsList}
+                            onChangeText={getSuggestions}
+                            onSelectItem={item => {
+                              item && setSelectedItem(item.id)
+                            }}
+                            debounce={600}
+                            suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
+                            onClear={onClearPress}
+                            //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
+                            onOpenSuggestionsList={onOpenSuggestionsList}
+                            loading={loading}
+                            useFilter={false} // set false to prevent rerender twice
+                            textInputProps={{
+                              placeholder: 'Type 3+ letters (dolo...)',
+                              autoCorrect: false,
+                              autoCapitalize: 'none',
+                              style: {
+                                borderRadius: 5,
+                                backgroundColor: 'rgb(244, 249, 235)',
+                                color: 'black',
+                                paddingLeft: 18,
+                                width: '100%',
+                              },
+                            }}
+                            rightButtonsContainerStyle={{
+                              top: 7,
+                              right: 0,
+                              height: 40,
+                              alignSelf: 'center',
+                            }}
+                            inputContainerStyle={{
+                              backgroundColor: '#fff',
+                              width: '100%'
+                            }}
+                            suggestionsListContainerStyle={{
+                              backgroundColor: '#F4F9EB',
+                              width: '100%'
+                            }}
+                            containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+                            renderItem={(item, text) => <Text style={{ color: 'black', padding: 15 }}>{item.title}</Text>}
+                            ChevronIconComponent={<Feather name="chevron-down" size={20} color="black" />}
+                            ClearIconComponent={<Feather name="x-circle" size={18} color="black" />}
+                            inputHeight={50}
+                            showChevron={false}
+                          />
+                          {errors.word ? <Text style={{color: 'red'}}>{errors.word}</Text> : null}
                       </View>
                       <View>
-                      <TouchableOpacity style={styles.mt_25}
-                      onPress={() =>  onTranslateWordClickHandler() }
-                      >
-                          <View style={styles.button}>
-                          <Text style={[styles.color_white, styles.font_16]}>
-                              Translate
-                          </Text>
-                          </View>
-                      </TouchableOpacity>
+                          <TouchableOpacity style={styles.mt_25}
+                            onPress={() =>  onTranslateWordClickHandler() }
+                          >
+                              <View style={styles.button}>
+                              <Text style={[styles.color_white, styles.font_16]}>
+                                  Translate
+                              </Text>
+                              </View>
+                          </TouchableOpacity>
                       </View>
                   </View>
                   </ScrollView>
                 </View>
                 </View>
               </View>
-              {/* <View style={styles.darkContainer}>
+              {selectedWord() ? 
+              <View style={styles.darkContainer}>
                 <View style={styles.innerContainer}> 
-                  <Text style={styles.bottom_heading}>Translated word (Arabic)</Text>  
-                  <Text style={styles.bottom_heading}>Translated word (Slanged)</Text>  
-                  <Text style={styles.bottom_heading}>Translated word (Latin)</Text>  
-                  <Text style={styles.bottom_heading}>Translated word (Formal latin)</Text>  
+                  <Text style={styles.bottom_heading}>{data.from == "arabic" ? selectedWord().word : selectedWord.arabic_word} (Arabic)</Text>  
+                  {data.from == "other" ?
+                  <>
+                      <Text style={styles.bottom_heading}>{selectedWord().slanged_arabic} (Slanged)</Text>  
+                      <Text style={styles.bottom_heading}>{selectedWord().latin_slanged} (Latin)</Text>  
+                      <Text style={styles.bottom_heading}>{selectedWord().latin_formal} (Formal latin)</Text>
+                  </> : null}
                 </View>
-              </View> */}
+              </View> : null}
             </View>
           </ScrollView>
       </SafeAreaView>
@@ -292,7 +286,8 @@ const styles = StyleSheet.create({
       color: '#82A4B7',
       marginLeft: 'auto',
       marginRight: 'auto',
-      borderRadius: 10,
+      borderRadius: 5,
+      height: 40,
       backgroundColor: '#F4F9EB',
     },
     view: {
