@@ -132,12 +132,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "11%",
+    marginTop: "13%",
     marginLeft: 50,
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#FFFFF7",
-    marginBottom: 15,
   },
   input: {
     width: "100%",
