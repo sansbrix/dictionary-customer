@@ -14,7 +14,8 @@ import { consoleErrors } from "../helper";
 const cat_image = require("../../assets/images/cat.png");
 
 const Words = (props) => {
-  const cat_id = props.route.params.cat_id;
+  const [data, setData] = React.useState([]);
+  const cat_id = 1;
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>

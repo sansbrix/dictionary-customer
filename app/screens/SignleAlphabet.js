@@ -11,12 +11,32 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { listData } from "../api";
 import { consoleErrors } from "../helper";
-const image = require("../../assets/images/cat.png");
+import { Audio } from 'expo-av';
+
+const image = require("../../assets/image_not_available.png");
+
+import Feather from 'react-native-vector-icons/Feather';
+import api, { BASE_URI } from "../api/api";
+Feather.loadFont()
 
 const SingleAlphabet = (props) => {
   const [data, setData] = React.useState({});
-  const alpha_id = props.route.params.alpha_id;
-  console.log(alpha_id, "idddd")
+  const [sound, setSound] = React.useState();
+  const [playing, setPlaying] = React.useState("false");
+  const alpha_id = 1;
+  
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync({uri: 'https://dns4.vippendu.com/download/128k-dmmuv/Scapegoat.mp3'});
+    setSound(sound);
+    await sound.playAsync(); 
+    setPlaying("true");
+  }
+
+  async function stopSound() {
+    await sound.stopAsync();
+    setPlaying("false");
+  }
+
   React.useEffect(() => {
     listData({alpha_id: alpha_id})
       .then((response) => { 
@@ -25,6 +45,7 @@ const SingleAlphabet = (props) => {
       })
       .catch((error) => consoleErrors(error));
   }, []);
+  
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -47,7 +68,7 @@ const SingleAlphabet = (props) => {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>Learn #{data.alphabet}</Text>
+              <Text style={styles.heading}>Learn #{data?.alphabet}</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
@@ -57,11 +78,17 @@ const SingleAlphabet = (props) => {
                     <Text style={[styles.plan_label, styles.mt_25]}>{data.alphabet}</Text> 
              </View>
              <View style={[styles.row, styles.mt_25]}>
-                <Image source={image} resizeMode="cover" style={styles.image}></Image>
-                <Image source={image} resizeMode="cover" style={styles.image}></Image>
+                {!data.image ? <Image source={image} resizeMode="contain" style={styles.image}></Image> :
+                <Image source={{ uri: BASE_URI + '/alphabet-images/' + data.image }} resizeMode="contain" style={styles.image}></Image>}
+                {!data.image2 ? <Image source={image} resizeMode="contain" style={styles.image}></Image> :
+                <Image source={{ uri: BASE_URI + '/alphabet-images/' + data.image2 }} resizeMode="contain" style={styles.image}></Image>}
              </View>
              <View style={[styles.row, styles.mt_25]}>
-                <Text style={styles.plan_label}>Audio</Text>
+                <TouchableOpacity onPress={() => data.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
+                  <Text style={styles.plan_label}>
+                  {data?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!data?.audio? "Audio Not Available" : "Play" }
+                  </Text>
+                </TouchableOpacity>
              </View>
               </View>
             </View>
@@ -207,8 +234,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 170,
+    height: 170,
     margin: 20
   },
   cat_image_container: {

@@ -47,7 +47,6 @@ function UserDefinedWord(props) {
           };
         });
         setCat(categories)
-        console.log(categories)
       })
       .catch((error) => consoleErrors(error));
 
@@ -60,7 +59,6 @@ function UserDefinedWord(props) {
           };
         });
         setCntry(countries)
-        console.log(countries)
       })
       .catch((error) => consoleErrors(error));
   }, []);
@@ -68,27 +66,10 @@ function UserDefinedWord(props) {
   const onAddUserDefinedClickHandler = () => {
     // Change the state
     setErrors({ ...defaultErrors });
-    console.log('-------', data, '******')
     addUserDefinedWords(data).then((response_) => {
-      return;
       try {
-        response = response_.data;
-        console.log("response", response_);
-        if(!response.status) {
-          if(response.error) {
-            const errors_ = response.error;
-            let errorsResponse = {};
-            Object.keys(errors_).forEach((er) => {
-              if(Array.isArray(errors_[er])) {
-                errorsResponse[er] = errors_[er][0];
-              }
-            });
-            // Set the state
-            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
-          } else {
-            setErrors({...defaultErrors, message: response.message, status: response.status});
-          }
-        } else {
+        const response = response_.data;
+        if(response.status) {
           setErrors({ ...defaultErrors, message: response.message, status: response.status });
           setTimeout(() => {
             props.navigation.navigate('MainMenu')
@@ -96,14 +77,27 @@ function UserDefinedWord(props) {
         }
       } catch(e) {
         console.log(e.line);
-        console.log("Error", e);
+        console.log("Error-----", e);
       }
       
     }).catch((error) => {
-      console.log("Rspon", error)
-      consoleErrors(error);
-      // setErrors({ ...error.response.data.errors });
-      // console.log("errors",errors)
+      // consoleErrors(error);
+      if(error.response.status == 422) {
+        console.log(error.response.data);
+        if(error.response.data && error.response.data.errors) {
+          const errors_ = error.response.data.errors;
+          let errorsResponse = {};
+          Object.keys(errors_).forEach((er) => {
+            if(Array.isArray(errors_[er])) {
+              errorsResponse[er] = errors_[er][0];
+            }
+          });
+          // Set the state
+          setErrors({...defaultErrors, ...errorsResponse, message: "Enter Valid Data", status: false});
+        } else {
+          setErrors({...defaultErrors, message: "Enter Valid Data", status: false});
+        }
+      }
     })
     
   }

@@ -32,6 +32,9 @@ export default function RootStackNavigator() {
     return (
         <RootStack.Navigator>
             <RootStack.Group screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
+            <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} />
+                <RootStack.Screen name="Words" component={Words} />
+                <RootStack.Screen name="Translate Word" component={TranslateWord} />
                 <RootStack.Screen name="Welcome" component={WelcomeScreen}/>
                 <RootStack.Screen name="MainMenu" component={MainMenu} />
                 <RootStack.Screen name="Signup" component={SignUp} />
@@ -50,13 +53,13 @@ export default function RootStackNavigator() {
                 <RootStack.Screen name="Update Profile" component={UpdateProfile} />
                 <RootStack.Screen name="Learning Track" component={LearningTrack} />
                 <RootStack.Screen name="Invite A Friend" component={InviteFriend} />
-                <RootStack.Screen name="Translate Word" component={TranslateWord} />
-                <RootStack.Screen name="Words" component={Words} />
+                <RootStack.Screen name="Signle Alphabet" component={SingleAlphabet} /> 
+                {/* <RootStack.Screen name="Words" component={Words} /> */}
                 <RootStack.Screen name="Words Quiz" component={WordsQuiz} />
                 <RootStack.Screen name="Sentences" component={Sentence} /> 
-                <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} /> 
+                {/* <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} />  */}
                 <RootStack.Screen name="Alphabets" component={Alphabets} /> 
-                <RootStack.Screen name="Signle Alphabet" component={SingleAlphabet} />       
+                      
             </RootStack.Group>
             {/* <RootStack.Group screenOptions={{ presentation: 'modal', headerShown: false, animation: 'slide_from_bottom' }}>
                 <RootStack.Screen name="Login" component={Login} />
