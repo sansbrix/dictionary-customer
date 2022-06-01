@@ -74,12 +74,14 @@ function OTPEmailVerification(props) {
         }
       } else if (index == 3) {
         temp = changeTempValue(temp, index, value);
-      }
-
-      if(!temp.includes("X")) {
         onSubmitOtpHandler(temp);
       }
 
+      // if(!temp.includes("X")) {
+       
+      // }
+
+      console.log(temp, 'temp')
       setOtp(temp);
    
     } catch(e) {
@@ -100,7 +102,9 @@ function OTPEmailVerification(props) {
       console.log("response", response);
       setErrors({ ...defaultErrors, message: response.message, status: response.status });
       setTimeout(() => {
-        // props.navigation.navigate("Email Verification", {email: data.email});
+        if(response.status) {
+          props.navigation.navigate("MainMenu");
+        }
       }, 3000);
     })
     .catch((err) => consoleErrors(err));

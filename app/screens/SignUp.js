@@ -41,6 +41,7 @@ const SignUp = (props) => {
       if(!response.status) {
         if(response.error) {
           const errors_ = response.error;
+          console.log(errors_, "errorss----")
           let errorsResponse = {};
           Object.keys(errors_).forEach((er) => {
             if(Array.isArray(errors_[er])) {
@@ -77,25 +78,6 @@ const SignUp = (props) => {
             borderBottomRightRadius: 45,
           }}
         >
-          <TouchableOpacity
-            style={{
-              borderRadius: 100,
-              backgroundColor: "#9D908D",
-              marginTop: 50,
-              marginLeft: 17,
-              width: 35,
-              height: 35,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => props.navigation.navigate("Welcome")}
-          >
-            <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-              <Text style={styles.back}>
-                <Ionicons name="md-arrow-back" size={24} color="#756765" />
-              </Text>
-            </Text>
-          </TouchableOpacity>
           <Text style={styles.heading}>Signup</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
@@ -176,7 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "11%",
+    marginTop: "19%",
     marginLeft: 17,
     fontSize: 30,
     fontWeight: "bold",

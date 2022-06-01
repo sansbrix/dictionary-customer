@@ -1,8 +1,10 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
+export const BASE_URI = "https://4054-103-41-39-195.in.ngrok.io";
+
 const api = axios.create({
-    baseURL: 'https://2428-103-41-39-3.in.ngrok.io/api',
+    baseURL: `${BASE_URI}/api`,
     headers: {
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/json',

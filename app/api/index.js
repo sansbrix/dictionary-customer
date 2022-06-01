@@ -14,6 +14,7 @@ const showWordsQuizById = (data) => api.post(`/showWordsQuizById`, data); // pen
 const getUserProfile = () => api.get(`/userProfile`);
 const sendOtp = data => api.post(`/send-otp`, data);
 const confirmOtp = data => api.post(`/confirm-otp`, data);
+const fetchLessonNameById = id => api.post(`/fetchLessonNameById`, id)
 export {
     UserSignup,
     UserLogin,
@@ -28,5 +29,6 @@ export {
     showWordsQuizById,
     getUserProfile,
     sendOtp,
-    confirmOtp
+    confirmOtp,
+    fetchLessonNameById
 }

@@ -84,8 +84,8 @@ const Login = (props) => {
             <ScrollView>
             <View styles={styles.container}>
               <View style={styles.bg_white}>
-                <View style={styles.view}>
-                  <TouchableOpacity style={{ ...styles.back,
+                <View style={[styles.view, styles.new_class]}>
+                  {/* <TouchableOpacity style={{ ...styles.back,
                     borderRadius: 100, 
                     backgroundColor: "#9D908D", 
                     marginTop: 50, 
@@ -100,7 +100,7 @@ const Login = (props) => {
                           <Ionicons name="md-arrow-back" size={24} color="#756765" />
                       </Text>
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <Text style={styles.register}>Login to level up!!!</Text>
                   <Text style={styles.heading}>Login</Text>
                 </View>
@@ -178,6 +178,9 @@ const styles = StyleSheet.create({
       width: '100%',
       borderBottomEndRadius: 50,
       paddingLeft: 20,
+    },
+    new_class: {
+      marginTop: 60
     },
     darkContainer: {
       backgroundColor: '#82A4B7',

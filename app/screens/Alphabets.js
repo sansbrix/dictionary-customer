@@ -77,7 +77,7 @@ const Alphabets = (props) => {
               </Text>
             </Text>
           </TouchableOpacity>
-          <Text style={styles.heading}>Signup</Text>
+          <Text style={styles.heading}>Alphabets</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
