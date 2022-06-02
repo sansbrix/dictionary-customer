@@ -15,6 +15,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URI } from '../api/api';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
+import { consoleErrors } from '../helper';
 Feather.loadFont();
 
 const ENTRIES1 = [
@@ -53,6 +54,8 @@ const AudioPlayer = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [sound, setSound] = React.useState();
   const [playing, setPlaying] = React.useState("false");
+  const [timer, setTimer] = React.useState(null);
+  var interval = null;
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync({uri: selectedItem.audio});
@@ -68,12 +71,14 @@ const AudioPlayer = (props) => {
 
   const goForward = () => {
     carouselRef.current.snapToNext();
+    setTimer(10);
   };
 
   useEffect(() => {
     wordsWithPictures({
       cat_id: 1,
     }).then((res) => {
+      console.log("res", res);
       if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         const ENTRIES = res.data.data.map((r) => {
         return {
@@ -85,12 +90,34 @@ const AudioPlayer = (props) => {
         setSelectedIndex(0);
         setEntries(ENTRIES);
         setSelectedItem(ENTRIES[0]);
+        setTimer(10);
       }
-    });
+    }).catch((err) => consoleErrors(err));
   }, []);
 
   useEffect(() => {
+    if(timer===0){
+      goForward();
+    }
+
+   // exit early when we reach 0
+   if (!timer) return;
+
+   // save intervalId to clear the interval when the
+   // component re-renders
+   const intervalId = setInterval(() => {
+     setTimer(timer - 1);
+   }, 1000);
+
+   // clear interval on re-render to avoid memory leaks
+   return () => clearInterval(intervalId);
+   // add timeLeft as a dependency to re-rerun the effect
+   // when we update it
+  },[timer]);
+
+  useEffect(() => {
     setSelectedItem(entries[selectedIndex]);
+    setTimer(10);
   }, [selectedIndex]);
 
   const renderItem = ({item, index}, parallaxProps) => {
@@ -154,6 +181,7 @@ const AudioPlayer = (props) => {
               flex: 1,
             }}
           >
+            <Text>{`00:${timer}`}</Text>
             <Carousel
               ref={carouselRef}
               sliderWidth={screenWidth}
@@ -161,7 +189,10 @@ const AudioPlayer = (props) => {
               data={entries}
               renderItem={renderItem}
               hasParallaxImages={true}
-              onSnapToItem={(info) => setSelectedIndex(info)}
+              onSnapToItem={(info) => {
+                setSelectedIndex(info);
+              }}
+              scrollEnabled={false}
             />
           </View>
           <View style={[styles.row, {backgroundColor: '#FFF'}]}>

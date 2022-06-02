@@ -52,7 +52,7 @@ const Words = (props) => {
           title: r.word,
           subtitle: r.arabic_word,
           illustration: BASE_URI + '/word-images/' + r.image,
-          audio: BASE_URI + '/word-audios/' + r.audio,
+          audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
         }});
         setSelectedIndex(0);
         setEntries(ENTRIES);
@@ -62,15 +62,8 @@ const Words = (props) => {
   }, []);
 
   useEffect(() => {
-    let selectedItem_ = selectedIndex ? entries.find((_, ind) => ind == selectedIndex) : null;
-    setSelectedItem(selectedItem_);
+    setSelectedItem(entries[selectedIndex]);
   }, [selectedIndex]);
-
-
-
-
-
-  
 
   const renderItem = ({item, index}, parallaxProps) => {
     return (
