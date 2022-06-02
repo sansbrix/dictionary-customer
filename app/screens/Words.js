@@ -1,156 +1,190 @@
-import React from "react";
-import { 
-    StyleSheet, 
-    Text, 
-    View, 
-    SafeAreaView, 
-    Image,
-    ScrollView,
-    TouchableOpacity
+import React, {useRef, useState, useEffect} from 'react';
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+  Platform,
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {listData} from "../api"
-import { consoleErrors } from "../helper";
-const cat_image = require("../../assets/images/cat.png");
+import { wordsWithPictures } from '../api';
+import { Router } from 'react-native-router-flux';
+import { consoleErrors } from '../helper';
+import { BASE_URI } from '../api/api';
+
+const ENTRIES1 = [
+  {
+    title: 'Beautiful and dramatic Antelope Canyon',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/UYiroysl.jpg',
+  },
+  {
+    title: 'Earlier this morning, NYC',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+  },
+  {
+    title: 'White Pocket Sunset',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
+    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
+  },
+  {
+    title: 'Acrocorinth, Greece',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
+  },
+  {
+    title: 'The lone tree, majestic landscape of New Zealand',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
+  },
+];
+const {width: screenWidth} = Dimensions.get('window');
 
 const Words = (props) => {
+  const [entries, setEntries] = useState([]);
+  const [data, setData] = useState([]);
+  const carouselRef = useRef(null);
   const cat_id = props.route.params.cat_id;
-  const [data, setData] = React.useState([]);
-  const defaultErrors = {
-    message: "",
-    status: undefined,
-  }
 
-  const [errors, setErrors] = React.useState({
-    ...defaultErrors
-  })
+  const goForward = () => {
+    carouselRef.current.snapToNext();
+  };
 
-  React.useEffect(() => {
-      listData({param : "w",
-      u_defined : false,
-      category_id : cat_id })
-      .then((response) => {
-        const countries = response.data.data.map((cntry) => {
-          return {
-            label: cntry["country"],
-            value: cntry["id"]
-          };
-        });
-        setCntry(countries)
-        console.log(countries)
-      })
-      .catch((error) => consoleErrors(error));
+  useEffect(() => {
+    
+    wordsWithPictures({
+      cat_id : cat_id
+    }).then((response_) => {
+      const response = response_.data;
+      setData([response.data.map((d) => {
+        return {
+          image: BASE_URI + '/word-images/' + d.image,
+          id: d.id,
+          audio: d.audio,
+        }
+      })]);
+      if(!response.status) {
+        if(response.error) {
+          const errors_ = response.error;
+          console.log(errors_, "errorss----")
+          let errorsResponse = {};
+          Object.keys(errors_).forEach((er) => {
+            if(Array.isArray(errors_[er])) {
+              errorsResponse[er] = errors_[er][0];
+            }
+          });
+        } 
+      }
+
+    }).catch((err) => {
+      consoleErrors(err);
+      console.log("err1", err.status)
+      console.log("err", JSON.stringify(err));
+    });
+    setEntries(ENTRIES1);
   }, []);
 
+  const renderItem = ({item, index}, parallaxProps) => {
+    console.log(item);
+    return (
+      <View style={styles.item}>
+        <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
+          [data]
+        </Text>
+        <Text style={{fontSize: 50, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
+        قف 
+        </Text>
+        <ParallaxImage
+          source={{uri: item.image}}
+          containerStyle={styles.imageContainer}
+          style={styles.image}
+          parallaxFactor={0.4}
+          {...parallaxProps}
+        />
+      </View>
+    );
+  };
   return (
-    <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-            <TouchableOpacity style={{ ...styles.back,
-                borderRadius: 100, 
-                backgroundColor: "#9D908D", 
-                marginTop: 50, 
-                marginLeft: 1, 
-                width: 35,height: 35, 
-                justifyContent: "center", 
-                alignItems: "center" 
-                }}
-                onPress={() => props.navigation.navigate('LearningMenu',{cat_id: cat_id})}>
-                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-                  <Text style={styles.back}>
-                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                  </Text>
-                </Text>
-              </TouchableOpacity>
-              <Text style={styles.register}>#lesson name</Text>
-              <Text style={styles.heading}>Lesson Wise Words</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.pb_5, styles.outer_container]}>
-               {data.slice(0,2).map((item,index)=>{
-                 console.log(index, "index")
-                return (
-                  <View style={styles.plans_div} key={`word-${index}`}>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Word:{item.word}</Text>
-                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
-                      Latin Formal:{item.latin_formal}
-                    </Text>
-                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
-                      Latin Slanged:{item.latin_slanged}
-                    </Text>
-                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
-                      Slanged Arabic:{item.slanged_arabic}
-                    </Text>
-                    <Text style={[styles.plan_sub_label_paid, styles.sub_label_color]}>
-                      Arabic Word:{item.arabic_word}
-                    </Text>
-                  </View>
-                </View>
-                )
-               })}
-              </View>
-              <View style={styles.bottom_div}>
-              <View style={[styles.plans_div, styles.bot_leraning]}>
-                  <View style={styles.dot}></View>
-                  <View style={styles.cat_image_container}>
-                    <Image
-                      source={cat_image}
-                      resizeMode="cover"
-                      style={styles.image}
-                    ></Image>
-                  </View>
-                  <View>
-                    <Text style={styles.plan_label}>Lesson 1 (0%)</Text>
-                    <Text style={[styles.plan_sub_label_paid, styles.color_white]}>
-                      #Category Name
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+    <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
+        <View
+          style={{
+            flex: 0.2,
+            flexDirection: 'row',
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              borderRadius: 100,
+              backgroundColor: "#9D908D",
+              marginTop: 50,
+              marginLeft: 17,
+              width: 35,
+              height: 35,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => props.navigation.navigate("LearningMenu")}
+          >
+            <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+              <Text style={styles.back}>
+                <Ionicons name="md-arrow-back" size={24} color="#756765" />
+              </Text>
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.heading}>Words with pictures</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingTop: 40,
+              flex: 1,
+            }}
+          >
+          {data.length > 0 ?
+            <Carousel
+              ref={carouselRef}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth - 60}
+              data={data}
+              renderItem={renderItem}
+              hasParallaxImages={true}
+            /> : null}
           </View>
         </View>
-      </ScrollView>
-
-    </SafeAreaView>
+    </View>
   );
-}
-
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
   },
-
   heading: {
-    marginTop: "1%",
-    fontSize: 30,
+    marginTop: "13%",
+    marginLeft: 50,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFF7",
   },
   input: {
     width: "100%",
     margin: 5,
-    borderWidth: 1,
     padding: 10,
-    borderColor: "#82A4B7",
     color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    backgroundColor: "#82A4B7",
+    backgroundColor: "#fff",
   },
   view: {
     backgroundColor: "#82A4B7",
@@ -165,38 +199,39 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   bg_white: {
-    backgroundColor: "#ffffff",
-    height: "24%",
+    backgroundColor: "#FFFFFF",
+    height: "22%",
     width: "100%",
+    // flex: 0.4,
   },
   innerContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 50,
     height: "100%",
     width: "100%",
+    flex: 0.4,
   },
   back: {
     marginTop: "10%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   register: {
     marginTop: "12%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#756765",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 20,
     width: "70%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: -8
   },
   color_white: {
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   font_16: {
     fontSize: 16,
@@ -209,11 +244,11 @@ const styles = StyleSheet.create({
   mt_25: {
     marginTop: 25,
   },
+  mb_25: {
+    marginBottom: 25,
+  },
   p_20: {
     padding: 20,
-  },
-  pb_5: {
-    paddingBottom: 5
   },
   another_link: {
     marginTop: 5,
@@ -222,74 +257,22 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
-  outer_container: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
+  container: {
+    flex: 1,
   },
-  plans_div: {
-    width: "100%",
-    padding: 15,
-    backgroundColor: "#F4F9EB",
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "auto",
-    marginBottom: 4,
-    borderRadius: 10,
+  item: {
+    width: screenWidth - 60,
+    height: screenWidth - 60,
   },
-  dot: {
-    height: 20,
-    width: 20,
-    backgroundColor: "#756765",
-    borderRadius: 50,
-    marginTop: 11,
-  },
-  plan_label: {
-    fontSize: 17,
-    color: "#82A4B7",
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  plan_sub_label: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "green",
-    marginLeft: 10,
-  },
-  plan_sub_label_paid: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  sub_label_color: {
-    color: '#756765'
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    backgroundColor: 'white',
+    borderRadius: 8,
   },
   image: {
-    width: 40,
-    height: 40,
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
   },
-  cat_image_container: {
-    marginLeft: 0,
-    marginRight: 2,
-    padding: 0,
-    height: 40,
-    width: 40,
-  },
-  bottom_div: {
-      height: 100,
-      width: '100%',
-      backgroundColor: '#9D908D',
-      position: 'relative',
-      bottom: -10,
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingBottom: 10
-  },
-  bot_leraning: {
-    backgroundColor: '#a2476a'
-  }
 });
-
 export default Words;
