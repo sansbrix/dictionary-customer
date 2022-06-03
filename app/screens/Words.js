@@ -10,97 +10,72 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { wordsWithPictures } from '../api';
-import { Router } from 'react-native-router-flux';
-import { consoleErrors } from '../helper';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URI } from '../api/api';
+import { Audio } from 'expo-av';
+import Feather from 'react-native-vector-icons/Feather';
+Feather.loadFont();
 
-const ENTRIES1 = [
-  {
-    title: 'Beautiful and dramatic Antelope Canyon',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
-  },
-  {
-    title: 'Earlier this morning, NYC',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-  },
-  {
-    title: 'White Pocket Sunset',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-  },
-  {
-    title: 'Acrocorinth, Greece',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-  },
-  {
-    title: 'The lone tree, majestic landscape of New Zealand',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-  },
-];
 const {width: screenWidth} = Dimensions.get('window');
 
 const Words = (props) => {
   const [entries, setEntries] = useState([]);
-  const [data, setData] = useState([]);
   const carouselRef = useRef(null);
-  const cat_id = props.route.params.cat_id;
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [sound, setSound] = React.useState();
+  const [playing, setPlaying] = React.useState("false");
+
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync({uri: selectedItem.audio});
+    setSound(sound);
+    await sound.playAsync(); 
+    setPlaying("true");
+  }
+
+  async function stopSound() {
+    await sound.stopAsync();
+    setPlaying("false");
+  }
 
   const goForward = () => {
     carouselRef.current.snapToNext();
   };
-
   useEffect(() => {
-    
     wordsWithPictures({
-      cat_id : cat_id
-    }).then((response_) => {
-      const response = response_.data;
-      setData([response.data.map((d) => {
+      cat_id: props.route.params.cat_id,
+    }).then((res) => {
+      if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        const ENTRIES = res.data.data.map((r) => {
         return {
-          image: BASE_URI + '/word-images/' + d.image,
-          id: d.id,
-          audio: d.audio,
-        }
-      })]);
-      if(!response.status) {
-        if(response.error) {
-          const errors_ = response.error;
-          console.log(errors_, "errorss----")
-          let errorsResponse = {};
-          Object.keys(errors_).forEach((er) => {
-            if(Array.isArray(errors_[er])) {
-              errorsResponse[er] = errors_[er][0];
-            }
-          });
-        } 
+          title: r.word,
+          subtitle: r.arabic_word,
+          illustration: BASE_URI + '/word-images/' + r.image,
+          audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
+        }});
+        setSelectedIndex(0);
+        setEntries(ENTRIES);
+        setSelectedItem(ENTRIES[0]);
       }
-
-    }).catch((err) => {
-      consoleErrors(err);
-      console.log("err1", err.status)
-      console.log("err", JSON.stringify(err));
     });
-    setEntries(ENTRIES1);
   }, []);
 
+  useEffect(() => {
+    setSelectedItem(entries[selectedIndex]);
+  }, [selectedIndex]);
+
   const renderItem = ({item, index}, parallaxProps) => {
-    console.log(item);
     return (
       <View style={styles.item}>
         <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
-          [data]
+          [{item.title}]
         </Text>
         <Text style={{fontSize: 50, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
-        قف 
+        {item.subtitle}
         </Text>
         <ParallaxImage
-          source={{uri: item.image}}
+          source={{uri: item.illustration}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}
@@ -109,6 +84,7 @@ const Words = (props) => {
       </View>
     );
   };
+
   return (
     <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
         <View
@@ -150,21 +126,40 @@ const Words = (props) => {
               flex: 1,
             }}
           >
-          {data.length > 0 ?
             <Carousel
               ref={carouselRef}
               sliderWidth={screenWidth}
               itemWidth={screenWidth - 60}
-              data={data}
+              data={entries}
               renderItem={renderItem}
               hasParallaxImages={true}
-            /> : null}
+              onSnapToItem={(info) => setSelectedIndex(info)}
+            />
+          </View>
+          <View style={[styles.row, {backgroundColor: '#FFF'}]}>
+            <TouchableOpacity onPress={() => selectedItem?.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
+              <Text style={styles.plan_label}>
+              {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio? "Audio Not Available" : "Play" }
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  row: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
+  plan_label: {
+    fontSize: 20,
+    color: "#82A4B7",
+    fontWeight: "bold",
+    marginLeft: 12,
+    marginTop: 6,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

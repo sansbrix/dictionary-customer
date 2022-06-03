@@ -335,8 +335,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height:200,
     display:'flex',
     margin: 'auto'
   },
