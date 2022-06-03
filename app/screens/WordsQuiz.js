@@ -136,8 +136,8 @@ const WordsQuiz = (props) => {
               backgroundColor: "#fff",
               height: "100%",
               borderTopLeftRadius: 50,
-              paddingLeft: 50,
-              paddingRight: 50,
+              paddingLeft: 10,
+              paddingRight: 10,
               paddingTop: 5,
             }}
           >
@@ -152,24 +152,28 @@ const WordsQuiz = (props) => {
                     style={styles.image}
                   ></Image>
                 </View>
-                <View style={styles.plans_div}>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
+                <View style={styles.flex_container}>
+                  <View style={styles.plans_div}>
+                    <View>
+                      <Text style={styles.plan_label}>#place word</Text>
+                    </View>
+                  </View>
+                  <View style={styles.plans_div}>
+                    <View>
+                      <Text style={styles.plan_label}>#place word</Text>
+                    </View>
                   </View>
                 </View>
-                <View style={styles.plans_div}>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
+                <View style={styles.flex_container}>
+                  <View style={styles.plans_div}>
+                    <View>
+                      <Text style={styles.plan_label}>#place word</Text>
+                    </View>
                   </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
-                  </View>
-                </View>
-                <View style={styles.plans_div}>
-                  <View>
-                    <Text style={styles.plan_label}>#place word</Text>
+                  <View style={styles.plans_div}>
+                    <View>
+                      <Text style={styles.plan_label}>#place word</Text>
+                    </View>
                   </View>
                 </View>
                 <View>
@@ -255,7 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#756765",
     padding: 10,
     borderRadius: 20,
-    width: "70%",
+    width: "60%",
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -291,14 +295,17 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  flex_container: {
+    display: "flex",
+    flexDirection: "row",
+  },
   plans_div: {
-    width: "50%",
-    padding: 7,
+    width: "49%",
+    padding: 5,
     backgroundColor: "#F4F9EB",
-    // display: "flex",
-    // flexDirection: "row",
     marginTop: "auto",
-    marginBottom: 4,
+    marginBottom: 5,
+    marginRight: 4,
     borderRadius: 10,
   },
   dot: {
@@ -312,7 +319,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "#82A4B7",
     fontWeight: "bold",
-    marginLeft: 10,
+    textAlign: 'center'
   },
   plan_sub_label: {
     fontSize: 14,
