@@ -15,6 +15,14 @@ import { consoleErrors } from "../helper";
 const UpdateProfile = (props) => {
   const [data, setData] = React.useState({
     param: "",
+    first_name: "",
+    last_name: "",
+    country: "",
+    state: "",
+    city: "",
+    nationality: "",
+    native_language: "",
+    date_of_birth: "",
 
   });
 
@@ -42,7 +50,7 @@ const UpdateProfile = (props) => {
     setErrors({ ...defaultErrors });
     UpdateUserProfile(data).then((response_) => {
       try {
-        response = response_.data;
+        const response = response_.data;
         if(!response.status) {
           if(response.error) {
             const errors_ = response.error;

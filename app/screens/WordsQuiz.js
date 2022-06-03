@@ -120,7 +120,7 @@ const WordsQuiz = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("ProfileMenu")}
+                onPress={() => props.navigation.navigate("LearningMenu", {cat_id: props.route.params.cat_id})}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
