@@ -9,18 +9,17 @@ import {
   ScrollView,
 } from 'react-native';
 import {UserLogin} from "../api";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { consoleErrors, showToast } from '../helper';
+import { Root } from 'react-native-popup-confirm-toast'
+import Spinner from 'react-native-loading-spinner-overlay';
 import * as SecureStore from 'expo-secure-store';
-import { consoleErrors } from '../helper';
-import { Root, Toast } from 'react-native-popup-confirm-toast'
 
 const Login = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({
     email: "",
     password: ""
   });
-
   const defaultErrors = {
     email: "",
     password: "",
@@ -34,10 +33,11 @@ const Login = (props) => {
 
   const onLoginClickHandler = () => {
     // Change the state
+    setLoader(true);
     setErrors({ ...defaultErrors });
     UserLogin(data).then(async (response_) => {
+      const response = response_.data;
       try {
-        response = response_.data;
         console.log(response);
         if(!response.status) {
           if(response.error) {
@@ -49,22 +49,17 @@ const Login = (props) => {
               }
             });
             // Set the state
-            setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+            setErrors({...defaultErrors, ...errorsResponse });
           } else if(response.email_not_verified){
-            props.navigation.navigate("Email Verification", {email: data.email});
+            props.navigation.navigate("Email Verification", {email: data.email, password: data.password});
           } else {
-            setErrors({...defaultErrors, message: response.message, status: response.status});
+            setErrors({...defaultErrors });
           }
+          showToast(response.message);
         } else {
+          setErrors({ ...defaultErrors  });
           await SecureStore.setItemAsync('access_token', response.token);
-          setErrors({ ...defaultErrors, message: response.message, status: response.status });
-          setTimeout(() => {
-            showMessage({
-              message: "Simple message",
-              type: "info",
-            });
-            props.navigation.navigate('ProfileMenu')
-          }, 3000);
+          props.navigation.navigate('ProfileMenu')
         }
       } catch(e) {
         console.log("Error", e);
@@ -72,75 +67,81 @@ const Login = (props) => {
       
     }).catch((err) => {
       consoleErrors(err);
-      // console.log("err1", err.status)
-      // console.log("err", JSON.stringify(err));
-    })
+      showToast("Something went wrong. Try again later.");
+    }).finally(() => setLoader(false));
     
   }
 
     return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <ScrollView>
-        <View
-          style={{
-            flex: 0.3,
-            backgroundColor: "#82A4B7",
-            borderBottomRightRadius: 45,
-          }}
-        >
-          <Text style={styles.heading}>Login</Text>
-        </View>
-        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+      <Root>
+         {loader ? <Spinner
+           visible={loader}
+           textContent={'Loading...'}
+           textStyle={styles.spinnerTextStyle}
+         /> : null}
+        <ScrollView>
           <View
             style={{
-              backgroundColor: "#fff",
-              height: "100%",
-              borderTopLeftRadius: 50,
-              paddingLeft: 50,
-              paddingRight: 50,
-              paddingTop: 5,
+              flex: 0.3,
+              backgroundColor: "#82A4B7",
+              borderBottomRightRadius: 45,
             }}
           >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
-              <View> 
-                    {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
-                      <Text style={styles.label}>Your Email</Text>
-                      <TextInput
-                      onChangeText={(value) => setData({...data, email: value})}
-                      style={[styles.input]}
-                      placeholder="Email"
-                      />
-                      {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
-                    </View>
-                    <View>
-                      <Text style={styles.label}>Your Password</Text>
-                      <TextInput
-                        secureTextEntry={true}
-                        onChangeText={(value) => setData({...data, password: value})}
-                        style={[styles.input]}
-                        placeholder="Password"
-                      />
-                      {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
-                    </View>
-                    <View>
-                    <TouchableOpacity style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                    onPress={() =>  onLoginClickHandler() }>
-                        <Text style={[styles.color_white, styles.font_16]}>Login</Text>
-                    </TouchableOpacity>
-                    </View>
-                    <View style={styles.mt_25}>
-                      <Text 
-                      style={styles.another_link}
-                      onPress={() => props.navigation.navigate('Signup')}
-                      >New to dictionary app? Register here...</Text>
-                    </View>
-            </ScrollView>
+            <Text style={styles.heading}>Login</Text>
           </View>
-        </View>
-      </ScrollView>
+          <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                height: "100%",
+                borderTopLeftRadius: 50,
+                paddingLeft: 50,
+                paddingRight: 50,
+                paddingTop: 5,
+              }}
+            >
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View> 
+                      {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+                        <Text style={styles.label}>Your Email</Text>
+                        <TextInput
+                        onChangeText={(value) => setData({...data, email: value})}
+                        style={[styles.input]}
+                        placeholder="Email"
+                        />
+                        {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
+                      </View>
+                      <View>
+                        <Text style={styles.label}>Your Password</Text>
+                        <TextInput
+                          secureTextEntry={true}
+                          onChangeText={(value) => setData({...data, password: value})}
+                          style={[styles.input]}
+                          placeholder="Password"
+                        />
+                        {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
+                      </View>
+                      <View>
+                      <TouchableOpacity style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
+                      onPress={() =>  onLoginClickHandler() }>
+                          <Text style={[styles.color_white, styles.font_16]}>Login</Text>
+                      </TouchableOpacity>
+                      </View>
+                      <View style={styles.mt_25}>
+                        <Text 
+                        style={styles.another_link}
+                        onPress={() => props.navigation.navigate('Signup')}
+                        >New to dictionary app? Register here...</Text>
+                      </View>
+              </ScrollView>
+            </View>
+          </View>
+        </ScrollView>
+      </Root>
     </SafeAreaView>
     );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useLayoutEffect} from "react";
 import {
   StyleSheet,
   Text,
@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import {sendOtp, UserSignup} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { consoleErrors } from "../helper";
-
+import { consoleErrors, showToast } from "../helper";
+import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const SignUp = (props) => {
-  const [disable, disableButton] = React.useState(false);
+  const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -32,8 +33,9 @@ const SignUp = (props) => {
   const [errors, setErrors] = React.useState({
     ...defaultErrors
   })
+  
   onSignUpClickHandler = () => {
-    disableButton(true);
+    setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
     UserSignup(data).then((response_) => {
@@ -49,106 +51,115 @@ const SignUp = (props) => {
             }
           });
           // Set the state
-          setErrors({...defaultErrors, ...errorsResponse, message: response.message, status: response.status});
+          setErrors({...defaultErrors, ...errorsResponse});
         } else {
-          setErrors({...defaultErrors, message: response.message, status: response.status});
+          setErrors({...defaultErrors});
         }
+        showToast(response.message);
       } else {
-        setErrors({ ...defaultErrors, message: response.message, status: response.status });
-        setTimeout(() => {
-          props.navigation.navigate("Login");
-        }, 3000);
+        setData({
+          email: "",
+          password: "",
+          mobile_number: "",
+        })
+        setErrors({ ...defaultErrors });
+        props.navigation.navigate("Login" , {signup_successful: true});
       }
 
     }).catch((err) => {
       consoleErrors(err);
-      console.log("err1", err.status)
-      console.log("err", JSON.stringify(err));
-    }).finally(() => disableButton(false));
-    
+    }).finally(() => setLoader(false));
   }
-  // console.log(props);
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <ScrollView>
-        <View
-          style={{
-            flex: 0.3,
-            backgroundColor: "#82A4B7",
-            borderBottomRightRadius: 45,
-          }}
-        >
-          <Text style={styles.heading}>Signup</Text>
-        </View>
-        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+      <Root>
+         {loader ? <Spinner
+           visible={loader}
+           textStyle={styles.spinnerTextStyle}
+         /> : null}
+        <ScrollView>
           <View
             style={{
-              backgroundColor: "#fff",
-              height: "100%",
-              borderTopLeftRadius: 50,
-              paddingLeft: 50,
-              paddingRight: 50,
-              paddingTop: 5,
+              flex: 0.3,
+              backgroundColor: "#82A4B7",
+              borderBottomRightRadius: 45,
             }}
           >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
-              <View>
-                {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                  onChangeText={(value) => setData({...data, email: value})}
-                  style={[styles.input]}
-                  placeholder="Email"
-                />
-                {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
-              </View>
-              <View>
-                <Text style={styles.label}>Mobile</Text>
-                <TextInput
-                  onChangeText={(value) => setData({...data, mobile_number: value})}
-                  style={[styles.input]}
-                  placeholder="Mobile Number"
-                />
-                {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
-              </View>
-              <View>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                  secureTextEntry={true}
-                  onChangeText={(value) => setData({...data, password: value})}
-                  style={[styles.input]}
-                  placeholder="Password"
-                />
-                {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
-              </View>
-              <View>
-                <TouchableOpacity
-                  disabled={disable}
-                  style={{ ...styles.mt_25, ...styles.mb_25, ...styles.button }}
-                  onPress={() =>
-                    onSignUpClickHandler()
-                  }
-                >
-                  <Text style={[styles.color_white, styles.font_16]}>
-                    Sign Up
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <Text
-                  style={styles.another_link}
-                  onPress={() => props.navigation.navigate("Login")}
-                >
-                  Already have a account? Login here...
-                </Text>
-              </View>
-            </ScrollView>
+            <Text style={styles.heading}>Signup</Text>
           </View>
-        </View>
-      </ScrollView>
+          <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                height: "100%",
+                borderTopLeftRadius: 50,
+                paddingLeft: 50,
+                paddingRight: 50,
+                paddingTop: 5,
+              }}
+            >
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View>
+                  {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+                  <Text style={styles.label}>Email</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, email: value})}
+                    style={[styles.input]}
+                    value={data.email}
+                    placeholder="Email"
+                  />
+                  {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
+                </View>
+                <View>
+                  <Text style={styles.label}>Mobile</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, mobile_number: value})}
+                    style={[styles.input]}
+                    value={data.mobile_number}
+                    placeholder="Mobile Number"
+                  />
+                  {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
+                </View>
+                <View>
+                  <Text style={styles.label}>Password</Text>
+                  <TextInput
+                    secureTextEntry={true}
+                    onChangeText={(value) => setData({...data, password: value})}
+                    style={[styles.input]}
+                    placeholder="Password"
+                    value={data.password}
+                  />
+                  {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={{ ...styles.mt_25, ...styles.mb_25, ...styles.button }}
+                    onPress={() =>
+                      onSignUpClickHandler()
+                    }
+                  >
+                    <Text style={[styles.color_white, styles.font_16]}>
+                      Sign Up
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <Text
+                    style={styles.another_link}
+                    onPress={() => props.navigation.navigate("Login")}
+                  >
+                    Already have a account? Login here...
+                  </Text>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </ScrollView>
+      </Root>
     </SafeAreaView>
   );
 };
