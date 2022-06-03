@@ -6,13 +6,14 @@ import {
   View, 
   SafeAreaView,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {UserLogin} from "../api";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as SecureStore from 'expo-secure-store';
 import { consoleErrors } from '../helper';
+import { Root, Toast } from 'react-native-popup-confirm-toast'
 
 const Login = (props) => {
   const [data, setData] = React.useState({
@@ -78,37 +79,33 @@ const Login = (props) => {
   }
 
     return (
-        <SafeAreaView style={[styles.container,
-            {flexDirection: "column"}
-            ]}>
-            <ScrollView>
-            <View styles={styles.container}>
-              <View style={styles.bg_white}>
-                <View style={[styles.view, styles.new_class]}>
-                  {/* <TouchableOpacity style={{ ...styles.back,
-                    borderRadius: 100, 
-                    backgroundColor: "#9D908D", 
-                    marginTop: 50, 
-                    marginLeft: 1, 
-                    width: 35,height: 35, 
-                    justifyContent: "center", 
-                    alignItems: "center" 
-                    }}
-                    onPress={() => props.navigation.navigate('Welcome')}>
-                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-                      <Text style={styles.back}>
-                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                      </Text>
-                    </Text>
-                  </TouchableOpacity> */}
-                  <Text style={styles.register}>Login to level up!!!</Text>
-                  <Text style={styles.heading}>Login</Text>
-                </View>
-              </View>
-              <View style={styles.darkContainer}>
-                <View style={styles.innerContainer}>
-                  <View style={styles.p_20}>
-                    <View> 
+    <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+      <ScrollView>
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+          <Text style={styles.heading}>Login</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              <View> 
                     {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                       <Text style={styles.label}>Your Email</Text>
                       <TextInput
@@ -140,12 +137,11 @@ const Login = (props) => {
                       onPress={() => props.navigation.navigate('Signup')}
                       >New to dictionary app? Register here...</Text>
                     </View>
-                  </View>
-                </View>
-              </View>
-            </View>
             </ScrollView>
-        </SafeAreaView>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
     );
 }
 
@@ -156,11 +152,12 @@ const styles = StyleSheet.create({
     },
 
     heading: {
-      marginTop: '1%',
+      marginTop: "19%",
+      marginLeft: 17,
       fontSize: 30,
-      fontWeight: 'bold',
-      color: '#ffffff',
-      marginBottom: 60
+      fontWeight: "bold",
+      color: "#FFFFFF",
+      marginBottom: 15,
     },
     input: {
       width: '100%',

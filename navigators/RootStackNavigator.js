@@ -56,7 +56,7 @@ export default function RootStackNavigator() {
                 <RootStack.Screen name="Sentences" component={Sentence} /> 
                 <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} /> 
                 <RootStack.Screen name="Alphabets" component={Alphabets} /> 
-                {/* <RootStack.Screen name="Signle Alphabet" component={SingleAlphabet} />        */}
+                <RootStack.Screen name="Translate Word" component={TranslateWord} />       
             </RootStack.Group>
             {/* <RootStack.Group screenOptions={{ presentation: 'modal', headerShown: false, animation: 'slide_from_bottom' }}>
                 <RootStack.Screen name="Login" component={Login} />

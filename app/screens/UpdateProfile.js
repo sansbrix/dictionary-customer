@@ -75,16 +75,20 @@ const UpdateProfile = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-              <TouchableOpacity
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
                 style={{
                   ...styles.back,
                   borderRadius: 100,
                   backgroundColor: "#9D908D",
                   marginTop: 50,
-                  marginLeft: 1,
+                  marginLeft: 20,
                   width: 35,
                   height: 35,
                   justifyContent: "center",
@@ -98,13 +102,24 @@ const UpdateProfile = (props) => {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>Update Profile</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={styles.p_20}>
-                <View>
+          <Text style={styles.heading}>Update Profile</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+            <View>
                 {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                   <Text style={styles.label}>First Name</Text>
                   <TextInput
@@ -125,26 +140,6 @@ const UpdateProfile = (props) => {
                     value={data.last_name}
                   />
                   {errors.last_name ? <Text style={{color: 'red'}}>{errors.last_name}</Text> : null}
-                </View>
-                {/* <View>
-                  <Text style={styles.label}>Email</Text>
-                  <TextInput
-                    onChangeText={(value) => setData({...data, email: value})}
-                    style={[styles.input]}
-                    placeholder="Email"
-                  />
-                  {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
-                </View> */}
-                <View>
-                  <Text style={styles.label}>Password</Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    onChangeText={(value) => setData({...data, password: value})}
-                    style={[styles.input]}
-                    placeholder="Password"
-                    value={data.password}
-                  />
-                  {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Country</Text>
@@ -197,16 +192,6 @@ const UpdateProfile = (props) => {
                   {errors.native_language ? <Text style={{color: 'red'}}>{errors.native_language}</Text> : null}
                 </View>
                 <View>
-                  <Text style={styles.label}>Mobile Number</Text>
-                  <TextInput
-                    onChangeText={(value) => setData({...data, mobile_number: value})}
-                    style={[styles.input]}
-                    placeholder="Mobile Number"
-                    value={data.mobile_number}
-                  />
-                  {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
-                </View>
-                <View>
                   <Text style={styles.label}>DOB</Text>
                   <TextInput
                     onChangeText={(value) => setData({...data, date_of_birth: value})}
@@ -231,8 +216,7 @@ const UpdateProfile = (props) => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -246,10 +230,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   heading: {
-    marginTop: "2%",
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
+    marginBottom: 15,
   },
   input: {
     width: "100%",

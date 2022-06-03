@@ -130,7 +130,7 @@ const Words = (props) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("LearningMenu")}
+            onPress={() => props.navigation.navigate("LearningMenu", {cat_id: cat_id})}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>

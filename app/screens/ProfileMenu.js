@@ -15,10 +15,9 @@ const ProfileMenu = (props) => {
   const [data, setData] = React.useState({});
 
   React.useEffect(() => {
-    getUserProfile({}).then((response) => {
-
-      console.log("Respons---user", response?.data?.user)
-      setData(response?.data?.user)
+    getUserProfile().then((response) => {
+      console.log(response.data, "sdds");
+      setData(response.data);
     }).catch((error) => {
       console.log(error);consoleErrors(error)});
   }, []);

@@ -103,7 +103,7 @@ function OTPEmailVerification(props) {
       setErrors({ ...defaultErrors, message: response.message, status: response.status });
       setTimeout(() => {
         if(response.status) {
-          props.navigation.navigate("MainMenu");
+          props.navigation.navigate("ProfileMenu");
         }
       }, 3000);
     })
@@ -127,7 +127,7 @@ function OTPEmailVerification(props) {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("Signup")}
+                onPress={() => props.navigation.navigate("Login")}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>

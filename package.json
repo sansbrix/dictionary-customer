@@ -26,12 +26,14 @@
     "react-native-autocomplete-input": "^5.1.0",
     "react-native-dropdown-picker": "2.1.1",
     "react-native-flash-message": "^0.2.1",
+    "react-native-popup-confirm-toast": "^2.1.1",
     "react-native-router-flux": "^4.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-snap-carousel": "^3.9.1",
+    "react-native-status-bar-height": "^2.6.0",
     "react-native-vector-icons": "^9.1.0",
-    "react-native-web": "0.17.1",
-    "react-native-snap-carousel": "^3.9.1"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
