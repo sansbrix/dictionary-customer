@@ -153,29 +153,21 @@ const WordsQuiz = (props) => {
                   ></Image>
                 </View>
                 <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  </View>
                   <View>
                     <Text style={styles.plan_label}>#place word</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  </View>
                   <View>
                     <Text style={styles.plan_label}>#place word</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  </View>
                   <View>
                     <Text style={styles.plan_label}>#place word</Text>
                   </View>
                 </View>
                 <View style={styles.plans_div}>
-                  <View style={styles.cat_image_container}>
-                  </View>
                   <View>
                     <Text style={styles.plan_label}>#place word</Text>
                   </View>
@@ -300,11 +292,11 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   plans_div: {
-    width: "100%",
+    width: "50%",
     padding: 7,
     backgroundColor: "#F4F9EB",
-    display: "flex",
-    flexDirection: "row",
+    // display: "flex",
+    // flexDirection: "row",
     marginTop: "auto",
     marginBottom: 4,
     borderRadius: 10,
