@@ -33,34 +33,54 @@ const LearningTrack = (props) => {
   }
   
   return (
+
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-            <TouchableOpacity style={{ ...styles.back,
-                borderRadius: 100, 
-                backgroundColor: "#9D908D", 
-                marginTop: 50, 
-                marginLeft: 1, 
-                width: 35,height: 35, 
-                justifyContent: "center", 
-                alignItems: "center" 
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 20,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate('MainMenu')}>
-                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                onPress={() => props.navigation.navigate("MainMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
-                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.register}>Progress 0% (Level: #level)</Text>
               <Text style={styles.heading}>Learning Track</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.outer_container]}>
+              <Text style={styles.register}>Progress 0% (Level: #level)</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
               {data.map((item,index)=>{
                 return (
                   <TouchableOpacity key={`learning-${index}`} onPress={() =>onLessonClickHandler(item.id)}>
@@ -83,8 +103,7 @@ const LearningTrack = (props) => {
               </TouchableOpacity>
                 )
               })}
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -99,11 +118,12 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    marginTop: "1%",
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffffff",
-    marginBottom: 60,
+    color: "#FFFFFF",
+    marginBottom: 5,
   },
   input: {
     width: "100%",
@@ -146,9 +166,11 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   register: {
-    marginTop: "12%",
+    marginTop: "1%",
     fontSize: 15,
     color: "#ffffff",
+    marginLeft: 80,
+    marginBottom: 15
   },
   button: {
     alignItems: "center",

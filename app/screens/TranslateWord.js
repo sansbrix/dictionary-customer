@@ -80,50 +80,52 @@ const TranslateWord = (props) => {
   const onOpenSuggestionsList = useCallback(isOpened => {}, [])
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <>
-        <ScrollView style={{height: '100%', flex: 1, flexDirection: 'column'}}>
+      <ScrollView>
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 20,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={() => props.navigation.navigate("MainMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+                  <Text style={styles.back}>
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
+                </Text>
+              </TouchableOpacity>
+          <Text style={styles.heading}>Translate Word</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
             style={{
-              flex: 0.3,
-              backgroundColor: "#82A4B7",
-              borderBottomRightRadius: 45,
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
             }}
           >
-            <TouchableOpacity
-              style={{
-                borderRadius: 100,
-                backgroundColor: "#9D908D",
-                marginTop: 50,
-                marginLeft: 17,
-                width: 35,
-                height: 35,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => props.navigation.navigate("MainMenu")}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
             >
-              <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-                <Text style={styles.back}>
-                  <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                </Text>
-              </Text>
-            </TouchableOpacity>
-            <Text style={styles.heading}>Translate</Text>
-          </View>
-          <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
-            <View
-              style={{
-                backgroundColor: "#fff",
-                height: "100%",
-                borderTopLeftRadius: 50,
-                paddingLeft: 50,
-                paddingRight: 50,
-                paddingTop: 5,
-                flex: 1,
-                flexDirection: 'column'
-              }}
-            >
-                <View style={{flex: 0.2}}>
+            <View style={{flex: 0.2}}>
                     <Text style={styles.label}>From</Text>
                     <Picker
                       style={styles.input}
@@ -218,10 +220,10 @@ const TranslateWord = (props) => {
                         <Text style={styles.bottom_heading}>{selectedWord().latin_formal} (Formal latin)</Text>
                     </> : null}
                   </View>: null}
-            </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-      </>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -235,8 +237,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "11%",
-    marginLeft: 17,
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
     color: "#FFFFFF",

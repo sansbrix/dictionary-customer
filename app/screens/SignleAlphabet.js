@@ -110,8 +110,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   heading: {
-    marginTop: "8%",
+    marginTop: "-11%",
     fontSize: 30,
+    marginLeft: 70,
     fontWeight: "bold",
     color: "#ffffff",
   },
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "25%",
+    height: "19%",
     width: "100%",
   },
   innerContainer: {

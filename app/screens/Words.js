@@ -165,11 +165,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "13%",
-    marginLeft: 50,
-    fontSize: 18,
+    marginTop: "12%",
+    fontSize: 30,
+    marginLeft: 10,
     fontWeight: "bold",
-    color: "#FFFFF7",
+    color: "#ffffff",
+    marginBottom: 15
   },
   input: {
     width: "100%",

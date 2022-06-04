@@ -14,6 +14,7 @@ import { consoleErrors } from "../helper";
 import {Picker} from '@react-native-picker/picker';
 
 const Alphabets = (props) => {
+  const cat_id = props.route.params;
   const [disable, disableButton] = React.useState(false);
   const [lang, setlang] = React.useState([]);
   const [selectedLang, setSelectedLang] = React.useState("");
@@ -63,13 +64,13 @@ const Alphabets = (props) => {
               borderRadius: 100,
               backgroundColor: "#9D908D",
               marginTop: 50,
-              marginLeft: 17,
+              marginLeft: 20,
               width: 35,
               height: 35,
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("Welcome")}
+            onPress={() => props.navigation.navigate("MainMenu")}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>
@@ -84,9 +85,10 @@ const Alphabets = (props) => {
             style={{
               backgroundColor: "#fff",
               height: "100%",
+              width: "100%",
               borderTopLeftRadius: 50,
-              paddingLeft: 50,
-              paddingRight: 50,
+              paddingLeft: 30,
+              paddingRight: 30,
               paddingTop: 5,
             }}
           >
@@ -94,7 +96,7 @@ const Alphabets = (props) => {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <View>
+              <View style={[styles.m_t_50, styles.mb_25]}>
                 <Picker
                   style={styles.input}
                   selectedValue={selectedLang}
@@ -173,8 +175,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "11%",
-    marginLeft: 17,
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
     color: "#FFFFFF",
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     height: "100%",
     width: "100%",
-    flex: 0.4,
+    flex: 0.6,
   },
   back: {
     marginTop: "10%",
@@ -261,5 +263,8 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  m_t_50: {
+    marginTop: 50
+  }
 });
 export default Alphabets;

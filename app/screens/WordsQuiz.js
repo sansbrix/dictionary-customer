@@ -202,7 +202,7 @@ const WordQuiz = (props) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("Welcome")}
+            onPress={() => props.navigation.navigate("LearningMenu", {cat_id: props.route.params.cat_id})}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>
@@ -210,7 +210,7 @@ const WordQuiz = (props) => {
               </Text>
             </Text>
           </TouchableOpacity>
-          <Text style={styles.heading}>Words with pictures</Text>
+          <Text style={styles.heading}>Words Puzzle</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -258,11 +258,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   heading: {
-    marginTop: "13%",
-    marginLeft: 50,
-    fontSize: 18,
+    marginTop: "12%",
+    fontSize: 30,
+    marginLeft: 10,
     fontWeight: "bold",
-    color: "#FFFFF7",
+    color: "#ffffff",
+    marginBottom: 15
   },
   input: {
     width: "100%",

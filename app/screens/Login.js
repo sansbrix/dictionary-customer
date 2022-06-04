@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
 
     heading: {
       marginTop: "19%",
-      marginLeft: 17,
+      marginLeft: 30,
       fontSize: 30,
       fontWeight: "bold",
       color: "#FFFFFF",

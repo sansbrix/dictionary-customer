@@ -84,6 +84,7 @@ function UserDefinedWord(props) {
     setErrors({ ...defaultErrors });
     addUserDefinedWords(data).then((response_) => {
       try {
+        console.log("----", response_, "----")
         const response = response_.data;
         if(response.status) {
           setErrors({ ...defaultErrors, message: response.message, status: response.status });
@@ -120,32 +121,51 @@ function UserDefinedWord(props) {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-            <TouchableOpacity style={{ ...styles.back,
-                borderRadius: 100, 
-                backgroundColor: "#9D908D", 
-                marginTop: 50, 
-                marginLeft: 1, 
-                width: 35,height: 35, 
-                justifyContent: "center", 
-                alignItems: "center" 
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 20,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate('MainMenu')}>
-                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                onPress={() => props.navigation.navigate("MainMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
-                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>User Defined Word</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={styles.p_20}>
-              {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+          <Text style={styles.heading}>User Defined Word</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+            {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
               <View>
                   <Text style={styles.label}>Select Country</Text>
                   <DropDownPicker
@@ -204,8 +224,7 @@ function UserDefinedWord(props) {
                     </View>
                   </TouchableOpacity>
                 </View>
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -219,11 +238,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   heading: {
-    marginTop: "5%",
+    marginTop: "-11%",
     fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
-    marginBottom: 60,
+    marginLeft: 70,
+    marginBottom: 15,
   },
   input: {
     width: "100%",

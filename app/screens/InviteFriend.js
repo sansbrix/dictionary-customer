@@ -5,7 +5,8 @@ import {
   TextInput, 
   View, 
   SafeAreaView,
-  TouchableOpacity 
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {sendInvite} from "../api"
@@ -63,36 +64,108 @@ function InviteFriend(props) {
     
   }
     return (
-        <SafeAreaView style={[styles.container,
-            {flexDirection: "column"}
-            ]}>
-            <View styles={styles.container}>
-              <View style={styles.bg_white}>
-                <View style={styles.view}>
-                <TouchableOpacity style={{ ...styles.back,
-                    borderRadius: 100, 
-                    backgroundColor: "#9D908D", 
-                    marginTop: 50, 
-                    marginLeft: 1, 
-                    width: 35,height: 35, 
-                    justifyContent: "center", 
-                    alignItems: "center" 
-                    }}
-                    onPress={() => props.navigation.navigate('ProfileMenu')}>
-                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-                      <Text style={styles.back}>
-                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                      </Text>
-                    </Text>
-                  </TouchableOpacity>
-                  <Text style={styles.register}>Send an invitation to join dictionary app!</Text>
-                  <Text style={styles.heading}>Invite a Friend</Text>
-                </View>
-              </View>
-              <View style={styles.darkContainer}>
-                <View style={styles.innerContainer}>
-                  <View style={styles.p_20}>
-                    <View> 
+        // <SafeAreaView style={[styles.container,
+        //     {flexDirection: "column"}
+        //     ]}>
+        //     <View styles={styles.container}>
+        //       <View style={styles.bg_white}>
+        //         <View style={styles.view}>
+        //         <TouchableOpacity style={{ ...styles.back,
+        //             borderRadius: 100, 
+        //             backgroundColor: "#9D908D", 
+        //             marginTop: 50, 
+        //             marginLeft: 1, 
+        //             width: 35,height: 35, 
+        //             justifyContent: "center", 
+        //             alignItems: "center" 
+        //             }}
+        //             onPress={() => props.navigation.navigate('ProfileMenu')}>
+        //             <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+        //               <Text style={styles.back}>
+        //                   <Ionicons name="md-arrow-back" size={24} color="#756765" />
+        //               </Text>
+        //             </Text>
+        //           </TouchableOpacity>
+        //           <Text style={styles.register}>Send an invitation to join dictionary app!</Text>
+        //           <Text style={styles.heading}>Invite a Friend</Text>
+        //         </View>
+        //       </View>
+        //       <View style={styles.darkContainer}>
+        //         <View style={styles.innerContainer}>
+        //           <View style={styles.p_20}>
+        //             <View> 
+        //             {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+        //               <Text style={styles.label}>Enter Email</Text>
+        //               <View style={styles.d_flex}>
+        //                 <TextInput
+        //                 onChangeText={(value) => setData({...data, email: value})}
+        //                 style={[styles.input]}
+        //                 placeholder="Email"
+        //                 />
+        //                 {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
+        //               </View>
+        //             </View>
+        //             <View>
+        //             <TouchableOpacity style={styles.mt_25}
+        //               onPress={() =>  onInviteFriendClickHandler() }>
+        //               <View style={styles.button}>
+        //                 <Text style={[styles.color_white, styles.font_16]}>Send Invite</Text>
+        //               </View>
+        //             </TouchableOpacity>
+        //             </View>
+        //           </View>
+        //         </View>
+        //       </View>
+        //     </View>
+        // </SafeAreaView>
+
+        <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+      <ScrollView>
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 20,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={() => props.navigation.navigate("ProfileMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+                  <Text style={styles.back}>
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
+                </Text>
+              </TouchableOpacity>
+          <Text style={styles.heading}>Invite a Friend</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+            <View style={styles.m_top_50}> 
                     {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                       <Text style={styles.label}>Enter Email</Text>
                       <View style={styles.d_flex}>
@@ -104,19 +177,17 @@ function InviteFriend(props) {
                         {errors.email ? <Text style={{color: 'red'}}>{errors.email}</Text> : null}
                       </View>
                     </View>
-                    <View>
                     <TouchableOpacity style={styles.mt_25}
                       onPress={() =>  onInviteFriendClickHandler() }>
                       <View style={styles.button}>
                         <Text style={[styles.color_white, styles.font_16]}>Send Invite</Text>
                       </View>
                     </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-        </SafeAreaView>
+            </ScrollView>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
     );
 }
 
@@ -127,10 +198,12 @@ const styles = StyleSheet.create({
     },
 
     heading: {
-      marginTop: '1%',
+      marginTop: "-11%",
+      marginLeft: 80,
       fontSize: 30,
-      fontWeight: 'bold',
-      color: '#ffffff'
+      fontWeight: "bold",
+      color: "#FFFFFF",
+      marginBottom: 15,
     },
     input: {
       width: '100%',
@@ -214,6 +287,9 @@ const styles = StyleSheet.create({
     d_flex: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    m_top_50: {
+      marginTop: 50
     }
   });
 

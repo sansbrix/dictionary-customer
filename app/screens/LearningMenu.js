@@ -15,22 +15,26 @@ const LearningMenu = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-              <TouchableOpacity
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
                 style={{
                   ...styles.back,
                   borderRadius: 100,
                   backgroundColor: "#9D908D",
                   marginTop: 50,
-                  marginLeft: 1,
+                  marginLeft: 30,
                   width: 35,
                   height: 35,
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("Learning Track")}
+                onPress={() => props.navigation.navigate("ProfileMenu")}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
@@ -38,16 +42,27 @@ const LearningMenu = (props) => {
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>Enhance Your Learning</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.outer_container]}>
-                <TouchableOpacity
+          <Text style={styles.heading}>Enhance Your Learning</Text>
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+            <TouchableOpacity
                   onPress={() => props.navigation.navigate("Words Quiz", {cat_id: cat_id})}
                 >
-                  <View style={styles.plans_div}>
+                  <View style={[styles.plans_div, styles.m_top_50]}>
                     <View style={styles.cat_image_container}>
                       <Ionicons name="md-film" size={32} color="#756765" />
                     </View>
@@ -82,8 +97,7 @@ const LearningMenu = (props) => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -98,10 +112,12 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    marginTop: "3%",
+    marginTop: "-11%",
     fontSize: 30,
+    marginLeft: 80,
     fontWeight: "bold",
     color: "#ffffff",
+    marginBottom: 15
   },
   input: {
     width: "100%",
@@ -193,8 +209,12 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginTop: "auto",
-    marginBottom: 4,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 10,
+  },
+  m_top_50: {
+    marginTop: 50
   },
   dot: {
     height: 20,

@@ -39,7 +39,7 @@ const Sentence = (props) =>{
                     borderRadius: 100, 
                     backgroundColor: "#9D908D", 
                     marginTop: 50, 
-                    marginLeft: 1, 
+                    marginLeft: 20, 
                     width: 35,height: 35, 
                     justifyContent: "center", 
                     alignItems: "center" 
@@ -114,10 +114,11 @@ const styles = StyleSheet.create({
     },
 
     heading: {
-      marginTop: '2%',
+      marginTop: '-11%',
       fontSize: 30,
       fontWeight: 'bold',
-      color: '#ffffff'
+      color: '#ffffff',
+      marginLeft: 80,
     },
     input: {
       width: '100%',
@@ -160,9 +161,11 @@ const styles = StyleSheet.create({
       color: '#ffffff',
     },
     register: {
-      marginTop: '1%',
+      marginTop: '5',
       fontSize: 15,
-      color: '#ffffff'
+      color: '#ffffff',
+      marginLeft: 80,
+      marginBottom: 15
     },
     button: {
         alignItems: "center",

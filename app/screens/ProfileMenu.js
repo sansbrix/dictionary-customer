@@ -16,41 +16,184 @@ const ProfileMenu = (props) => {
 
   React.useEffect(() => {
     getUserProfile().then((response) => {
-      console.log(response.data, "sdds");
-      setData(response.data);
+      setData(response.data.user);
     }).catch((error) => {
       console.log(error);consoleErrors(error)});
   }, []);
   return (
-    <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+    // <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+    // <View
+    //       style={{
+    //         flex: 0.3,
+    //         backgroundColor: "#82A4B7",
+    //         borderBottomRightRadius: 45,
+    //       }}
+    //     >
+    //     <TouchableOpacity
+    //             style={{
+    //               ...styles.back,
+    //               borderRadius: 100,
+    //               backgroundColor: "#9D908D",
+    //               marginTop: 50,
+    //               marginLeft: 30,
+    //               width: 35,
+    //               height: 35,
+    //               justifyContent: "center",
+    //               alignItems: "center",
+    //             }}
+    //             onPress={() => props.navigation.navigate("Login")}
+    //           >
+    //             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+    //               <Text style={styles.back}>
+    //                 <Ionicons name="md-arrow-back" size={24} color="#756765" />
+    //               </Text>
+    //             </Text>
+    //           </TouchableOpacity>
+    //       <Text style={styles.heading}>Profile Menu</Text>
+    //     </View>
+    //   <ScrollView>
+    //       <View>
+    //         <TouchableOpacity style={{ ...styles.back,
+    //             borderRadius: 100, 
+    //             backgroundColor: "#9D908D", 
+    //             marginTop: 50, 
+    //             marginLeft: 10, 
+    //             width: 35,height: 35, 
+    //             justifyContent: "center", 
+    //             alignItems: "center" 
+    //             }}
+    //             onPress={() => props.navigation.navigate('Login')}>
+    //             <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+    //               <Text style={styles.back}>
+    //                   <Ionicons name="md-log-out" size={24} color="#756765" />
+    //               </Text>
+    //             </Text>
+    //           </TouchableOpacity>
+    //           <Text style={styles.heading}>{data?.first_name} {data?.last_name}</Text>
+    //           <Text style={styles.levelLabel}>Level: Level</Text> 
+    //       <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+    //         <View style={{
+    //           backgroundColor: "#fff",
+    //           height: "100%",
+    //           borderTopLeftRadius: 50,
+    //           paddingLeft: 50,
+    //           paddingRight: 50,
+    //           paddingTop: 5,
+    //         }}>
+    //         <ScrollView
+    //           showsVerticalScrollIndicator={false}
+    //           showsHorizontalScrollIndicator={false}
+    //         >
+    //           <TouchableOpacity onPress={() => props.navigation.navigate('MainMenu')}>
+    //             <View style={styles.plans_div}>
+    //               <View style={styles.cat_image_container}>
+    //               <Ionicons name="md-language" size={32} color="#756765" />
+    //               </View>
+    //               <View>
+    //                 <Text style={styles.plan_label}>#Language</Text>
+    //               </View>
+    //             </View>
+    //           </TouchableOpacity>
+                
+    //           {/* <TouchableOpacity onPress={() => props.navigation.navigate('Learning Track')}>
+    //             <View style={styles.plans_div}>
+    //               <View style={styles.cat_image_container}>
+    //               <Ionicons name="md-play" size={32} color="#756765" />
+    //               </View>
+    //               <View>
+    //                 <Text style={styles.plan_label}>#Level</Text>
+    //               </View>
+    //             </View>
+    //           </TouchableOpacity> */}
+                
+    //           <TouchableOpacity onPress={() => props.navigation.navigate('Update Profile')}>
+    //             <View style={styles.plans_div}>
+    //               <View style={styles.cat_image_container}>
+    //               <Ionicons name="md-settings" size={32} color="#756765" />
+    //               </View>
+    //               <View>
+    //                 <Text style={styles.plan_label}>Settings</Text>
+    //               </View>
+    //             </View>
+    //           </TouchableOpacity>
+
+    //           <TouchableOpacity onPress={() => props.navigation.navigate('Invite A Friend')}>
+    //             <View style={styles.plans_div}>
+    //               <View style={styles.cat_image_container}>
+    //               <Ionicons name="md-link" size={32} color="#756765" />
+    //               </View>
+    //               <View>
+    //                 <Text style={styles.plan_label}>Invite a Friend</Text>
+    //               </View>
+    //             </View>
+    //           </TouchableOpacity>
+
+    //           <TouchableOpacity onPress={() => props.navigation.navigate('Plans')}>
+    //             <View style={styles.plans_div}>
+    //               <View style={styles.cat_image_container}>
+    //               <Ionicons name="md-ribbon" size={32} color="#756765" />
+    //               </View>
+    //               <View>
+    //                 <Text style={styles.plan_label}>subscriptions</Text>
+    //               </View>
+    //             </View>
+    //           </TouchableOpacity>
+    //           </ScrollView>
+    //         </View>
+    //       </View>
+    //     </View>
+    //   </ScrollView>
+    // </SafeAreaView>
+
+     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-            <TouchableOpacity style={{ ...styles.back,
-                borderRadius: 100, 
-                backgroundColor: "#9D908D", 
-                marginTop: 50, 
-                marginLeft: 1, 
-                width: 35,height: 35, 
-                justifyContent: "center", 
-                alignItems: "center" 
+        <View
+          style={{
+            flex: 0.3,
+            backgroundColor: "#82A4B7",
+            borderBottomRightRadius: 45,
+          }}
+        >
+        <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 30,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate('Login')}>
-                <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                onPress={() => props.navigation.navigate("Login")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
-                      <Ionicons name="md-log-out" size={24} color="#756765" />
+                    <Ionicons name="md-log-out" size={24} color="#756765" />
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>{data?.first_name} {data?.last_name}</Text>
-            </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={[styles.p_20, styles.outer_container]}>
-              <TouchableOpacity onPress={() => props.navigation.navigate('MainMenu')}>
-                <View style={styles.plans_div}>
+          <Text style={styles.heading}>Profile Menu</Text>
+          <Text style={styles.levelLabel}>{data.first_name} {data.last_name} : Level</Text> 
+        </View>
+        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: "100%",
+              borderTopLeftRadius: 50,
+              paddingLeft: 50,
+              paddingRight: 50,
+              paddingTop: 5,
+            }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+            <TouchableOpacity onPress={() => props.navigation.navigate('MainMenu')}>
+                <View style={[styles.plans_div, styles.m_top_50]}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="md-language" size={32} color="#756765" />
                   </View>
@@ -60,7 +203,7 @@ const ProfileMenu = (props) => {
                 </View>
               </TouchableOpacity>
                 
-              <TouchableOpacity onPress={() => props.navigation.navigate('Learning Track')}>
+              {/* <TouchableOpacity onPress={() => props.navigation.navigate('Learning Track')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="md-play" size={32} color="#756765" />
@@ -69,7 +212,7 @@ const ProfileMenu = (props) => {
                     <Text style={styles.plan_label}>#Level</Text>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
                 
               <TouchableOpacity onPress={() => props.navigation.navigate('Update Profile')}>
                 <View style={styles.plans_div}>
@@ -103,9 +246,7 @@ const ProfileMenu = (props) => {
                   </View>
                 </View>
               </TouchableOpacity>
-                
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -120,10 +261,12 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    marginTop: "3%",
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
+    marginBottom: 5,
   },
   input: {
     width: "100%",
@@ -215,8 +358,12 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginTop: "auto",
-    marginBottom: 4,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 10,
+  },
+  m_top_50: {
+    marginTop: 40
   },
   dot: {
     height: 20,
@@ -257,6 +404,13 @@ const styles = StyleSheet.create({
     borderRightWidth: 4,
     borderRadius: 10,
   },
+  levelLabel: {
+    marginLeft: 80,
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginBottom: 15
+  }
 });
 
 export default ProfileMenu;

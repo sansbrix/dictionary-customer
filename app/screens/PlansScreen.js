@@ -20,7 +20,7 @@ function PlansScreen(props) {
                 borderRadius: 100,
                 backgroundColor: "#9D908D",
                 marginTop: 50,
-                marginLeft: 1,
+                marginLeft: 20,
                 width: 35,
                 height: 35,
                 justifyContent: "center",
@@ -34,10 +34,11 @@ function PlansScreen(props) {
                 </Text>
               </Text>
             </TouchableOpacity>
-            <Text style={styles.register}>
-              Congratulations! Enjoy your free trial for 1 day!!!
-            </Text>
             <Text style={styles.heading}>More Subscriptions</Text>
+            {/* <Text style={styles.register}>
+              Congratulations! Enjoy your free trial for 1 day!!!
+            </Text> */}
+           
           </View>
         </View>
         <View style={styles.darkContainer}>
@@ -113,10 +114,12 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    marginTop: "1%",
+    marginTop: "-11%",
     fontSize: 30,
     fontWeight: "bold",
     color: "#ffffff",
+    marginLeft: 80,
+    marginBottom: 1
   },
   input: {
     width: "100%",
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "27%",
+    height: "20%",
     width: "100%",
   },
   innerContainer: {
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   register: {
-    marginTop: "12%",
+    marginTop: 5,
     fontSize: 15,
     color: "#ffffff",
   },
