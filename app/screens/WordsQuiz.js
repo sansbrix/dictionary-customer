@@ -1,134 +1,216 @@
-import React from "react";
+import React, {useRef, useState, useEffect} from 'react';
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
-  Image,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
+  Dimensions,
+  Platform,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { showMatchWordsPuzzle, wordsWithPictures } from '../api';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { BASE_URI } from '../api/api';
+import { Audio } from 'expo-av';
+import Feather from 'react-native-vector-icons/Feather';
+import { consoleErrors } from '../helper';
+Feather.loadFont();
 
-const cat_image = require("../../assets/images/cat.png");
+const {width: screenWidth} = Dimensions.get('window');
 
-const WordsQuiz = (props) => {
-  // console.log(props.route.params.cat_id, "params")
-  const cat_id = 1
+const WordQuiz = (props) => {
+  const [entries, setEntries] = useState([]);
+  const carouselRef = useRef(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [playing, setPlaying] = React.useState("false");
+  const [timer, setTimer] = React.useState(null);
+  var interval = null;
+  const [results, setResults] =  React.useState([]);
+  const [answers, setAnswers] = React.useState([]);
+  const goForward = () => {
+    carouselRef.current.snapToNext();
+    setTimer(10);
+  };
+
+  useEffect(() => {
+    showMatchWordsPuzzle({
+      category_id: 1,
+    }).then((res) => {    
+      if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        const ENTRIES = res.data.data.map((r) => {
+        return {
+          id: r.id,
+          title: r.word,
+          options: r.options,
+          illustration: BASE_URI + '/word-images/' + r.image,
+          audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
+          word_id: r.id,
+          answer: r.answer
+        }});
+        setSelectedIndex(0);
+        setEntries(ENTRIES);
+        setSelectedItem(ENTRIES[0]);
+        setTimer(10);
+      }
+    }).catch((err) => consoleErrors(err));
+  }, []);
+
+  useEffect(() => {
+    if(timer===0){
+      if(selectedIndex == 3) {
+        console.log(results, "results");
+      } else {
+        goForward();
+      }
+    }
+
+   // exit early when we reach 0
+   if (!timer) return;
+
+   // save intervalId to clear the interval when the
+   // component re-renders
+   const intervalId = setInterval(() => {
+     setTimer(timer - 1);
+   }, 1000);
+
+   // clear interval on re-render to avoid memory leaks
+   return () => {
+     submitBlankAnswer(selectedIndex);
+     clearInterval(intervalId);
+    }
+   // add timeLeft as a dependency to re-rerun the effect
+   // when we update it
+  },[timer]);
+
+  useEffect(() => {
+    setSelectedItem(entries[selectedIndex]);
+    setTimer(10);
+  }, [selectedIndex]);
+
+  const submitAnswer = (data, index) => {
+    const temp = {
+      word_id: data.id, 
+      options: data.options,
+      user_answer: data.options[index],
+      correct_answer: data.answer
+    };
+    setAnswers([...answers, data.options[index]]);
+    setResults([
+      ...results, temp,
+    ]);
+    if(selectedIndex  == 3) {
+      
+    } else {
+      goForward();
+    }
+  }
+
+  const submitResult = () => {
+    const data = {
+      category_id: 1,
+      user_answers: answers,
+      question_ids: entries.map((m) => m.id),
+      question_options: entries.map((m) => m.options),
+      correct_answers:  entries.map((m) => m.answer),
+    };
+  }
+
+  const submitBlankAnswer = (index) => {
+    const data = entries[index];
+    if( data ) {
+      const temp = {
+        word_id: data.id, 
+        options: data.options,
+        user_answer: null,
+        correct_answer: data.answer
+      };
+      setResults([
+        ...results, temp,
+      ]);
+      setAnswers([...answers, null]);
+    }
+  }
+
+  const renderItem = ({item, index}, parallaxProps) => {
+    return (
+      <View style={styles.item}>
+        <Text>{index}</Text>
+        <ParallaxImage
+          source={{uri: item.illustration}}
+          containerStyle={styles.imageContainer}
+          style={styles.image}
+          parallaxFactor={0.4}
+          {...parallaxProps}
+        />
+        <View style={styles.flex_container}>
+          <View style={styles.plans_div}>
+            <TouchableOpacity onPress={() => { submitAnswer(item, 0) }}>
+              <View>
+                <Text style={styles.plan_label}>{item?.options[0]}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.plans_div}>
+            <TouchableOpacity onPress={() => { submitAnswer(item, 1) }}>
+              <View>
+                <Text style={styles.plan_label}>{item?.options[1]}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.flex_container}>
+          <View style={styles.plans_div}>
+            <TouchableOpacity onPress={() => { submitAnswer(item, 2) }}>
+              <View>
+                <Text style={styles.plan_label}>{item?.options[2]}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.plans_div}>
+            <TouchableOpacity onPress={() => { submitAnswer(item, 3) }}>
+              <View>
+                <Text style={styles.plan_label}>{item?.options[3]}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
-    // <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-    //   <ScrollView>
-    //     <View styles={styles.container}>
-    //       <View style={styles.bg_white}>
-    //         <View style={styles.view}>
-    //           <TouchableOpacity
-    //             style={{
-    //               ...styles.back,
-    //               borderRadius: 100,
-    //               backgroundColor: "#9D908D",
-    //               marginTop: 50,
-    //               marginLeft: 1,
-    //               width: 35,
-    //               height: 35,
-    //               justifyContent: "center",
-    //               alignItems: "center",
-    //             }}
-    //             onPress={() => props.navigation.navigate("LearningMenu", {cat_id: cat_id})}
-    //           >
-    //             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-    //               <Text style={styles.back}>
-    //                 <Ionicons name="md-arrow-back" size={24} color="#756765" />
-    //               </Text>
-    //             </Text>
-    //           </TouchableOpacity>
-    //           <Text style={styles.heading}>Choose Correct Word</Text>
-    //         </View>
-    //       </View>
-    //       <View style={styles.darkContainer}>
-    //         <View style={styles.innerContainer}>
-    //           <View style={[styles.p_20, styles.pb_5, styles.outer_container]}>
-    //             <View stye={styles.image_container}>
-    //               <Image
-    //                 source={cat_image}
-    //                 resizeMode="cover"
-    //                 style={styles.image}
-    //               ></Image>
-    //             </View>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#place word</Text>
-    //               </View>
-    //             </View>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#place word</Text>
-    //               </View>
-    //             </View>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#place word</Text>
-    //               </View>
-    //             </View>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#place word</Text>
-    //               </View>
-    //             </View>
-    //             <View>
-    //               <TouchableOpacity style={styles.mt_25} onPress={() => props.navigation.navigate('LearningMenu')}>
-    //                 <View style={styles.button}>
-    //                   <Text style={[styles.color_white, styles.font_16]}>
-    //                     Submit
-    //                   </Text>
-    //                 </View>
-    //               </TouchableOpacity>
-    //             </View>
-    //           </View>
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
-
-
-     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <ScrollView>
+    <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
         <View
           style={{
-            flex: 0.3,
+            flex: 0.2,
+            flexDirection: 'row',
             backgroundColor: "#82A4B7",
             borderBottomRightRadius: 45,
           }}
         >
-        <TouchableOpacity
-                style={{
-                  ...styles.back,
-                  borderRadius: 100,
-                  backgroundColor: "#9D908D",
-                  marginTop: 50,
-                  marginLeft: 20,
-                  width: 35,
-                  height: 35,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => props.navigation.navigate("LearningMenu", {cat_id: props.route.params.cat_id})}
-              >
-                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-                  <Text style={styles.back}>
-                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                  </Text>
-                </Text>
-              </TouchableOpacity>
-          <Text style={styles.heading}>Choose Correct Word</Text>
+          <TouchableOpacity
+            style={{
+              borderRadius: 100,
+              backgroundColor: "#9D908D",
+              marginTop: 50,
+              marginLeft: 17,
+              width: 35,
+              height: 35,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => props.navigation.navigate("Welcome")}
+          >
+            <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+              <Text style={styles.back}>
+                <Ionicons name="md-arrow-back" size={24} color="#756765" />
+              </Text>
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.heading}>Words with pictures</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -136,90 +218,61 @@ const WordsQuiz = (props) => {
               backgroundColor: "#fff",
               height: "100%",
               borderTopLeftRadius: 50,
-              paddingLeft: 10,
-              paddingRight: 10,
-              paddingTop: 5,
+              paddingTop: 40,
+              flex: 1,
             }}
           >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
-            <View style={styles.image_container}>
-                  <Image
-                    source={cat_image}
-                    resizeMode="cover"
-                    style={styles.image}
-                  ></Image>
-                </View>
-                <View style={styles.flex_container}>
-                  <View style={styles.plans_div}>
-                    <View>
-                      <Text style={styles.plan_label}>#place word</Text>
-                    </View>
-                  </View>
-                  <View style={styles.plans_div}>
-                    <View>
-                      <Text style={styles.plan_label}>#place word</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.flex_container}>
-                  <View style={styles.plans_div}>
-                    <View>
-                      <Text style={styles.plan_label}>#place word</Text>
-                    </View>
-                  </View>
-                  <View style={styles.plans_div}>
-                    <View>
-                      <Text style={styles.plan_label}>#place word</Text>
-                    </View>
-                  </View>
-                </View>
-                <View>
-                  <TouchableOpacity style={styles.mt_25} onPress={() => props.navigation.navigate('LearningMenu')}>
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Submit
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-            </ScrollView>
+            <Text>{`00:${timer}`}</Text>
+            <Carousel
+              ref={carouselRef}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth - 60}
+              data={entries}
+              renderItem={renderItem}
+              hasParallaxImages={true}
+              onSnapToItem={(info) => {
+                setSelectedIndex(info);
+              }}
+              scrollEnabled={false}
+            />
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-    
-
+    </View>
   );
-}
-
+};
 const styles = StyleSheet.create({
+  row: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
+  plan_label: {
+    fontSize: 20,
+    color: "#82A4B7",
+    fontWeight: "bold",
+    marginLeft: 12,
+    marginTop: 6,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
   },
-
   heading: {
-    marginTop: "-11%",
-    marginLeft: 80,
-    fontSize: 30,
+    marginTop: "13%",
+    marginLeft: 50,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 20,
+    color: "#FFFFF7",
   },
   input: {
     width: "100%",
     margin: 5,
-    borderWidth: 1,
     padding: 10,
-    borderColor: "#82A4B7",
     color: "#82A4B7",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    backgroundColor: "#82A4B7",
+    backgroundColor: "#fff",
   },
   view: {
     backgroundColor: "#82A4B7",
@@ -234,37 +287,39 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   bg_white: {
-    backgroundColor: "#ffffff",
-    height: "23%",
+    backgroundColor: "#FFFFFF",
+    height: "22%",
     width: "100%",
+    // flex: 0.4,
   },
   innerContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 50,
     height: "100%",
     width: "100%",
+    flex: 0.4,
   },
   back: {
     marginTop: "10%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   register: {
-    marginTop: "9%",
+    marginTop: "12%",
     fontSize: 15,
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#756765",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 20,
-    width: "60%",
+    width: "70%",
     marginLeft: "auto",
     marginRight: "auto",
   },
   color_white: {
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
   font_16: {
     fontSize: 16,
@@ -277,11 +332,11 @@ const styles = StyleSheet.create({
   mt_25: {
     marginTop: 25,
   },
+  mb_25: {
+    marginBottom: 25,
+  },
   p_20: {
     padding: 20,
-  },
-  pb_5: {
-    paddingBottom: 5,
   },
   another_link: {
     marginTop: 5,
@@ -290,10 +345,22 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
-  outer_container: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
+  container: {
+    flex: 1,
+  },
+  item: {
+    width: screenWidth - 60,
+    height: screenWidth - 60,
+  },
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    backgroundColor: 'white',
+    borderRadius: 8,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
   },
   flex_container: {
     display: "flex",
@@ -308,72 +375,5 @@ const styles = StyleSheet.create({
     marginRight: 4,
     borderRadius: 10,
   },
-  dot: {
-    height: 20,
-    width: 20,
-    backgroundColor: "#756765",
-    borderRadius: 50,
-    marginTop: 11,
-  },
-  plan_label: {
-    fontSize: 17,
-    color: "#82A4B7",
-    fontWeight: "bold",
-    textAlign: 'center'
-  },
-  plan_sub_label: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "green",
-    marginLeft: 10,
-  },
-  plan_sub_label_paid: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#756765",
-    marginLeft: 10,
-  },
-  image: {
-    width: 200,
-    height:200,
-    display:'flex',
-    margin: 'auto'
-  },
-  cat_image_container: {
-    marginLeft: 0,
-    marginRight: 2,
-    padding: 0,
-    height: 25,
-    width: 40,
-  },
-  bottom_div: {
-    height: 100,
-    width: "100%",
-    backgroundColor: "#9D908D",
-    position: "relative",
-    bottom: -10,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingBottom: 10,
-  },
-  bot_leraning: {
-    backgroundColor: "#a2476a",
-  },
-  bottom_heading: {
-    fontSize: 17,
-    color: "#756765",
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: 12,
-  },
-  image_container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  }
 });
-
-export default WordsQuiz;
+export default WordQuiz;
