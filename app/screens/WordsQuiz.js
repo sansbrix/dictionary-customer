@@ -27,12 +27,17 @@ const WordQuiz = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [playing, setPlaying] = React.useState("false");
   const [timer, setTimer] = React.useState(null);
-  var interval = null;
   const [results, setResults] =  React.useState([]);
   const [answers, setAnswers] = React.useState([]);
+  const [isQuestion, setIsQuestion] = React.useState(false);
+
+  var interval = null;
+
+  const TIME_ELLAPSED = 3;
+
   const goForward = () => {
     carouselRef.current.snapToNext();
-    setTimer(10);
+    setTimer(TIME_ELLAPSED);
   };
 
   useEffect(() => {
@@ -53,18 +58,26 @@ const WordQuiz = (props) => {
         setSelectedIndex(0);
         setEntries(ENTRIES);
         setSelectedItem(ENTRIES[0]);
-        setTimer(10);
+        setTimer(TIME_ELLAPSED);
       }
     }).catch((err) => consoleErrors(err));
   }, []);
 
   useEffect(() => {
     if(timer===0){
-      if(selectedIndex == 3) {
-        console.log(results, "results");
+      console.log("Tiner",timer);
+      if(isQuestion) {
+        setIsQuestion(false);
+        if(selectedIndex == 3) {
+          console.log(results, "results");
+        } else {
+          goForward();
+        }
       } else {
-        goForward();
+        setIsQuestion(true);
+        setTimer(TIME_ELLAPSED);
       }
+      
     }
 
    // exit early when we reach 0
@@ -77,8 +90,10 @@ const WordQuiz = (props) => {
    }, 1000);
 
    // clear interval on re-render to avoid memory leaks
-   return () => {
-     submitBlankAnswer(selectedIndex);
+    return () => {
+     if(isQuestion) {
+        submitBlankAnswer(selectedIndex);
+     }
      clearInterval(intervalId);
     }
    // add timeLeft as a dependency to re-rerun the effect
@@ -86,8 +101,14 @@ const WordQuiz = (props) => {
   },[timer]);
 
   useEffect(() => {
-    setSelectedItem(entries[selectedIndex]);
-    setTimer(10);
+    if(isQuestion) {
+      setSelectedItem(entries[selectedIndex]);
+    } else {
+      // setIsQuestion(true);
+      setSelectedItem(entries[selectedIndex-1]);
+    }
+    
+    setTimer(TIME_ELLAPSED);
   }, [selectedIndex]);
 
   const submitAnswer = (data, index) => {
@@ -145,38 +166,41 @@ const WordQuiz = (props) => {
           parallaxFactor={0.4}
           {...parallaxProps}
         />
-        <View style={styles.flex_container}>
-          <View style={styles.plans_div}>
-            <TouchableOpacity onPress={() => { submitAnswer(item, 0) }}>
-              <View>
-                <Text style={styles.plan_label}>{item?.options[0]}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.plans_div}>
-            <TouchableOpacity onPress={() => { submitAnswer(item, 1) }}>
-              <View>
-                <Text style={styles.plan_label}>{item?.options[1]}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.flex_container}>
-          <View style={styles.plans_div}>
-            <TouchableOpacity onPress={() => { submitAnswer(item, 2) }}>
-              <View>
-                <Text style={styles.plan_label}>{item?.options[2]}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.plans_div}>
-            <TouchableOpacity onPress={() => { submitAnswer(item, 3) }}>
-              <View>
-                <Text style={styles.plan_label}>{item?.options[3]}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+        {isQuestion ? 
+        <>
+            <View style={styles.flex_container}>
+            <View style={styles.plans_div}>
+                <TouchableOpacity onPress={() => { submitAnswer(item, 0) }}>
+                <View>
+                    <Text style={styles.plan_label}>{item?.options[0]}</Text>
+                </View>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.plans_div}>
+                <TouchableOpacity onPress={() => { submitAnswer(item, 1) }}>
+                <View>
+                    <Text style={styles.plan_label}>{item?.options[1]}</Text>
+                </View>
+                </TouchableOpacity>
+            </View>
+            </View>
+            <View style={styles.flex_container}>
+            <View style={styles.plans_div}>
+                <TouchableOpacity onPress={() => { submitAnswer(item, 2) }}>
+                <View>
+                    <Text style={styles.plan_label}>{item?.options[2]}</Text>
+                </View>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.plans_div}>
+                <TouchableOpacity onPress={() => { submitAnswer(item, 3) }}>
+                <View>
+                    <Text style={styles.plan_label}>{item?.options[3]}</Text>
+                </View>
+                </TouchableOpacity>
+            </View>
+            </View> 
+        </> : <Text>Audio</Text>}
       </View>
     );
   };

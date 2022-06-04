@@ -20,6 +20,7 @@ const SignUp = (props) => {
     email: "",
     password: "",
     mobile_number: "",
+    invite_by_code: "",
   });
 
   const defaultErrors = {
@@ -134,6 +135,16 @@ const SignUp = (props) => {
                     value={data.password}
                   />
                   {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
+                </View>
+                <View>
+                  <Text style={styles.label}>Invitation Code</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, invite_by_code: value})}
+                    style={[styles.input]}
+                    placeholder="Invitation Code"
+                    value={data.invite_by_code}
+                  />
+                  {errors.invite_by_code ? <Text style={{color: 'red'}}>{errors.invite_by_code}</Text> : null}
                 </View>
                 <View>
                   <TouchableOpacity
