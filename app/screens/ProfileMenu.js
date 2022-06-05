@@ -21,7 +21,7 @@ const ProfileMenu = (props) => {
       console.log(error);consoleErrors(error)});
   }, []);
 
-  onLogoutClickHandler = () => {
+  const onLogoutClickHandler = () => {
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });

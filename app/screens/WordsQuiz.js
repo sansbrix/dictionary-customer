@@ -25,6 +25,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 var OUTPUT = [null, null, null, null];
 
 const WordQuiz = (props) => {
+  const [sound, setSound] = React.useState(null);
   const [loader, setLoader] = React.useState(false);
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
@@ -40,7 +41,7 @@ const WordQuiz = (props) => {
 
   var interval = null;
 
-  const TIME_ELLAPSED = null;
+  const TIME_ELLAPSED = 10;
 
   const goForward = () => {
     carouselRef.current.snapToNext();
@@ -57,6 +58,7 @@ const WordQuiz = (props) => {
         return {
           id: r.id,
           title: r.word,
+          subtitle: r.arabic_word,
           options: r.options,
           illustration: BASE_URI + '/word-images/' + r.image,
           audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
@@ -185,10 +187,10 @@ const WordQuiz = (props) => {
   const renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
-        <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
+        <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}} numberOfLines={2}>
           [{item.title}]
         </Text>
-        <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
+        <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: '#82A4B7'}} numberOfLines={2}>
           {item.subtitle}
         </Text>
         <ParallaxImage
@@ -200,40 +202,40 @@ const WordQuiz = (props) => {
         />
         {isQuestion ? 
         <>
-            <View style={styles.flex_container}>
-            <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(index, 0) }}>
-                <View>
-                    <Text style={styles.plan_label}>{item?.options[0]}</Text>
-                </View>
-                </TouchableOpacity>
+            <View style={[styles.flex_container, {position: 'relative', top: 20}]}>
+              <View style={styles.plans_div}>
+                  <TouchableOpacity onPress={() => { submitAnswer(index, 0) }}>
+                  <View>
+                      <Text style={styles.plan_label}>{item?.options[0]}</Text>
+                  </View>
+                  </TouchableOpacity>
+              </View>
+              <View style={styles.plans_div}>
+                  <TouchableOpacity onPress={() => { submitAnswer(index, 1) }}>
+                  <View>
+                      <Text style={styles.plan_label}>{item?.options[1]}</Text>
+                  </View>
+                  </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(index, 1) }}>
-                <View>
-                    <Text style={styles.plan_label}>{item?.options[1]}</Text>
-                </View>
-                </TouchableOpacity>
-            </View>
-            </View>
-            <View style={styles.flex_container}>
-            <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(index, 2) }}>
-                <View>
-                    <Text style={styles.plan_label}>{item?.options[2]}</Text>
-                </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(index, 3) }}>
-                <View>
-                    <Text style={styles.plan_label}>{item?.options[3]}</Text>
-                </View>
-                </TouchableOpacity>
-            </View>
+            <View style={[styles.flex_container, {position: 'relative', top: 20}]}>
+              <View style={styles.plans_div}>
+                  <TouchableOpacity onPress={() => { submitAnswer(index, 2) }}>
+                  <View>
+                      <Text style={styles.plan_label}>{item?.options[2]}</Text>
+                  </View>
+                  </TouchableOpacity>
+              </View>
+              <View style={styles.plans_div}>
+                  <TouchableOpacity onPress={() => { submitAnswer(index, 3) }}>
+                  <View>
+                      <Text style={styles.plan_label}>{item?.options[3]}</Text>
+                  </View>
+                  </TouchableOpacity>
+              </View>
             </View> 
         </> : <>
-          <View style={[styles.row, {backgroundColor: '#FFF'}]}>
+          <View style={[styles.row, {backgroundColor: '#FFF', position: 'relative', top: 50}]}>
             <TouchableOpacity onPress={() => selectedItem?.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
               <Text style={styles.plan_label}>
               {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio? "Audio Not Available" : "Play" }
@@ -266,8 +268,8 @@ const WordQuiz = (props) => {
               backgroundColor: "#9D908D",
               marginTop: 50,
               marginLeft: 17,
-              width: 35,
-              height: 35,
+              width: 25,
+              height: 25,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -281,18 +283,22 @@ const WordQuiz = (props) => {
           </TouchableOpacity>
           <Text style={styles.heading}>Words Puzzle</Text>
         </View>
-        <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+        <View style={{ flex: 0.8, backgroundColor: "#82A4B7" }}>
           <View
             style={{
               backgroundColor: "#fff",
               height: "100%",
               borderTopLeftRadius: 50,
-              paddingTop: 40,
+              paddingTop: 20,
               flex: 1,
             }}
           >
-            {timer != null ? <Text>{`00:${timer}`}</Text> : null}
+            <View style={{display: 'flex'}}>
+              <Text style={styles.timerStyle}>{timer}</Text>
+            </View>
+            
             <Carousel
+              sliderHeight={Dimensions.get('screen').height}
               ref={carouselRef}
               sliderWidth={screenWidth}
               itemWidth={screenWidth - 60}
@@ -317,11 +323,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   plan_label: {
-    fontSize: 20,
-    color: "#82A4B7",
+    fontSize: 12,
+    color: "grey",
     fontWeight: "bold",
     marginLeft: 12,
     marginTop: 6,
+    marginBottom: 6,
   },
   container: {
     flex: 1,
@@ -329,7 +336,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginTop: "12%",
-    fontSize: 30,
+    fontSize: 20,
     marginLeft: 10,
     fontWeight: "bold",
     color: "#ffffff",
@@ -421,7 +428,7 @@ const styles = StyleSheet.create({
   },
   item: {
     width: screenWidth - 60,
-    height: screenWidth - 60,
+    height: Dimensions.get('screen').height - (Dimensions.get('screen').height * 40) / 100,
   },
   imageContainer: {
     flex: 1,
@@ -432,6 +439,7 @@ const styles = StyleSheet.create({
   image: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
+    top: 0,
   },
   flex_container: {
     display: "flex",
@@ -446,5 +454,13 @@ const styles = StyleSheet.create({
     marginRight: 4,
     borderRadius: 10,
   },
+  timerStyle: {
+    marginBottom: 10,
+    display: 'flex',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 20,
+    color: 'grey'
+  }
 });
 export default WordQuiz;
