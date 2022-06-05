@@ -10,9 +10,12 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {sendInvite} from "../api"
+import { consoleErrors, showToast } from "../helper";
+import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function InviteFriend(props) {
-
+  const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({
     email: ""
   });
@@ -28,6 +31,7 @@ function InviteFriend(props) {
   })
 
   onInviteFriendClickHandler = () => {
+    setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
     sendInvite(data).then((response_) => {
@@ -47,6 +51,7 @@ function InviteFriend(props) {
           } else {
             setErrors({...defaultErrors, message: response.message, status: response.status});
           }
+          showToast(response.message);
         } else {
           setErrors({ ...defaultErrors, message: response.message, status: response.status });
           setTimeout(() => {
@@ -58,9 +63,10 @@ function InviteFriend(props) {
       }
       
     }).catch((err) => {
-      console.log("err1", err.status)
-      console.log("err", JSON.stringify(err));
-    })
+      // console.log("err1", err.status)
+      // console.log("err", JSON.stringify(err));
+      consoleErrors(err)
+    }).finally(() => setLoader(false));
     
   }
     return (
@@ -120,6 +126,11 @@ function InviteFriend(props) {
         // </SafeAreaView>
 
         <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+        <Root>
+         {loader ? <Spinner
+           visible={loader}
+           textStyle={styles.spinnerTextStyle}
+         /> : null}
       <ScrollView>
         <View
           style={{
@@ -187,6 +198,7 @@ function InviteFriend(props) {
           </View>
         </View>
       </ScrollView>
+      </Root>
     </SafeAreaView>
     );
 }

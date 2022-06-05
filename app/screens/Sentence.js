@@ -24,7 +24,7 @@ const Sentence = (props) =>{
     // })
     // .catch((error) => consoleErrors(error));
     setLoader(true);
-    listData({cat_id: cat_id, param: 's'})
+    listData({category_id: cat_id, param: 's'})
       .then((response) => { 
         setData(response.data);
         console.log(response.data, "------")
@@ -71,12 +71,12 @@ const Sentence = (props) =>{
                           {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
                       </View>
                     </View>
-                    {/* <View style={styles.plans_div}> 
+                    <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
                       <Text style={styles.plan_label}>Audio</Text>
                       </View>
-                    </View> */}
+                    </View>
                     {/* <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
@@ -109,12 +109,12 @@ const Sentence = (props) =>{
                           {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
                       </View>
                     </View>
-                    {/* <View style={styles.plans_div}> 
+                    <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
                       <Text style={styles.plan_label}>Audio</Text>
                       </View>
-                    </View> */}
+                    </View>
                     {/* <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>

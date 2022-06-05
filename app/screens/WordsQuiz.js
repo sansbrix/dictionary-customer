@@ -235,7 +235,7 @@ const WordQuiz = (props) => {
               </View>
             </View> 
         </> : <>
-          <View style={[styles.row, {backgroundColor: '#FFF', position: 'relative', top: 50}]}>
+          <View style={[styles.row, {backgroundColor: '#FFF', position: 'relative', top: 20}]}>
             <TouchableOpacity onPress={() => selectedItem?.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
               <Text style={styles.plan_label}>
               {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio? "Audio Not Available" : "Play" }
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginTop: "12%",
-    fontSize: 20,
+    fontSize: 30,
     marginLeft: 10,
     fontWeight: "bold",
     color: "#ffffff",

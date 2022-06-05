@@ -127,7 +127,7 @@ function OTPEmailVerification(props) {
         }).then(async (response_) => {
           const response = response_.data;
           await SecureStore.setItemAsync('access_token', response.token);
-          props.navigation.navigate("ProfileMenu");
+          props.navigation.replace("ProfileMenu");
         });
       }
       
