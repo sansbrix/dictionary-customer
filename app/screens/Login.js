@@ -77,7 +77,6 @@ const Login = (props) => {
       <Root>
          {loader ? <Spinner
            visible={loader}
-           textContent={'Loading...'}
            textStyle={styles.spinnerTextStyle}
          /> : null}
         <ScrollView>

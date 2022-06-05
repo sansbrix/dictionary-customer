@@ -195,8 +195,8 @@ const ProfileMenu = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                // onPress={() => props.navigation.navigate("Login")}
-                onPress={() => onLogoutClickHandler()}
+                onPress={() => props.navigation.navigate("Login")}
+                // onPress={() => onLogoutClickHandler()}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
