@@ -93,6 +93,7 @@ function UserDefinedWord(props) {
           }, 3000);
         }
       } catch(e) {
+        consoleErrors(e);
         console.log(e.line);
         console.log("Error-----", e);
       }

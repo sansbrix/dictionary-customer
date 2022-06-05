@@ -14,8 +14,9 @@ const showWordsQuizById = (data) => api.post(`/showWordsQuizById`, data); // pen
 const getUserProfile = () => api.get(`/userProfile`);
 const sendOtp = data => api.post(`/send-otp`, data);
 const confirmOtp = data => api.post(`/confirm-otp`, data);
-const fetchLessonNameById = id => api.post(`/fetchLessonNameById`, id)
-const wordsWithPictures = id => api.post(`/wordsWithPictures`, id)
+const fetchLessonNameById = id => api.post(`/fetchLessonNameById`, id);
+const wordsWithPictures = id => api.post(`/wordsWithPictures`, id);
+const logout = () =>api.post(`/logout`);
 export {
     UserSignup,
     UserLogin,
@@ -32,5 +33,6 @@ export {
     sendOtp,
     confirmOtp,
     fetchLessonNameById,
-    wordsWithPictures
+    wordsWithPictures,
+    logout
 }
