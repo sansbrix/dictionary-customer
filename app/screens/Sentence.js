@@ -18,11 +18,6 @@ const Sentence = (props) =>{
   const [data, setData] = React.useState({});
   const cat_id = props.route.params.cat_id;
   React.useEffect(() => {
-    // fetchLessonNameById(cat_id)
-    // .then((res)=> {
-    //   console.log(res, "response---")
-    // })
-    // .catch((error) => consoleErrors(error));
     setLoader(true);
     listData({cat_id: cat_id, param: 's'})
       .then((response) => { 
@@ -32,7 +27,7 @@ const Sentence = (props) =>{
       .catch((err) => {
         consoleErrors(err);
       }).finally(() => setLoader(false));
-  });
+  }, []);
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}

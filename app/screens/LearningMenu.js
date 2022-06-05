@@ -85,7 +85,7 @@ const LearningMenu = (props) => {
                   </View>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity
+                <TouchableOpacity
                   onPress={() => props.navigation.navigate("Sentences", {cat_id: cat_id})}
                 >
                   <View style={styles.plans_div}>
@@ -96,7 +96,7 @@ const LearningMenu = (props) => {
                       <Text style={styles.plan_label}>Sentences</Text>
                     </View>
                   </View>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </ScrollView>
           </View>
         </View>
