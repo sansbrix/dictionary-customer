@@ -8,7 +8,7 @@ import {
     ScrollView
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {getUserProfile} from "../api";
+import {getUserProfile, logout} from "../api";
 import { consoleErrors } from "../helper";
 
 const ProfileMenu = (props) => {
@@ -20,6 +20,35 @@ const ProfileMenu = (props) => {
     }).catch((error) => {
       console.log(error);consoleErrors(error)});
   }, []);
+
+  onLogoutClickHandler = () => {
+    setLoader(true);
+    // Change the state
+    setErrors({ ...defaultErrors });
+    logout().then((response_) => {
+      const response = response_;
+      console.log(response_, "------")
+      if(!response.status) {
+        if(response.error) {
+          setErrors({...defaultErrors, ...errorsResponse});
+        } else {
+          setErrors({...defaultErrors});
+        }
+        showToast(response.message);
+      } else {
+        setData({
+          email: "",
+          password: "",
+          mobile_number: "",
+        })
+        setErrors({ ...defaultErrors });
+        props.navigation.navigate("Login" , {signup_successful: true});
+      }
+
+    }).catch((err) => {
+      consoleErrors(err);
+    }).finally(() => setLoader(false));
+  }
   return (
     // <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
     // <View
@@ -167,6 +196,7 @@ const ProfileMenu = (props) => {
                   alignItems: "center",
                 }}
                 onPress={() => props.navigation.navigate("Login")}
+                // onPress={() => onLogoutClickHandler()}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>

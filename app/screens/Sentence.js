@@ -8,25 +8,30 @@ import {
   ScrollView
 } from 'react-native';
 import { listData , fetchLessonNameById} from "../api";
-import { consoleErrors } from "../helper";
+import { consoleErrors, showToast } from "../helper";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Sentence = (props) =>{
+  const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({});
   const cat_id = props.route.params.cat_id;
-  console.log(cat_id, "idddd")
   React.useEffect(() => {
     // fetchLessonNameById(cat_id)
     // .then((res)=> {
     //   console.log(res, "response---")
     // })
     // .catch((error) => consoleErrors(error));
+    setLoader(true);
     listData({cat_id: cat_id, param: 's'})
       .then((response) => { 
-        setData(response.data.data);
-        console.log(response.data.data, "------")
+        setData(response.data);
+        console.log(response.data, "------")
       })
-      .catch((error) => consoleErrors(error));
+      .catch((err) => {
+        consoleErrors(err);
+      }).finally(() => setLoader(false));
   });
     return (
         <SafeAreaView style={[styles.container,
@@ -52,26 +57,64 @@ const Sentence = (props) =>{
                     </Text>
                   </TouchableOpacity>
                   <Text style={styles.heading}>Sentences</Text>
-                  <Text style={styles.register}>Lesson: {data[0]?.category?.category}</Text>
+                  {/* <Text style={styles.register}>Lesson: {data[0]?.category?.category}</Text> */}
                   <View style={[styles.p_20, styles.outer_container]}>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Sentence: {data[0]?.sentence_in_english}</Text>
+                          {/* <Text style={styles.plan_label}>Sentence: {data[0]?.sentence_in_english}</Text> */}
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text>
+                          {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
                       </View>
                     </View>
-                    <View style={styles.plans_div}> 
+                    {/* <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
                       <Text style={styles.plan_label}>Audio</Text>
                       </View>
+                    </View> */}
+                    {/* <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          <Text style={styles.plan_label}>Latin</Text>
+                      </View>
                     </View>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          <Text style={styles.plan_label}>Formal Latin</Text>
+                      </View>
+                    </View>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          <Text style={styles.plan_label}>Other (if any)</Text>
+                      </View>
+                    </View> */}
+                </View>
+                <View style={[styles.p_20, styles.outer_container]}>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          {/* <Text style={styles.plan_label}>Sentence: {data[0]?.sentence_in_english}</Text> */}
+                      </View>
+                    </View>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
+                      </View>
+                    </View>
+                    {/* <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                      <Text style={styles.plan_label}>Audio</Text>
+                      </View>
+                    </View> */}
                     {/* <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>

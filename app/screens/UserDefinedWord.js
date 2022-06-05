@@ -10,10 +10,13 @@ import {
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {addUserDefinedWords, listData} from "../api";
-import { consoleErrors } from "../helper";
+import { consoleErrors, showToast } from "../helper";
 import DropDownPicker from "react-native-dropdown-picker";
+import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function UserDefinedWord(props) {
+  const [loader, setLoader] = React.useState(false);
   const [cat, setCat] = React.useState([]);
   const [cntry, setCntry] = React.useState([]);
   const [lng, setLngs] = React.useState([]);
@@ -41,6 +44,7 @@ function UserDefinedWord(props) {
   })
 
   React.useEffect(() => {
+    setLoader(true);
     listData({param: 'cat'})
       .then((response) => {
         const categories = response.data.data.map((cat) => {
@@ -51,8 +55,9 @@ function UserDefinedWord(props) {
         });
         setCat(categories)
       })
-      .catch((error) => consoleErrors(error));
-
+      .catch((error) => {consoleErrors(error)})
+      .finally(() => setLoader(false));
+      setLoader(true);
       listData({param: 'l'})
       .then((response) => {
         const languages = response.data.data.map((lng) => {
@@ -64,8 +69,9 @@ function UserDefinedWord(props) {
         setLngs(languages)
         console.log(languages)
       })
-      .catch((error) => consoleErrors(error));
-
+      .catch((error) => {consoleErrors(error)})
+      .finally(() => setLoader(false));
+      setLoader(true);
       listData({param: 'c'})
       .then((response) => {
         const countries = response.data.data.map((cntry) => {
@@ -76,29 +82,33 @@ function UserDefinedWord(props) {
         });
         setCntry(countries)
       })
-      .catch((error) => consoleErrors(error));
+      .catch((error) => {consoleErrors(error)})
+      .finally(() => setLoader(false));
   }, []);
 
   const onAddUserDefinedClickHandler = () => {
+    setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
     addUserDefinedWords(data).then((response_) => {
       try {
-        console.log("----", response_, "----")
+        console.log("----", response_.data, "----")
         const response = response_.data;
         if(response.status) {
-          setErrors({ ...defaultErrors, message: response.message, status: response.status });
+          showToast("Word added!");
+          setErrors({ ...defaultErrors, status: response.status });
           setTimeout(() => {
             props.navigation.navigate('MainMenu')
           }, 3000);
         }
       } catch(e) {
+        consoleErrors(e);
         console.log(e.line);
         console.log("Error-----", e);
       }
       
     }).catch((error) => {
-      // consoleErrors(error);
+      consoleErrors(error);
       if(error.response.status == 422) {
         console.log(error.response.data);
         if(error.response.data && error.response.data.errors) {
@@ -115,11 +125,16 @@ function UserDefinedWord(props) {
           setErrors({...defaultErrors, message: "Enter Valid Data", status: false});
         }
       }
-    })
+    }).finally(() => setLoader(false))
     
   }
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+    <Root>
+         {loader ? <Spinner
+           visible={loader}
+           textStyle={styles.spinnerTextStyle}
+         /> : null}
       <ScrollView>
         <View
           style={{
@@ -228,6 +243,7 @@ function UserDefinedWord(props) {
           </View>
         </View>
       </ScrollView>
+      </Root>
     </SafeAreaView>
   );
 }
