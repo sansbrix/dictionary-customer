@@ -10,30 +10,37 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import { showMatchWordsPuzzle, wordsWithPictures } from '../api';
+import { addWordsQuizResult, showMatchWordsPuzzle, wordsWithPictures } from '../api';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URI } from '../api/api';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
-import { consoleErrors } from '../helper';
+import { consoleErrors, showPopUp } from '../helper';
 Feather.loadFont();
 
 const {width: screenWidth} = Dimensions.get('window');
+import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+var OUTPUT = [null, null, null, null];
 
 const WordQuiz = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [playing, setPlaying] = React.useState("false");
   const [timer, setTimer] = React.useState(null);
-  const [results, setResults] =  React.useState([]);
+  const [results, setResults] =  React.useState([
+    null, null, null, null
+  ]);
   const [answers, setAnswers] = React.useState([]);
   const [isQuestion, setIsQuestion] = React.useState(false);
 
   var interval = null;
 
-  const TIME_ELLAPSED = 3;
+  const TIME_ELLAPSED = null;
 
   const goForward = () => {
     carouselRef.current.snapToNext();
@@ -41,6 +48,7 @@ const WordQuiz = (props) => {
   };
 
   useEffect(() => {
+    setLoader(true);
     showMatchWordsPuzzle({
       category_id: 1,
     }).then((res) => {    
@@ -60,16 +68,17 @@ const WordQuiz = (props) => {
         setSelectedItem(ENTRIES[0]);
         setTimer(TIME_ELLAPSED);
       }
-    }).catch((err) => consoleErrors(err));
+    }).catch((err) => consoleErrors(err))
+    .finally(() => setLoader(false));
   }, []);
 
   useEffect(() => {
     if(timer===0){
-      console.log("Tiner",timer);
       if(isQuestion) {
         setIsQuestion(false);
+        submitBlankAnswer(selectedIndex);
         if(selectedIndex == 3) {
-          console.log(results, "results");
+          submitResult();
         } else {
           goForward();
         }
@@ -91,9 +100,6 @@ const WordQuiz = (props) => {
 
    // clear interval on re-render to avoid memory leaks
     return () => {
-     if(isQuestion) {
-        submitBlankAnswer(selectedIndex);
-     }
      clearInterval(intervalId);
     }
    // add timeLeft as a dependency to re-rerun the effect
@@ -112,53 +118,79 @@ const WordQuiz = (props) => {
   }, [selectedIndex]);
 
   const submitAnswer = (data, index) => {
-    const temp = {
-      word_id: data.id, 
-      options: data.options,
-      user_answer: data.options[index],
-      correct_answer: data.answer
-    };
-    setAnswers([...answers, data.options[index]]);
-    setResults([
-      ...results, temp,
-    ]);
+    setIsQuestion(false);
+    OUTPUT[data] = index;
     if(selectedIndex  == 3) {
-      
+      submitResult();
     } else {
       goForward();
     }
   }
 
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync({uri: selectedItem.audio});
+    setSound(sound);
+    await sound.playAsync(); 
+    setPlaying("true");
+  }
+
+  async function stopSound() {
+    await sound.stopAsync();
+    setPlaying("false");
+  }
+
   const submitResult = () => {
+    setTimer(null);
     const data = {
       category_id: 1,
-      user_answers: answers,
+      user_answers: OUTPUT,
       question_ids: entries.map((m) => m.id),
       question_options: entries.map((m) => m.options),
-      correct_answers:  entries.map((m) => m.answer),
+      correct_answers: entries.map((m) => m.answer),
     };
+
+    const correct_answer = 0;
+    answers.map((ans, ind) => {
+      if(ans == data["question_options"][ind][OUTPUT[ind]]) {
+        correct_answer += 1;
+      }
+    });
+
+    setLoader(true);
+    addWordsQuizResult(data).then((res) => {
+      
+      showPopUp(
+        `You've scored ${correct_answer} from ${data["question_ids"].length}`, 
+        false, 
+        function () {
+          props.navigation.replace("LearningMenu", {cat_id: 1})
+        }
+      );
+    }).catch((err) => consoleErrors(err))
+    .finally(() => setLoader(false));
+        
   }
 
   const submitBlankAnswer = (index) => {
     const data = entries[index];
     if( data ) {
-      const temp = {
-        word_id: data.id, 
-        options: data.options,
-        user_answer: null,
-        correct_answer: data.answer
-      };
-      setResults([
-        ...results, temp,
-      ]);
-      setAnswers([...answers, null]);
+      var temp = [
+        ...results
+      ];
+      temp[data] = null;
+      setResults(temp);
     }
   }
 
   const renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
-        <Text>{index}</Text>
+        <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
+          [{item.title}]
+        </Text>
+        <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
+          {item.subtitle}
+        </Text>
         <ParallaxImage
           source={{uri: item.illustration}}
           containerStyle={styles.imageContainer}
@@ -170,14 +202,14 @@ const WordQuiz = (props) => {
         <>
             <View style={styles.flex_container}>
             <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(item, 0) }}>
+                <TouchableOpacity onPress={() => { submitAnswer(index, 0) }}>
                 <View>
                     <Text style={styles.plan_label}>{item?.options[0]}</Text>
                 </View>
                 </TouchableOpacity>
             </View>
             <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(item, 1) }}>
+                <TouchableOpacity onPress={() => { submitAnswer(index, 1) }}>
                 <View>
                     <Text style={styles.plan_label}>{item?.options[1]}</Text>
                 </View>
@@ -186,27 +218,40 @@ const WordQuiz = (props) => {
             </View>
             <View style={styles.flex_container}>
             <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(item, 2) }}>
+                <TouchableOpacity onPress={() => { submitAnswer(index, 2) }}>
                 <View>
                     <Text style={styles.plan_label}>{item?.options[2]}</Text>
                 </View>
                 </TouchableOpacity>
             </View>
             <View style={styles.plans_div}>
-                <TouchableOpacity onPress={() => { submitAnswer(item, 3) }}>
+                <TouchableOpacity onPress={() => { submitAnswer(index, 3) }}>
                 <View>
                     <Text style={styles.plan_label}>{item?.options[3]}</Text>
                 </View>
                 </TouchableOpacity>
             </View>
             </View> 
-        </> : <Text>Audio</Text>}
+        </> : <>
+          <View style={[styles.row, {backgroundColor: '#FFF'}]}>
+            <TouchableOpacity onPress={() => selectedItem?.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
+              <Text style={styles.plan_label}>
+              {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio? "Audio Not Available" : "Play" }
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>}
       </View>
     );
   };
 
   return (
     <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
+      <Root>
+        {loader ? <Spinner
+          visible={loader}
+          textStyle={styles.spinnerTextStyle}
+        /> : null}
         <View
           style={{
             flex: 0.2,
@@ -226,7 +271,7 @@ const WordQuiz = (props) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("LearningMenu", {cat_id: props.route.params.cat_id})}
+            onPress={() => props.navigation.replace("LearningMenu", {cat_id: 1})}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>
@@ -246,7 +291,7 @@ const WordQuiz = (props) => {
               flex: 1,
             }}
           >
-            <Text>{`00:${timer}`}</Text>
+            {timer != null ? <Text>{`00:${timer}`}</Text> : null}
             <Carousel
               ref={carouselRef}
               sliderWidth={screenWidth}
@@ -261,6 +306,7 @@ const WordQuiz = (props) => {
             />
           </View>
         </View>
+      </Root>
     </View>
   );
 };

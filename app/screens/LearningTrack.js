@@ -15,12 +15,12 @@ import { consoleErrors } from "../helper";
 const cat_image = require("../../assets/images/cat.png");
 
 const LearningTrack = (props) => {
-  
+  const [totalPercentage, setTotalPercentage] = React.useState(0.000);
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     listData({"param" : "cat"}).then((response) => {
-      console.log("Response", response.data);
+      // setTotalPercentage(response.data.data.reduce((prevValue, currentValue) => prevValue + currentValue) / 100)
       setData([
         ...response.data?.data,
       ])
@@ -64,7 +64,7 @@ const LearningTrack = (props) => {
                 </Text>
               </TouchableOpacity>
               <Text style={styles.heading}>Learning Track</Text>
-              <Text style={styles.register}>Progress 0% (Level: #level)</Text>
+              <Text style={styles.register}>Progress</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -94,7 +94,7 @@ const LearningTrack = (props) => {
                     ></Image>
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Lesson {index+1} (0%)</Text>
+                    <Text style={styles.plan_label}>Lesson {index+1} ({item.percentage ?? 0}%)</Text>
                     <Text style={styles.plan_sub_label_paid}>
                       {item.category}
                     </Text>

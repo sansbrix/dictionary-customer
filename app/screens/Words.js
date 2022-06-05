@@ -133,7 +133,13 @@ const Words = (props) => {
               data={entries}
               renderItem={renderItem}
               hasParallaxImages={true}
-              onSnapToItem={(info) => setSelectedIndex(info)}
+              onSnapToItem={async (info) => {
+                setSelectedIndex(info);
+                if(playing) {
+                  setPlaying(false);
+                  stopSound();
+                }
+              }}
             />
           </View>
           <View style={[styles.row, {backgroundColor: '#FFF'}]}>

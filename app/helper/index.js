@@ -28,9 +28,11 @@ export const showToast = (message, error=false) => {
 }
 
 import { Popup } from 'react-native-popup-confirm-toast';
-export const showPopUp = (message, error=false) => {
-  Popup.show({
+export const showPopUp = (message, error=false, callback = () => null) => {
+  return Popup.show({
     type: error ? 'danger' : 'success',
     textBody: message,
+    buttonText: 'OK',
+    callback: callback
   })
 }
