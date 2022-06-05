@@ -56,6 +56,7 @@ function InviteFriend(props) {
             setErrors({...defaultErrors, message: response.message, status: response.status});
             showPopUp(response.message, true);
           }
+          showToast(response.message);
         } else {
           setData({...data, email: ''});
           showPopUp(response.message, false);

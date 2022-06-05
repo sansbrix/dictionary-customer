@@ -41,6 +41,7 @@ const SignUp = (props) => {
     setErrors({ ...defaultErrors });
     UserSignup(data).then((response_) => {
       const response = response_.data;
+      console.log(response_)
       if(!response.status) {
         if(response.error) {
           const errors_ = response.error;
@@ -262,7 +263,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   another_link: {
-    marginTop: 5,
+    marginTop: -7,
+    marginBottom: 10,
     fontSize: 15,
     color: "#82A4B7",
     marginLeft: "auto",

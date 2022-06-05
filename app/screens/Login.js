@@ -59,7 +59,7 @@ const Login = (props) => {
         } else {
           setErrors({ ...defaultErrors  });
           await SecureStore.setItemAsync('access_token', response.token);
-          props.navigation.navigate('ProfileMenu')
+          props.navigation.replace('ProfileMenu')
         }
       } catch(e) {
         console.log("Error", e);
