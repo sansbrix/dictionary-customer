@@ -12,8 +12,10 @@ import {listData} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { consoleErrors } from "../helper";
 import {Picker} from '@react-native-picker/picker';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Alphabets = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const cat_id = props.route.params;
   const [disable, disableButton] = React.useState(false);
   const [lang, setlang] = React.useState([]);
@@ -21,6 +23,7 @@ const Alphabets = (props) => {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
+    setLoader(true);
     listData({param: 'l'})
       .then((response) => {
         const languages = response.data.data.map((lan) => {
@@ -32,10 +35,11 @@ const Alphabets = (props) => {
         setlang(languages)
         console.log(languages)
       })
-      .catch((error) => consoleErrors(error));
+      .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
   }, []);
 
   const onChangeLanguageHandler = (lang_id) => {
+    setLoader(true);
     setSelectedLang(lang_id);
     listData({lang_id: lang_id})
       .then((response) => {
@@ -46,11 +50,15 @@ const Alphabets = (props) => {
         console.log(output);
         setData(output);
       })
-      .catch((error) => consoleErrors(error));
+      .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
     };
 
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+       {loader ? <Spinner
+          visible={loader}
+          textStyle={styles.spinnerTextStyle}
+        /> : null}  
       <ScrollView>
         <View
           style={{
@@ -70,7 +78,7 @@ const Alphabets = (props) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => props.navigation.navigate("MainMenu")}
+            onPress={() => props.navigation.replace("MainMenu")}
           >
             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
               <Text style={styles.back}>
@@ -118,7 +126,7 @@ const Alphabets = (props) => {
                               <TouchableOpacity
                                 key={`alpha_col-${ind}`}
                                 onPress={() =>
-                                  props.navigation.navigate("Signle Alphabet",{alpha_id: item.id})
+                                  props.navigation.replace("Signle Alphabet",{alpha_id: item.id})
                                 }
                               >
                                 <View style={styles.cat_image_container}>

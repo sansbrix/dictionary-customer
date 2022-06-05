@@ -145,7 +145,7 @@ const Words = (props) => {
           <View style={[styles.row, {backgroundColor: '#FFF'}]}>
             <TouchableOpacity onPress={() => selectedItem?.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>
               <Text style={styles.plan_label}>
-              {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio? "Audio Not Available" : "Play" }
+              {selectedItem?.audio ? <Feather style={{marginRight:'10'}} name={playing == "false" ? "play" : 'pause'} size={20} color="#82A4B7" /> : null}{!selectedItem?.audio ? "Audio Not Available" : "Play" }
               </Text>
             </TouchableOpacity>
           </View>

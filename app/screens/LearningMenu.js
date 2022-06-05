@@ -10,7 +10,6 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const LearningMenu = (props) => {
-  console.log(props.route.params, "---")
   const  cat_id  = props.route.params.cat_id;
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>

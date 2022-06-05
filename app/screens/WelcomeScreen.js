@@ -8,11 +8,17 @@ import {
     TouchableOpacity
   } from 'react-native';
   import Ionicons from '@expo/vector-icons/Ionicons';
-
+  import * as SecureStore from 'expo-secure-store';
 const image = require('../../assets/images/bg-2.jpeg');
 const logo = require('../../assets/images/logo1.png')
 
 const WelcomeScreen = (props) => {
+    React.useEffect(async() => { 
+      const token = await SecureStore.getItemAsync('access_token');
+      if(token) {
+        props.navigation.replace('ProfileMenu');
+      }
+     }, []);
     return (
         <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>

@@ -12,6 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { listData } from "../api";
 import { consoleErrors } from "../helper";
 import { Audio } from 'expo-av';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const image = require("../../assets/image_not_available.png");
 
@@ -20,6 +21,7 @@ import api, { BASE_URI } from "../api/api";
 Feather.loadFont()
 
 const SingleAlphabet = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({});
   const [sound, setSound] = React.useState();
   const [playing, setPlaying] = React.useState("false");
@@ -38,16 +40,20 @@ const SingleAlphabet = (props) => {
   }
 
   React.useEffect(() => {
+    setLoader(true);
     listData({alpha_id: alpha_id})
       .then((response) => { 
         setData(response.data.data);
-        console.log(response.data.data, "------")
       })
-      .catch((error) => consoleErrors(error));
+      .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
   }, []);
   
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+      {loader ? <Spinner
+        visible={loader}
+        textStyle={styles.spinnerTextStyle}
+      /> : null} 
       <ScrollView>
         <View styles={styles.container}>
           <View style={styles.bg_white}>

@@ -11,30 +11,36 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {listData} from '../api'
 import { consoleErrors } from "../helper";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const cat_image = require("../../assets/images/cat.png");
 
 const LearningTrack = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const [totalPercentage, setTotalPercentage] = React.useState(0.000);
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
+    setLoader(true);
     listData({"param" : "cat"}).then((response) => {
       // setTotalPercentage(response.data.data.reduce((prevValue, currentValue) => prevValue + currentValue) / 100)
       setData([
         ...response.data?.data,
       ])
-    }).catch((error) => consoleErrors(error));
+    }).catch((error) => consoleErrors(error)).finally(() => setLoader(false));
   }, []);
 
   onLessonClickHandler = (cat_id) => {
-    // localStorage.setItem("cat_id", cat_id)
     props.navigation.navigate('LearningMenu', {cat_id : cat_id})
   }
   
   return (
 
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+        {loader ? <Spinner
+          visible={loader}
+          textStyle={styles.spinnerTextStyle}
+        /> : null}
       <ScrollView>
         <View
           style={{

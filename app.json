@@ -17,12 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "UIBackgroundModes": [
-        "audio"
-      ]
+      "supportsTablet": true
     },
     "android": {
+      "package": "com.sansbrix.dictionary",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

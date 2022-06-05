@@ -32,8 +32,6 @@ export default function RootStackNavigator() {
     return (
         <RootStack.Navigator>
             <RootStack.Group screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
-            
-            {/* <RootStack.Screen name="MainMenu" component={MainMenu} /> */}
                 <RootStack.Screen name="Welcome" component={WelcomeScreen}/>
                 <RootStack.Screen name="MainMenu" component={MainMenu} />
                 <RootStack.Screen name="Signup" component={SignUp} />

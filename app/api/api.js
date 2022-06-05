@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-export const BASE_URI = "https://2608-2405-201-5005-d090-941c-12a4-d47-10c1.in.ngrok.io";
+export const BASE_URI = "https://dictionaryclone.sansbrix.com/public";
 
 const api = axios.create({
     baseURL: `${BASE_URI}/api`,
@@ -16,7 +16,6 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = await SecureStore.getItemAsync('access_token');
-    console.log("token", token);
     if (token) {
         if(config.headers) {
             config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end

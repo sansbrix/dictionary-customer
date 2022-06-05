@@ -1,9 +1,13 @@
-export const consoleErrors = (error) => {
+export const consoleErrors = (error, props=null) => {
     if (error.response) {
         // Request made and server responded
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
+
+        if(error.response.status == 401 && props) {
+          props.navigation.replace("Login");
+        }
       } else if (error.request) {
         // The request was made but no response was received
         console.log(error.request);

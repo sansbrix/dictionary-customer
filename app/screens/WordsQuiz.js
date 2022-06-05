@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   Platform,
+  Image
 } from "react-native";
 import { addWordsQuizResult, showMatchWordsPuzzle, wordsWithPictures } from '../api';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -23,6 +24,8 @@ import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 var OUTPUT = [null, null, null, null];
+
+const image = require("../../assets/image_not_available.png");
 
 const WordQuiz = (props) => {
   const [sound, setSound] = React.useState(null);
@@ -51,7 +54,7 @@ const WordQuiz = (props) => {
   useEffect(() => {
     setLoader(true);
     showMatchWordsPuzzle({
-      category_id: 1,
+      category_id: props.route.params.cat_id,
     }).then((res) => {    
       if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         const ENTRIES = res.data.data.map((r) => {
@@ -60,7 +63,7 @@ const WordQuiz = (props) => {
           title: r.word,
           subtitle: r.arabic_word,
           options: r.options,
-          illustration: BASE_URI + '/word-images/' + r.image,
+          illustration: r.image ? BASE_URI + '/word-images/' + r.image : null,
           audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
           word_id: r.id,
           answer: r.answer
@@ -77,7 +80,7 @@ const WordQuiz = (props) => {
   useEffect(() => {
     if(timer===0){
       if(isQuestion) {
-        setIsQuestion(false);
+        // setIsQuestion(false);
         submitBlankAnswer(selectedIndex);
         if(selectedIndex == 3) {
           submitResult();
@@ -120,7 +123,7 @@ const WordQuiz = (props) => {
   }, [selectedIndex]);
 
   const submitAnswer = (data, index) => {
-    setIsQuestion(false);
+    // setIsQuestion(false);
     OUTPUT[data] = index;
     if(selectedIndex  == 3) {
       submitResult();
@@ -144,7 +147,7 @@ const WordQuiz = (props) => {
   const submitResult = () => {
     setTimer(null);
     const data = {
-      category_id: 1,
+      category_id: props.route.params.cat_id,
       user_answers: OUTPUT,
       question_ids: entries.map((m) => m.id),
       question_options: entries.map((m) => m.options),
@@ -247,6 +250,38 @@ const WordQuiz = (props) => {
     );
   };
 
+  const renderImageData = (item) => {
+    return(
+      <View style={{flex: 0.6, marginRight: 10, marginLeft: 10, marginBottom: 20}}>
+        <Text style={{fontSize: 13, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}}>
+          [{item.title}]
+        </Text>
+        <Text style={{fontSize: 17, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: '#82A4B7'}}>
+          {item.subtitle}
+        </Text>
+        {item.illustration ? 
+          <Image source={{ uri: item.illustration}} resizeMode="cover" style={{height: '80%', width: '100%'}}/> :
+          <Image source={image} resizeMode="contain" style={{height: '100%', width: '100%'}}/>}
+      </View>
+    )
+  }
+  const renderImagesBeforeQuiz = () => {
+    const firstImage = entries && entries[0] ? entries[0] : null;
+    const secondImage = entries && entries[1] ? entries[1] : null;
+    const thirdImage = entries && entries[2] ? entries[2] : null;
+    const fourthImage = entries && entries[3] ? entries[3] : null;
+    return (<>
+      <View style={{display: 'flex', flexDirection: 'row', flex: 1}}>
+        {firstImage ? renderImageData(firstImage) : null}
+        {secondImage ? renderImageData(secondImage) : null}
+      </View>
+      <View style={{display: 'flex', flexDirection: 'row', flex: 1}}>
+        {thirdImage ? renderImageData(thirdImage) : null}
+        {fourthImage ? renderImageData(fourthImage) : null}
+      </View>
+    </>)
+  }
+
   return (
     <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
       <Root>
@@ -296,8 +331,7 @@ const WordQuiz = (props) => {
             <View style={{display: 'flex'}}>
               <Text style={styles.timerStyle}>{timer}</Text>
             </View>
-            
-            <Carousel
+            {!isQuestion ? renderImagesBeforeQuiz() : <Carousel
               sliderHeight={Dimensions.get('screen').height}
               ref={carouselRef}
               sliderWidth={screenWidth}
@@ -309,7 +343,7 @@ const WordQuiz = (props) => {
                 setSelectedIndex(info);
               }}
               scrollEnabled={false}
-            />
+            />}
           </View>
         </View>
       </Root>

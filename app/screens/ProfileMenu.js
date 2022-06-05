@@ -10,170 +10,24 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {getUserProfile, logout} from "../api";
 import { consoleErrors } from "../helper";
+import * as SecureStore from 'expo-secure-store';
 
 const ProfileMenu = (props) => {
   const [data, setData] = React.useState({});
-
+  
   React.useEffect(() => {
+    // Check the token 
     getUserProfile().then((response) => {
       setData(response.data.user);
     }).catch((error) => {
       console.log(error);consoleErrors(error)});
   }, []);
 
-  const onLogoutClickHandler = () => {
-    setLoader(true);
-    // Change the state
-    setErrors({ ...defaultErrors });
-    logout().then((response_) => {
-      const response = response_;
-      console.log(response_, "------")
-      if(!response.status) {
-        if(response.error) {
-          setErrors({...defaultErrors, ...errorsResponse});
-        } else {
-          setErrors({...defaultErrors});
-        }
-        showToast(response.message);
-      } else {
-        setData({
-          email: "",
-          password: "",
-          mobile_number: "",
-        })
-        setErrors({ ...defaultErrors });
-        props.navigation.navigate("Login" , {signup_successful: true});
-      }
-
-    }).catch((err) => {
-      consoleErrors(err);
-    }).finally(() => setLoader(false));
+  const onLogoutClickHandler = async () => {
+    await SecureStore.deleteItemAsync('access_token');
+    props.navigation.replace("Login" , {signup_successful: true});
   }
   return (
-    // <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-    // <View
-    //       style={{
-    //         flex: 0.3,
-    //         backgroundColor: "#82A4B7",
-    //         borderBottomRightRadius: 45,
-    //       }}
-    //     >
-    //     <TouchableOpacity
-    //             style={{
-    //               ...styles.back,
-    //               borderRadius: 100,
-    //               backgroundColor: "#9D908D",
-    //               marginTop: 50,
-    //               marginLeft: 30,
-    //               width: 35,
-    //               height: 35,
-    //               justifyContent: "center",
-    //               alignItems: "center",
-    //             }}
-    //             onPress={() => props.navigation.navigate("Login")}
-    //           >
-    //             <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-    //               <Text style={styles.back}>
-    //                 <Ionicons name="md-arrow-back" size={24} color="#756765" />
-    //               </Text>
-    //             </Text>
-    //           </TouchableOpacity>
-    //       <Text style={styles.heading}>Profile Menu</Text>
-    //     </View>
-    //   <ScrollView>
-    //       <View>
-    //         <TouchableOpacity style={{ ...styles.back,
-    //             borderRadius: 100, 
-    //             backgroundColor: "#9D908D", 
-    //             marginTop: 50, 
-    //             marginLeft: 10, 
-    //             width: 35,height: 35, 
-    //             justifyContent: "center", 
-    //             alignItems: "center" 
-    //             }}
-    //             onPress={() => props.navigation.navigate('Login')}>
-    //             <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-    //               <Text style={styles.back}>
-    //                   <Ionicons name="md-log-out" size={24} color="#756765" />
-    //               </Text>
-    //             </Text>
-    //           </TouchableOpacity>
-    //           <Text style={styles.heading}>{data?.first_name} {data?.last_name}</Text>
-    //           <Text style={styles.levelLabel}>Level: Level</Text> 
-    //       <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
-    //         <View style={{
-    //           backgroundColor: "#fff",
-    //           height: "100%",
-    //           borderTopLeftRadius: 50,
-    //           paddingLeft: 50,
-    //           paddingRight: 50,
-    //           paddingTop: 5,
-    //         }}>
-    //         <ScrollView
-    //           showsVerticalScrollIndicator={false}
-    //           showsHorizontalScrollIndicator={false}
-    //         >
-    //           <TouchableOpacity onPress={() => props.navigation.navigate('MainMenu')}>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               <Ionicons name="md-language" size={32} color="#756765" />
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#Language</Text>
-    //               </View>
-    //             </View>
-    //           </TouchableOpacity>
-                
-    //           {/* <TouchableOpacity onPress={() => props.navigation.navigate('Learning Track')}>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               <Ionicons name="md-play" size={32} color="#756765" />
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>#Level</Text>
-    //               </View>
-    //             </View>
-    //           </TouchableOpacity> */}
-                
-    //           <TouchableOpacity onPress={() => props.navigation.navigate('Update Profile')}>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               <Ionicons name="md-settings" size={32} color="#756765" />
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>Settings</Text>
-    //               </View>
-    //             </View>
-    //           </TouchableOpacity>
-
-    //           <TouchableOpacity onPress={() => props.navigation.navigate('Invite A Friend')}>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               <Ionicons name="md-link" size={32} color="#756765" />
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>Invite a Friend</Text>
-    //               </View>
-    //             </View>
-    //           </TouchableOpacity>
-
-    //           <TouchableOpacity onPress={() => props.navigation.navigate('Plans')}>
-    //             <View style={styles.plans_div}>
-    //               <View style={styles.cat_image_container}>
-    //               <Ionicons name="md-ribbon" size={32} color="#756765" />
-    //               </View>
-    //               <View>
-    //                 <Text style={styles.plan_label}>subscriptions</Text>
-    //               </View>
-    //             </View>
-    //           </TouchableOpacity>
-    //           </ScrollView>
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
-
      <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
         <View
@@ -195,8 +49,7 @@ const ProfileMenu = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("Login")}
-                // onPress={() => onLogoutClickHandler()}
+                onPress={() => onLogoutClickHandler()}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
