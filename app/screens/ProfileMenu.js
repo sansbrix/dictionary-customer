@@ -145,7 +145,6 @@ const ProfileMenu = (props) => {
                   </View>
                 </View>
               </TouchableOpacity>
-
               <TouchableOpacity onPress={() => openPdf("tandc")}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
@@ -156,7 +155,6 @@ const ProfileMenu = (props) => {
                   </View>
                 </View>
               </TouchableOpacity>
-
               <TouchableOpacity onPress={() => openPdf("ppolicy")}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
