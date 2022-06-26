@@ -145,7 +145,7 @@ const ProfileMenu = (props) => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => openPdf("tandc")}>
+              <TouchableOpacity onPress={() => props.navigation.navigate('Terms')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="newspaper-outline" size={32} color="#756765" />
@@ -155,7 +155,7 @@ const ProfileMenu = (props) => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => openPdf("ppolicy")}>
+              <TouchableOpacity onPress={() => props.navigation.navigate('Policy')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="lock-closed" size={32} color="#756765" />

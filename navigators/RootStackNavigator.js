@@ -58,7 +58,7 @@ export default function RootStackNavigator() {
                 <RootStack.Screen name="Words" component={Words} />
                 <RootStack.Screen name="Words Quiz" component={WordsQuiz} />
                 <RootStack.Screen name="Sentences" component={Sentence} /> 
-                <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} /> 
+                <RootStack.Screen name="Add User-defined Word" component={UserDefinedWord} />  
                 <RootStack.Screen name="Alphabets" component={Alphabets} /> 
                 <RootStack.Screen name="Translate Word" component={TranslateWord} />       
                 <RootStack.Screen name="Terms" component={Terms} />       
