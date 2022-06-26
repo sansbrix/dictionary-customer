@@ -125,7 +125,28 @@ const ProfileMenu = (props) => {
                   <Ionicons name="md-ribbon" size={32} color="#756765" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>subscriptions</Text>
+                    <Text style={styles.plan_label}>Subscriptions</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => props.navigation.navigate('Terms')}>
+                <View style={styles.plans_div}>
+                  <View style={styles.cat_image_container}>
+                  <Ionicons name="md-ribbon" size={32} color="#756765" />
+                  </View>
+                  <View>
+                    <Text style={styles.plan_label}>Terms and Conditions</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => props.navigation.navigate('Policy')}>
+                <View style={styles.plans_div}>
+                  <View style={styles.cat_image_container}>
+                  <Ionicons name="md-ribbon" size={32} color="#756765" />
+                  </View>
+                  <View>
+                    <Text style={styles.plan_label}>Privacy Policy</Text>
                   </View>
                 </View>
               </TouchableOpacity>
