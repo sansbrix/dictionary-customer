@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {sendInvite} from "../api"
-import { showPopUp } from '../helper';
+import { consoleErrors, showPopUp } from '../helper';
 import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -71,8 +71,9 @@ function InviteFriend(props) {
       }
       
     }).catch((err) => {
-      console.log("err1", err.status)
-      console.log("err", JSON.stringify(err));
+      consoleErrors(err);
+      // console.log("err1", err.status)
+      // console.log("err", JSON.stringify(err));
     }).finally(() => setLoader(false));
     
   }
@@ -111,7 +112,7 @@ function InviteFriend(props) {
                     </Text>
                   </Text>
                 </TouchableOpacity>
-            <Text style={styles.heading}>Invite a Friend</Text>
+            <Text style={styles.heading}>Add a Friend</Text>
           </View>
           <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
             <View

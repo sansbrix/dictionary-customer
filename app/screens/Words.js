@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect, memo} from 'react';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import {
   StyleSheet,
@@ -15,11 +15,15 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URI } from '../api/api';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
+import SingleWordItem from './SingleWordItem';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 Feather.loadFont();
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const Words = (props) => {
+  const [loader, setLoader] = React.useState(false);
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -35,58 +39,47 @@ const Words = (props) => {
   }
 
   async function stopSound() {
-    await sound.stopAsync();
-    setPlaying("false");
+    if(sound) {
+      await sound.stopAsync();
+      setPlaying("false");
+    }
   }
 
   const goForward = () => {
     carouselRef.current.snapToNext();
   };
   useEffect(() => {
+    setLoader(true);
     wordsWithPictures({
       cat_id: props.route.params.cat_id,
     }).then((res) => {
+      console.log(res.data.data);
       if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         const ENTRIES = res.data.data.map((r) => {
         return {
           title: r.word,
           subtitle: r.arabic_word,
-          illustration: BASE_URI + '/word-images/' + r.image,
+          illustration: r.image ? BASE_URI + '/word-images/' + r.image : null,
           audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
         }});
         setSelectedIndex(0);
         setEntries(ENTRIES);
         setSelectedItem(ENTRIES[0]);
       }
-    });
+    }).finally(() => setLoader(false));
   }, []);
 
   useEffect(() => {
     setSelectedItem(entries[selectedIndex]);
   }, [selectedIndex]);
 
-  const renderItem = ({item, index}, parallaxProps) => {
-    return (
-      <View style={styles.item}>
-        <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
-          [{item.title}]
-        </Text>
-        <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
-        {item.subtitle}
-        </Text>
-        <ParallaxImage
-          source={{uri: item.illustration}}
-          containerStyle={styles.imageContainer}
-          style={styles.image}
-          parallaxFactor={0.4}
-          {...parallaxProps}
-        />
-      </View>
-    );
-  };
+ 
 
   return (
     <View style={[styles.container, { flexDirection: "column",  backgroundColor: '#fff' }]}>
+       {loader ? <Spinner
+          visible={loader}
+        /> : null}  
         <View
           style={{
             flex: 0.2,
@@ -131,13 +124,15 @@ const Words = (props) => {
               sliderWidth={screenWidth}
               itemWidth={screenWidth - 60}
               data={entries}
-              renderItem={renderItem}
+              renderItem={({item, index}) => <SingleWordItem item={item} index={index}/>}
               hasParallaxImages={true}
               onSnapToItem={async (info) => {
                 setSelectedIndex(info);
                 if(playing) {
-                  setPlaying(false);
-                  stopSound();
+                  setPlaying("false");
+                  if(playing && selectedItem?.audio) {
+                    stopSound();
+                  }
                 }
               }}
             />
@@ -275,6 +270,11 @@ const styles = StyleSheet.create({
   image: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
+  },
+  image_conatin: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: "contain",
+    
   },
 });
 export default Words;

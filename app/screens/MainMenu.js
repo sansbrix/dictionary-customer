@@ -87,7 +87,7 @@ const MainMenu = (props) => {
                     <Ionicons name="md-pencil" size={32} color="#756765" />
                     </View>
                     <View>
-                      <Text style={styles.plan_label}>User Defined Words</Text>
+                      <Text style={styles.plan_label}>Add Arabic Word</Text>
                     </View>
                   </View>
                 </TouchableOpacity>

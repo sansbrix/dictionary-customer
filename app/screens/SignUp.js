@@ -13,14 +13,18 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { consoleErrors, showToast } from "../helper";
 import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CountryPicker from "react-native-country-codes-picker";
 
 const SignUp = (props) => {
+  const [show, setShow] = React.useState(false);
+  const [countryCode, setCountryCode] = React.useState('');
   const [loader, setLoader] = React.useState(false);
   const [data, setData] = React.useState({
     email: "",
     password: "",
-    mobile_number: "",
+    mobile_number: "", 
     invite_by_code: "",
+    extension: "+91"
   });
 
   const defaultErrors = {
@@ -29,13 +33,14 @@ const SignUp = (props) => {
     mobile_number: "",
     message: "",
     status: undefined,
+    extension: "",
   }
 
   const [errors, setErrors] = React.useState({
     ...defaultErrors
   })
   
-  onSignUpClickHandler = () => {
+  const onSignUpClickHandler = () => {
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
@@ -118,13 +123,27 @@ const SignUp = (props) => {
                 </View>
                 <View>
                   <Text style={styles.label}>Mobile</Text>
-                  <TextInput
-                    onChangeText={(value) => setData({...data, mobile_number: value})}
-                    style={[styles.input]}
-                    value={data.mobile_number}
-                    placeholder="Mobile Number"
-                  />
+                  <View style={{flex: 1, display: 'flex',flexDirection: 'row'}}>
+                    <View style={{flex: 0.2, display: 'flex'}}>
+                      <TextInput
+                        onChangeText={(value) => setData({...data, extension: value})}
+                        style={[styles.input, {width: "100%", display: 'flex'}]}
+                        value={data.extension}
+                        placeholder=""
+                      />
+                    </View>
+                    <View style={{flex: 0.8, display: 'flex'}}>
+                      <TextInput
+                        onChangeText={(value) => setData({...data, mobile_number: value})}
+                        style={[styles.input, {width: "100%", display: 'flex', marginLeft: 10}]}
+                        value={data.mobile_number} 
+                        placeholder="Mobile Number"
+                      />
+                    </View>
+                  
+                  </View>
                   {errors.mobile_number ? <Text style={{color: 'red'}}>{errors.mobile_number}</Text> : null}
+                  {!errors.mobile_number && errors.extension ? <Text style={{color: 'red'}}>{errors.extension}</Text> : null}
                 </View>
                 <View>
                   <Text style={styles.label}>Password</Text>

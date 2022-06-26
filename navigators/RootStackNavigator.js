@@ -25,6 +25,7 @@ import UserDefinedWord from '../app/screens/UserDefinedWord.js';
 import Alphabets from '../app/screens/Alphabets.js';
 import SingleAlphabet from '../app/screens/SignleAlphabet.js';
 import LearningMenu from '../app/screens/LearningMenu';
+import PdfViewer from '../app/screens/PdfViewer';
 
 const RootStack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function RootStackNavigator() {
         <RootStack.Navigator>
             <RootStack.Group screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
                 <RootStack.Screen name="Welcome" component={WelcomeScreen}/>
+                <RootStack.Screen name="PdfViewer" component={PdfViewer}/>
                 <RootStack.Screen name="MainMenu" component={MainMenu} />
                 <RootStack.Screen name="Signup" component={SignUp} />
                 <RootStack.Screen name="Login" component={Login} />

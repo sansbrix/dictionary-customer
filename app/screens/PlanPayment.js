@@ -7,8 +7,11 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  Image
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+const cardImage = require('../../assets/cards.png');
 
 function PlanPayment(props) {
   return (
@@ -60,19 +63,21 @@ function PlanPayment(props) {
                     placeholder="Ex: Anonymous"
                   />
                 </View>
-                <View>
-                  <Text style={styles.label}>Expiry</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
-                    placeholder="Expiry"
-                  />
-                </View>
-                <View>
-                  <Text style={styles.label}>CVC</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
-                    placeholder="CVC"
-                  />
+                <View style={{display: 'flex', flexDirection: 'row'}}>
+                  <View style={{flex: 0.5}}>
+                    <Text style={styles.label}>Expiry</Text>
+                    <TextInput
+                      style={[styles.input, styles.color_white]}
+                      placeholder="Expiry"
+                    />
+                  </View>
+                  <View style={{flex: 0.5}}>
+                    <Text style={styles.label}>CVC</Text>
+                    <TextInput
+                      style={[styles.input, styles.color_white]}
+                      placeholder="CVC"
+                    />
+                  </View>
                 </View>
                 <View>
                   <TouchableOpacity
@@ -88,9 +93,12 @@ function PlanPayment(props) {
                     </View>
                   </TouchableOpacity>
                 </View>
-
-                <View>
-                  <Text style={styles.another_link}>#choosen plan</Text>
+                <View style={{}}>
+                  <Image 
+                    source={cardImage} 
+                    resizeMode="contain"
+                    style={{height: 50, width: 'auto'}}
+                  />
                 </View>
               </View>
             </View>
@@ -151,7 +159,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   register: {
-    marginTop: "12%",
+    marginTop: "5%",
     fontSize: 15,
     color: "#ffffff",
   },

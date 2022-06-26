@@ -5,12 +5,15 @@ import {
     View, 
     SafeAreaView, 
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Linking
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {getUserProfile, logout} from "../api";
 import { consoleErrors } from "../helper";
 import * as SecureStore from 'expo-secure-store';
+import { WebView } from 'react-native-webview';
+import { BASE_URI } from "../api/api";
 
 const ProfileMenu = (props) => {
   const [data, setData] = React.useState({});
@@ -20,12 +23,25 @@ const ProfileMenu = (props) => {
     getUserProfile().then((response) => {
       setData(response.data.user);
     }).catch((error) => {
-      console.log(error);consoleErrors(error)});
+      console.log(error);consoleErrors(error,)});
   }, []);
 
   const onLogoutClickHandler = async () => {
     await SecureStore.deleteItemAsync('access_token');
     props.navigation.replace("Login" , {signup_successful: true});
+  }
+
+  const openPdf = async(file) => {
+    let source = "";
+    if(file) {
+      if(file == "tandc") {
+          source = BASE_URI + '/pdf/Terms-and-Conditions-of-Service.pdf';
+      } else if( file == "ppolicy") {
+          source = BASE_URI + '/pdf/Privacy-Policy.pdf';
+      } 
+   } 
+
+   await Linking.openURL(source);
   }
   return (
      <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
@@ -58,7 +74,7 @@ const ProfileMenu = (props) => {
                 </Text>
               </TouchableOpacity>
           <Text style={styles.heading}>Profile Menu</Text>
-          <Text style={styles.levelLabel}>{data.first_name} {data.last_name} : Level</Text> 
+          <Text style={styles.levelLabel}>{data.first_name} {data.last_name} {data.first_name ? ":" : ""} Level</Text> 
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -81,7 +97,7 @@ const ProfileMenu = (props) => {
                   <Ionicons name="md-language" size={32} color="#756765" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>#Language</Text>
+                    <Text style={styles.plan_label}>Language</Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -103,12 +119,12 @@ const ProfileMenu = (props) => {
                   <Ionicons name="md-settings" size={32} color="#756765" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Settings</Text>
+                    <Text style={styles.plan_label}>Update Profile</Text>
                   </View>
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => props.navigation.navigate('Invite A Friend')}>
+              <TouchableOpacity onPress={() => props.navigation.navigate('Add A Friend')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="md-link" size={32} color="#756765" />
@@ -125,7 +141,29 @@ const ProfileMenu = (props) => {
                   <Ionicons name="md-ribbon" size={32} color="#756765" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>subscriptions</Text>
+                    <Text style={styles.plan_label}>Subscriptions</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => openPdf("tandc")}>
+                <View style={styles.plans_div}>
+                  <View style={styles.cat_image_container}>
+                  <Ionicons name="newspaper-outline" size={32} color="#756765" />
+                  </View>
+                  <View>
+                    <Text style={styles.plan_label}>Terms & Conditions</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => openPdf("ppolicy")}>
+                <View style={styles.plans_div}>
+                  <View style={styles.cat_image_container}>
+                  <Ionicons name="lock-closed" size={32} color="#756765" />
+                  </View>
+                  <View>
+                    <Text style={styles.plan_label}>Privacy Policy </Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -236,13 +274,13 @@ const styles = StyleSheet.create({
   },
   plans_div: {
     width: "100%",
-    padding: 15,
+    padding: 10,
     backgroundColor: "#F4F9EB",
     display: "flex",
     flexDirection: "row",
     marginTop: "auto",
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 8,
+    marginTop: 8,
     borderRadius: 10,
   },
   m_top_50: {

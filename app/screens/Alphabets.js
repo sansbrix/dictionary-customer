@@ -28,14 +28,21 @@ const Alphabets = (props) => {
       .then((response) => {
         const languages = response.data.data.map((lan) => {
           return {
-            label: lan["country"]["country"]+"-"+lan["language"],
+            label: lan["language"],
             value: lan["id"]
           };
         });
         setlang(languages)
-        console.log(languages)
+        if(props.route.params && props.route.params.lang_id) {
+          onChangeLanguageHandler(props.route.params.lang_id);
+        } else {
+          setLoader(false);
+        }
       })
-      .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
+      .catch((error) => {
+        consoleErrors(error);
+        setLoader(false);
+      });
   }, []);
 
   const onChangeLanguageHandler = (lang_id) => {
@@ -47,7 +54,6 @@ const Alphabets = (props) => {
         for (let i = 0; i < response.data.data.length; i += 4) {
           output.push([...response.data.data.slice(i, i + 4)]);
         }
-        console.log(output);
         setData(output);
       })
       .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
@@ -116,7 +122,7 @@ const Alphabets = (props) => {
                 </Picker>
               </View>
               <View>
-              {data.slice(0,4).map((arr, index) => {
+              {data.slice(0,10).map((arr, index) => {
                   return (
                     <View style={styles.row} key={`alph_row${index}`}>
                       {(() => {
@@ -126,7 +132,7 @@ const Alphabets = (props) => {
                               <TouchableOpacity
                                 key={`alpha_col-${ind}`}
                                 onPress={() =>
-                                  props.navigation.replace("Signle Alphabet",{alpha_id: item.id})
+                                  props.navigation.navigate("Signle Alphabet",{alpha_id: item.id, lang_id: selectedLang})
                                 }
                               >
                                 <View style={styles.cat_image_container}>
@@ -165,6 +171,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 12,
     marginTop: 6,
+    textAlign:'center'
   },
   cat_image_container: {
     marginLeft: 15,

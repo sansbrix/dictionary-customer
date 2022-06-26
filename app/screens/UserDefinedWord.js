@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {addUserDefinedWords, listData} from "../api";
-import { consoleErrors, showToast } from "../helper";
+import { consoleErrors, showPopUp } from "../helper";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -36,7 +36,6 @@ function UserDefinedWord(props) {
     arabic_word: "",
     slanged_arabic: "",
     message: "",
-    status: undefined,
   }
 
   const [errors, setErrors] = React.useState({
@@ -92,10 +91,9 @@ function UserDefinedWord(props) {
     setErrors({ ...defaultErrors });
     addUserDefinedWords(data).then((response_) => {
       try {
-        console.log("----", response_.data, "----")
         const response = response_.data;
         if(response.status) {
-          showToast("Word added!");
+          showPopUp("Word added!");
           setErrors({ ...defaultErrors, status: response.status });
           setTimeout(() => {
             props.navigation.navigate('MainMenu')
@@ -103,8 +101,6 @@ function UserDefinedWord(props) {
         }
       } catch(e) {
         consoleErrors(e);
-        console.log(e.line);
-        console.log("Error-----", e);
       }
       
     }).catch((error) => {
@@ -163,7 +159,7 @@ function UserDefinedWord(props) {
                   </Text>
                 </Text>
               </TouchableOpacity>
-          <Text style={styles.heading}>User Defined Word</Text>
+          <Text style={styles.heading}>Add Arabic Word</Text>
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View
@@ -181,18 +177,8 @@ function UserDefinedWord(props) {
               showsHorizontalScrollIndicator={false}
             >
             {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
-              <View>
-                  <Text style={styles.label}>Select Country</Text>
-                  <DropDownPicker
-                    items={lng}
-                    defaultIndex={0}
-                    containerStyle={{height: 40}}
-                    onChangeItem={(item) => setData({...data, language_id: item.value})}
-                />
-                  {errors.language_id ? <Text style={{color: 'red'}}>{errors.language_id}</Text> : null}
-                </View>
                 <View>
-                  <Text style={styles.label}>Select Language</Text>
+                  <Text style={styles.label}>Select Country</Text>
                   <DropDownPicker
                     items={cntry}
                     defaultIndex={0}

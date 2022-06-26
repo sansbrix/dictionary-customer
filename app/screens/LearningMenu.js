@@ -33,7 +33,7 @@ const LearningMenu = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() => props.navigation.navigate("ProfileMenu")}
+                onPress={() => props.navigation.navigate("Learning Track")}
               >
                 <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
                   <Text style={styles.back}>
@@ -84,7 +84,7 @@ const LearningMenu = (props) => {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => props.navigation.navigate("Sentences", {cat_id: cat_id})}
                 >
                   <View style={styles.plans_div}>
@@ -95,7 +95,7 @@ const LearningMenu = (props) => {
                       <Text style={styles.plan_label}>Sentences</Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </ScrollView>
           </View>
         </View>

@@ -25,7 +25,7 @@ const SingleAlphabet = (props) => {
   const [data, setData] = React.useState({});
   const [sound, setSound] = React.useState();
   const [playing, setPlaying] = React.useState("false");
-  const alpha_id = 1;
+  const alpha_id = props.route.params.alpha_id;
   
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync({uri: 'https://dns4.vippendu.com/download/128k-dmmuv/Scapegoat.mp3'});
@@ -42,7 +42,7 @@ const SingleAlphabet = (props) => {
   React.useEffect(() => {
     setLoader(true);
     listData({alpha_id: alpha_id})
-      .then((response) => { 
+      .then((response) => {
         setData(response.data.data);
       })
       .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
@@ -67,14 +67,14 @@ const SingleAlphabet = (props) => {
                 justifyContent: "center", 
                 alignItems: "center" 
                 }}
-                onPress={() => props.navigation.navigate('Alphabets')}>
+                onPress={() => props.navigation.navigate('Alphabets', {lang_id: props.route.params.lang_id})}>
                 <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
                   <Text style={styles.back}>
                       <Ionicons name="md-arrow-back" size={24} color="#756765" />
                   </Text>
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.heading}>Learn #{data?.alphabet}</Text>
+              <Text style={styles.heading}>Learn {data?.alphabet}</Text>
             </View>
           </View>
           <View style={styles.darkContainer}>
@@ -86,8 +86,8 @@ const SingleAlphabet = (props) => {
              <View style={[styles.row, styles.mt_25]}>
                 {!data.image ? <Image source={image} resizeMode="contain" style={styles.image}></Image> :
                 <Image source={{ uri: BASE_URI + '/alphabet-images/' + data.image }} resizeMode="contain" style={styles.image}></Image>}
-                {!data.image2 ? <Image source={image} resizeMode="contain" style={styles.image}></Image> :
-                <Image source={{ uri: BASE_URI + '/alphabet-images/' + data.image2 }} resizeMode="contain" style={styles.image}></Image>}
+                {!data.image_2 ? <Image source={image} resizeMode="contain" style={styles.image}></Image> :
+                <Image source={{ uri: BASE_URI + '/alphabet-images/' + data.image_2 }} resizeMode="contain" style={styles.image}></Image>}
              </View>
              <View style={[styles.row, styles.mt_25]}>
                 <TouchableOpacity onPress={() => data.audio && playing == "false" ? playSound() : playing == "true" ? stopSound() : null}>

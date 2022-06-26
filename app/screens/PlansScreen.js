@@ -7,10 +7,28 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { showUsersSubscriptions } from "../api";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function PlansScreen(props) {
+  const [loader, setLoader] = React.useState(false);
+  const [subs, setSubs] = React.useState([]);
+  
+  React.useEffect(() => {
+    setLoader(true);
+    showUsersSubscriptions().then((res) => {
+      console.log(res.data.data);
+      setSubs(res.data.data);
+      setLoader(false);
+    });
+  },[]);
+   
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
+      {loader ? <Spinner
+           visible={loader}
+           textStyle={styles.spinnerTextStyle}
+         /> : null}
       <View styles={styles.container}>
         <View style={styles.bg_white}>
           <View style={styles.view}>
@@ -44,61 +62,20 @@ function PlansScreen(props) {
         <View style={styles.darkContainer}>
           <View style={styles.innerContainer}>
             <View style={[styles.p_20, styles.outer_container]}>
-              <View style={styles.plans_div}>
-                <View style={styles.dot}></View>
-                <View>
-                  <Text style={styles.plan_label}>Free Trial</Text>
-                  <Text style={styles.plan_sub_label}>Active</Text>
-                </View>
-              </View>
-
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Plan Payment")}
-              >
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View>
-                    <Text style={styles.plan_label}>1 Month Plan</Text>
-                    <Text style={styles.plan_sub_label_paid}>10 €</Text>
+              {subs.map((subs_) => 
+                <TouchableOpacity
+                  key={'subs' + subs_.id}
+                  onPress={() => props.navigation.navigate("Plan Payment")}
+                  >
+                  <View style={styles.plans_div}>
+                    <View style={styles.dot}></View>
+                    <View>
+                      <Text style={styles.plan_label}>{subs_.name}</Text>
+                      <Text style={styles.plan_sub_label_paid}>{subs_.price} €</Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Plan Payment")}
-              >
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View>
-                    <Text style={styles.plan_label}>3 Months Plan</Text>
-                    <Text style={styles.plan_sub_label_paid}>25 €</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Plan Payment")}
-              >
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View>
-                    <Text style={styles.plan_label}>6 Months Plan</Text>
-                    <Text style={styles.plan_sub_label_paid}>40 €</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Plan Payment")}
-              >
-                <View style={styles.plans_div}>
-                  <View style={styles.dot}></View>
-                  <View>
-                    <Text style={styles.plan_label}>12 Months Plan</Text>
-                    <Text style={styles.plan_sub_label_paid}>75 €</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
