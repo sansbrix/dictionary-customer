@@ -18,6 +18,9 @@ const fetchLessonNameById = id => api.post(`/fetchLessonNameById`, id);
 const wordsWithPictures = id => api.post(`/wordsWithPictures`, id);
 const logout = () =>api.post(`/logout`);
 const showUsersSubscriptions = () => api.post('/showUsersSubscriptions');
+const sendForgetPasswordOTP = (data) => api.post('/sendForgetPasswordOTP', data);
+const matchForgetPasswordOTP = data => api.post('/matchForgetPasswordOTP', data);
+const changeForgetPassword = data => api.post('/changeForgetPassword', data);
 
 export {
     UserSignup,
@@ -37,5 +40,8 @@ export {
     fetchLessonNameById,
     wordsWithPictures,
     logout,
-    showUsersSubscriptions
+    showUsersSubscriptions,
+    sendForgetPasswordOTP,
+    matchForgetPasswordOTP,
+    changeForgetPassword
 }

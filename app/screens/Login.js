@@ -125,16 +125,23 @@ const Login = (props) => {
                         {errors.password ? <Text style={{color: 'red'}}>{errors.password}</Text> : null}
                       </View>
                       <View>
-                      <TouchableOpacity style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                      onPress={() =>  onLoginClickHandler() }>
-                          <Text style={[styles.color_white, styles.font_16]}>Login</Text>
-                      </TouchableOpacity>
+                        <TouchableOpacity 
+                          style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
+                          onPress={() =>  onLoginClickHandler() }>
+                            <Text style={[styles.color_white, styles.font_16]}>Login</Text>
+                        </TouchableOpacity>
                       </View>
                       <View style={styles.mt_25}>
                         <Text 
-                        style={styles.another_link}
-                        onPress={() => props.navigation.navigate('Signup')}
-                        >New to dictionary app? Register here...</Text>
+                          style={styles.another_link}
+                          onPress={() => props.navigation.navigate('Signup')}
+                          >New to dictionary app? Register here...</Text>
+                      </View>
+                      <View>
+                        <Text 
+                          style={styles.another_link}
+                          onPress={() => props.navigation.navigate('ForgetPasswordEmail')}
+                          >Forget Your Password? Click Here !</Text>
                       </View>
               </ScrollView>
             </View>
@@ -238,6 +245,6 @@ const styles = StyleSheet.create({
       marginLeft: 'auto',
       marginRight: 'auto',
     }
-  });
+});
 
 export default Login;

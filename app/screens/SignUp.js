@@ -6,8 +6,9 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
+import Checkbox from 'expo-checkbox';
 import {sendOtp, UserSignup} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { consoleErrors, showToast } from "../helper";
@@ -24,7 +25,8 @@ const SignUp = (props) => {
     password: "",
     mobile_number: "", 
     invite_by_code: "",
-    extension: "+91"
+    extension: "+91",
+    termsAndConditionSelected: false,
   });
 
   const defaultErrors = {
@@ -165,6 +167,22 @@ const SignUp = (props) => {
                     value={data.invite_by_code}
                   />
                   {errors.invite_by_code ? <Text style={{color: 'red'}}>{errors.invite_by_code}</Text> : null}
+                </View>
+                <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+                  <View style={{display: 'flex', flex: 0.2 }}>
+                    <Checkbox 
+                      style={{display: 'flex', flex: 0.01, marginTop: 5 }}
+                      value={data.termsAndConditionSelected} 
+                      onValueChange={() => setData({...data, termsAndConditionSelected: !data.termsAndConditionSelected})}
+                      color={data.termsAndConditionSelected ? '#4630EB' : undefined}
+                    />
+                  </View>
+                  <View style={{display: 'flex', flex: 0.99 }}>
+                    <Text style={[styles.label, {display: 'flex'}]}>I accept terms and conditions.</Text>
+                  </View>           
+                  <View>
+                    {errors.tandc ? <Text style={{color: 'red'}}>{errors.tandc}</Text> : null}
+                  </View>         
                 </View>
                 <View>
                   <TouchableOpacity

@@ -28,6 +28,7 @@ import LearningMenu from '../app/screens/LearningMenu';
 import PdfViewer from '../app/screens/PdfViewer';
 import Policy from '../app/screens/Policy';
 import Terms from '../app/screens/Terms';
+import ForgetPasswordEmail from '../app/screens/ForgetPassword/ForgetPasswordEmail';
 
 const RootStack = createNativeStackNavigator();
 
@@ -62,7 +63,8 @@ export default function RootStackNavigator() {
                 <RootStack.Screen name="Alphabets" component={Alphabets} /> 
                 <RootStack.Screen name="Translate Word" component={TranslateWord} />       
                 <RootStack.Screen name="Terms" component={Terms} />       
-                <RootStack.Screen name="Policy" component={Policy} />       
+                <RootStack.Screen name="Policy" component={Policy} />      
+                <RootStack.Screen name="ForgetPasswordEmail" component={ForgetPasswordEmail}/> 
             </RootStack.Group>
             {/* <RootStack.Group screenOptions={{ presentation: 'modal', headerShown: false, animation: 'slide_from_bottom' }}>
                 <RootStack.Screen name="Login" component={Login} />
