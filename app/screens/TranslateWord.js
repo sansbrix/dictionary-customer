@@ -153,12 +153,14 @@ const TranslateWord = (props) => {
                 </View>
                 {selectedWord ? 
                   <View style={styles.innerContainer}> 
-                    <Text style={styles.bottom_heading}>{data.from == arabicLangId ? selectedWord.word : selectedWord.arabic_word} (Arabic)</Text>  
+                    <Text style={styles.bottom_heading}> Arabic</Text>  
+                        <Text style={styles.bottom_heading}>{data.from == arabicLangId ? selectedWord.word : selectedWord.arabic_word}</Text>  
                     {data.from != arabicLangId ?
                     <>
-                        <Text style={styles.bottom_heading}>{selectedWord.slanged_arabic} (Slanged)</Text>  
-                        <Text style={styles.bottom_heading}>{selectedWord.latin_slanged} (Latin)</Text>  
-                        <Text style={styles.bottom_heading}>{selectedWord.latin_formal} (Formal latin)</Text>
+                        <Text style={styles.bottom_heading}>Slanged</Text>  
+                        <Text style={styles.bottom_heading}>{selectedWord.slanged_arabic}</Text>  
+                        {/* <Text style={styles.bottom_heading}>{selectedWord.latin_slanged} (Latin)</Text>  
+                        <Text style={styles.bottom_heading}>{selectedWord.latin_formal} (Formal latin)</Text> */}
                     </> : null}
                   </View>: null}
             </ScrollView>

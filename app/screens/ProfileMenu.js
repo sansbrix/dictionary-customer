@@ -124,13 +124,13 @@ const ProfileMenu = (props) => {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => props.navigation.navigate('Add A Friend')}>
+              <TouchableOpacity onPress={() => props.navigation.navigate('Invite A Friend')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="md-link" size={32} color="#756765" />
                   </View>
                   <View>
-                    <Text style={styles.plan_label}>Invite a Friend</Text>
+                    <Text style={styles.plan_label}>Add a Friend</Text>
                   </View>
                 </View>
               </TouchableOpacity>

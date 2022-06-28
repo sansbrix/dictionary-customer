@@ -46,7 +46,10 @@ const SignUp = (props) => {
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
-    UserSignup(data).then((response_) => {
+    UserSignup({
+      ...data,
+    tandc: data.termsAndConditionSelected
+    }).then((response_) => {
       const response = response_.data;
       console.log(response_)
       if(!response.status) {
@@ -179,11 +182,11 @@ const SignUp = (props) => {
                   </View>
                   <View style={{display: 'flex', flex: 0.99 }}>
                     <Text style={[styles.label, {display: 'flex'}]}>I accept terms and conditions.</Text>
-                  </View>           
-                  <View>
-                    {errors.tandc ? <Text style={{color: 'red'}}>{errors.tandc}</Text> : null}
-                  </View>         
+                  </View>               
                 </View>
+                <View>
+                    {errors.tandc ? <Text style={{color: 'red'}}>{errors.tandc}</Text> : null}
+                  </View>     
                 <View>
                   <TouchableOpacity
                     style={{ ...styles.mt_25, ...styles.mb_25, ...styles.button }}

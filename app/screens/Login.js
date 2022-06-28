@@ -38,7 +38,6 @@ const Login = (props) => {
     UserLogin(data).then(async (response_) => {
       const response = response_.data;
       try {
-        console.log(response);
         if(!response.status) {
           if(response.error) {
             const errors_ = response.error;

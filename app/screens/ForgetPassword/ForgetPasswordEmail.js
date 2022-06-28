@@ -11,6 +11,7 @@ import {
 import { Root } from 'react-native-popup-confirm-toast';
 import { changeForgetPassword, matchForgetPasswordOTP, sendForgetPasswordOTP } from '../../api';
 import { showPopUp } from '../../helper';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const ForgetPasswordEmail = (props) => { 
@@ -97,6 +98,22 @@ const ForgetPasswordEmail = (props) => {
                 borderBottomRightRadius: 45,
               }}
             >
+            <TouchableOpacity style={{ ...styles.back,
+                    borderRadius: 100, 
+                    backgroundColor: "#9D908D", 
+                    marginTop: 50, 
+                    marginLeft: 20, 
+                    width: 35,height: 35, 
+                    justifyContent: "center", 
+                    alignItems: "center" 
+                    }}
+                    onPress={() => props.navigation.navigate('Login')}>
+                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                      <Text style={styles.back}>
+                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                      </Text>
+                    </Text>
+                  </TouchableOpacity>
               <Text style={styles.heading}>Forget Password</Text>
             </View>
             <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
@@ -246,6 +263,11 @@ const styles = StyleSheet.create({
       marginTop: '12%',
       fontSize: 15,
       color: '#ffffff'
+    },
+    back: {
+      marginTop: '10%',
+      fontSize: 15,
+      color: '#ffffff',
     },
     button: {
       alignItems: "center",

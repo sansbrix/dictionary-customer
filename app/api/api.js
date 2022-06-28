@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-export const BASE_URI = "https://63f1-2405-201-5005-d090-5ce1-d32a-1c95-b1b2.in.ngrok.io";
+export const BASE_URI = "https://dictionary.sansbrix.com/public";
 
 const api = axios.create({
     baseURL: `${BASE_URI}/api`,
