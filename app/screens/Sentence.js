@@ -15,19 +15,32 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const Sentence = (props) =>{
   const [loader, setLoader] = React.useState(false);
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState([]);
+  const [selectedData, setSelectedData] = React.useState(null);
+  const [endOfSentences, setEndOfSentences] = React.useState(false);
   const cat_id = props.route.params.cat_id;
   React.useEffect(() => {
     setLoader(true);
     listData({category_id: cat_id, param: 's'})
       .then((response) => { 
-        setData(response.data);
-        console.log(response.data, "------")
-      })
+        setData(response.data.data);
+        if(response.data.data.length > 0) {
+          setSelectedData(response.data.data[0]);
+        }
+      }) 
       .catch((err) => {
         consoleErrors(err);
       }).finally(() => setLoader(false));
   }, []);
+
+  const clickNextButtonHandler = () => {
+    const findIndex = data.findIndex((d) => d.id == selectedData.id);
+    if(findIndex + 1 == data.length) {
+      setEndOfSentences(true);
+    } else{
+      setSelectedData(selectedData[findIndex + 1]);
+    }
+  }
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
@@ -52,88 +65,54 @@ const Sentence = (props) =>{
                     </Text>
                   </TouchableOpacity>
                   <Text style={styles.heading}>Sentences</Text>
-                  {/* <Text style={styles.register}>Lesson: {data[0]?.category?.category}</Text> */}
+
+                  {endOfSentences && <View style={[styles.p_20, styles.outer_container]}>
+                    <Text>No Other Sentences Available</Text>
+                  </View>}
+                  {selectedData && !endOfSentences && 
                   <View style={[styles.p_20, styles.outer_container]}>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          {/* <Text style={styles.plan_label}>Sentence: {data[0]?.sentence_in_english}</Text> */}
+                          <Text style={styles.plan_label}>Sentence: {selectedData.sentence_in_english}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
+                          <Text style={styles.plan_label}>Arabic sentence: {selectedData?.sentence_in_arabic}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                      <Text style={styles.plan_label}>Audio</Text>
+                          <Text style={styles.plan_label}>Slanged Arabic: {selectedData?.slanged_arabic}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          <Text style={styles.plan_label}>Latin Formal: {selectedData?.latin_formal}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.plans_div}> 
+                      <View style={styles.dot}></View>
+                      <View>
+                          <Text style={styles.plan_label}>Latin Slanged: {selectedData?.latin_slanged}</Text>
                       </View>
                     </View>
                     {/* <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Latin</Text>
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Formal Latin</Text>
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Other (if any)</Text>
-                      </View>
-                    </View> */}
-                </View>
-                <View style={[styles.p_20, styles.outer_container]}>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          {/* <Text style={styles.plan_label}>Sentence: {data[0]?.sentence_in_english}</Text> */}
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          {/* <Text style={styles.plan_label}>Arabic sentence: {data[0]?.sentence_in_arabic}</Text> */}
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
                       <Text style={styles.plan_label}>Audio</Text>
                       </View>
-                    </View>
-                    {/* <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Latin</Text>
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Formal Latin</Text>
-                      </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Other (if any)</Text>
-                      </View>
                     </View> */}
-                </View>
+                  </View>}
                 </View>
               </View>
               <View style={styles.darkContainer}>
                   <View style={styles.innerContainer}>
-                  <TouchableOpacity style={styles.mt_10}>
+                  <TouchableOpacity style={styles.mt_10} onPress={() => clickNextButtonHandler()}>
                       <View style={styles.button}>
                         <Text style={[styles.color_white, styles.font_16]}>Next</Text>
                       </View>
@@ -229,7 +208,7 @@ const styles = StyleSheet.create({
       marginTop: 25
     },
     p_20: {
-      padding: 20
+      padding: 40
     },
     another_link: {
       marginTop: 5,
@@ -244,7 +223,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         backgroundColor: '#ffffff',
         borderRadius: 25,
-        marginTop: 15
+        marginTop: 85
     },
     plans_div: {
         width: '100%',

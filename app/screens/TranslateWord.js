@@ -23,6 +23,8 @@ Feather.loadFont()
 const TranslateWord = (props) => {
   const [selectedWord, setSelectedWord] = React.useState(null);
   const [arabicLangId, setArabicLangId] = React.useState(null);
+  const [wordNotFound, setWordNotFound] = React.useState(null);
+
   const [languages, setLanguages] = React.useState([]);
   
   const [data, setData] = React.useState({
@@ -42,12 +44,15 @@ const TranslateWord = (props) => {
   });
 
   const onTranslateClickHandler = () => {
+    console.log("MyDataaa", data);
     translateWordApi(data).then(res => {
       console.log(res.data);
       if(res.data.data) {
         setSelectedWord(res.data.data);
+        setWordNotFound(null);
       } else {
         setSelectedWord(null);
+        setWordNotFound("true");
       }
     }).catch(err => consoleErrors(err)); 
   }
@@ -59,6 +64,7 @@ const TranslateWord = (props) => {
       if(response.data.arabic && response.data.arabic.id) {
         setArabicLangId(response.data.arabic.id);
       }
+      setData({...data, from: response.data.data[0].id, to: response.data.data[1].id})
     });
   }, []);
  
@@ -120,7 +126,7 @@ const TranslateWord = (props) => {
                       style={styles.input}
                       selectedValue={data.from}
                       onValueChange={(itemValue, itemIndex) =>
-                        setData({...data, from: itemValue })
+                        setData({...data, to: itemValue == data.to ? data.from : itemValue, from: itemValue  })
                       }>
                       {languages && languages.map((lang) => <Picker.Item key={"lang" + lang.id} label={lang.language} value={lang.id} />)}
                     </Picker>
@@ -132,8 +138,8 @@ const TranslateWord = (props) => {
                     <Picker
                       style={styles.input}
                       selectedValue={data.to}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setData({...data, to: itemValue })
+                      onValueChange={(itemValue, itemIndex) => 
+                        setData({...data, to: itemValue, from: data.from == itemValue ? data.to : itemValue })
                       }>
                         {languages && languages.map((lang) => <Picker.Item key={"lang" + lang.id} label={lang.language} value={lang.id} />)}
                     </Picker>
@@ -151,6 +157,9 @@ const TranslateWord = (props) => {
                 <View style={{flex: 0.1}}> 
                       <TouchableOpacity onPress={() => onTranslateClickHandler()} style={styles.button}><Text style={{color: '#fff'}}>Translate</Text></TouchableOpacity>
                 </View>
+                {wordNotFound && <View style={styles.innerContainer}> 
+                  <Text style={styles.bottom_heading}> Word Not Found </Text>  
+                </View>}
                 {selectedWord ? 
                   <View style={styles.innerContainer}> 
                     <Text style={styles.bottom_heading}> Arabic</Text>  

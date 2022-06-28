@@ -11,6 +11,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const LearningMenu = (props) => {
   const  cat_id  = props.route.params.cat_id;
+
+  console.log("LearningMenu", cat_id);
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>
@@ -84,7 +86,7 @@ const LearningMenu = (props) => {
                   </View>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity
+                <TouchableOpacity
                   onPress={() => props.navigation.navigate("Sentences", {cat_id: cat_id})}
                 >
                   <View style={styles.plans_div}>
@@ -95,7 +97,7 @@ const LearningMenu = (props) => {
                       <Text style={styles.plan_label}>Sentences</Text>
                     </View>
                   </View>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </ScrollView>
           </View>
         </View>

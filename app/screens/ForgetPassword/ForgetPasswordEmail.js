@@ -85,121 +85,121 @@ const ForgetPasswordEmail = (props) => {
     }
     return (
         <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-        <Root>
-           {loader ? <Spinner
-             visible={loader}
-             textStyle={styles.spinnerTextStyle}
-           /> : null}
-          <ScrollView>
-            <View
-              style={{
-                flex: 0.3,
-                backgroundColor: "#82A4B7",
-                borderBottomRightRadius: 45,
-              }}
-            >
-            <TouchableOpacity style={{ ...styles.back,
-                    borderRadius: 100, 
-                    backgroundColor: "#9D908D", 
-                    marginTop: 50, 
-                    marginLeft: 20, 
-                    width: 35,height: 35, 
-                    justifyContent: "center", 
-                    alignItems: "center" 
-                    }}
-                    onPress={() => props.navigation.navigate('Login')}>
-                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-                      <Text style={styles.back}>
-                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
-                      </Text>
-                    </Text>
-                  </TouchableOpacity>
-              <Text style={styles.heading}>Forget Password</Text>
-            </View>
-            <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+          <Root>
+            {loader ? <Spinner
+              visible={loader}
+              textStyle={styles.spinnerTextStyle}
+            /> : null}
+            <ScrollView>
               <View
                 style={{
-                  backgroundColor: "#fff",
-                  height: "100%",
-                  borderTopLeftRadius: 50,
-                  paddingLeft: 50,
-                  paddingRight: 50,
-                  paddingTop: 5,
+                  flex: 0.3,
+                  backgroundColor: "#82A4B7",
+                  borderBottomRightRadius: 45,
                 }}
               >
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-                >
-                    {emailBox && <>
-                    <View>
-                        <Text style={styles.label}>Enter E-Mail</Text>
-                        <TextInput
-                            onChangeText={(value) => setEmail(value)}
-                            style={[styles.input]}
-                            placeholder="Email"
-                            value={email}
-                        />
-                        {emailError ? <Text style={{color: 'red'}}>{emailError}</Text> : null}
-                    </View>
-                    <View>
-                        <TouchableOpacity 
-                            style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                            onPress={() =>  onEnterEmailClickHandler() }>
-                            <Text style={[styles.color_white, styles.font_16]}>Send Code</Text>
-                        </TouchableOpacity>
-                    </View></>}
-
-                    {otpBox && <>
-                    <View>
-                        <Text style={styles.label}>Enter OTP</Text>
-                        <TextInput
-                            onChangeText={(value) => setOtp(value)}
-                            style={[styles.input]}
-                            placeholder="OTP"
-                            value={otp}
-                        />
-                        {emailError ? <Text style={{color: 'red'}}>{emailError}</Text> : null}
-                    </View>
-                    <View>
-                        <TouchableOpacity 
-                            style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                            onPress={() =>  onOTPSendClickHandler() }>
-                            <Text style={[styles.color_white, styles.font_16]}>Confirm OTP</Text>
-                        </TouchableOpacity>
-                    </View></>}
-
-                    {changePasswordBox && <>
-                    <View>
-                        <Text style={styles.label}>Enter Password</Text>
-                        <TextInput
-                            onChangeText={(value) => setPassword(value)}
-                            style={[styles.input]}
-                            placeholder="New Password"
-                            value={password}
-                        />
-                    </View>
-                    <View>
-                        <Text style={styles.label}>Enter Confirm Password</Text>
-                        <TextInput
-                            onChangeText={(value) => setConfirmPassword(value)}
-                            style={[styles.input]}
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                        />
-                    </View>
-                    <View>
-                        <TouchableOpacity 
-                            style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
-                            onPress={() =>  onChangePasswordClickHandler() }>
-                            <Text style={[styles.color_white, styles.font_16]}>Change Password</Text>
-                        </TouchableOpacity>
-                    </View></>}
-                </ScrollView>
+              <TouchableOpacity style={{ ...styles.back,
+                      borderRadius: 100, 
+                      backgroundColor: "#9D908D", 
+                      marginTop: 50, 
+                      marginLeft: 20, 
+                      width: 35,height: 35, 
+                      justifyContent: "center", 
+                      alignItems: "center" 
+                      }}
+                      onPress={() => props.navigation.navigate('Login')}>
+                      <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                        <Text style={styles.back}>
+                            <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                <Text style={styles.heading}>Forget Password</Text>
               </View>
-            </View>
-          </ScrollView>
-        </Root>
+              <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
+                <View
+                  style={{
+                    backgroundColor: "#fff",
+                    height: "100%",
+                    borderTopLeftRadius: 50,
+                    paddingLeft: 50,
+                    paddingRight: 50,
+                    paddingTop: 5,
+                  }}
+                >
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                      {emailBox && <>
+                      <View>
+                          <Text style={styles.label}>Enter E-Mail</Text>
+                          <TextInput
+                              onChangeText={(value) => setEmail(value)}
+                              style={[styles.input]}
+                              placeholder="Email"
+                              value={email}
+                          />
+                          {emailError ? <Text style={{color: 'red'}}>{emailError}</Text> : null}
+                      </View>
+                      <View>
+                          <TouchableOpacity 
+                              style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
+                              onPress={() =>  onEnterEmailClickHandler() }>
+                              <Text style={[styles.color_white, styles.font_16]}>Send Code</Text>
+                          </TouchableOpacity>
+                      </View></>}
+
+                      {otpBox && <>
+                      <View>
+                          <Text style={styles.label}>Enter OTP</Text>
+                          <TextInput
+                              onChangeText={(value) => setOtp(value)}
+                              style={[styles.input]}
+                              placeholder="OTP"
+                              value={otp}
+                          />
+                          {emailError ? <Text style={{color: 'red'}}>{emailError}</Text> : null}
+                      </View>
+                      <View>
+                          <TouchableOpacity 
+                              style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
+                              onPress={() =>  onOTPSendClickHandler() }>
+                              <Text style={[styles.color_white, styles.font_16]}>Confirm OTP</Text>
+                          </TouchableOpacity>
+                      </View></>}
+
+                      {changePasswordBox && <>
+                      <View>
+                          <Text style={styles.label}>Enter Password</Text>
+                          <TextInput
+                              onChangeText={(value) => setPassword(value)}
+                              style={[styles.input]}
+                              placeholder="New Password"
+                              value={password}
+                          />
+                      </View>
+                      <View>
+                          <Text style={styles.label}>Enter Confirm Password</Text>
+                          <TextInput
+                              onChangeText={(value) => setConfirmPassword(value)}
+                              style={[styles.input]}
+                              placeholder="Confirm Password"
+                              value={confirmPassword}
+                          />
+                      </View>
+                      <View>
+                          <TouchableOpacity 
+                              style={{...styles.mt_25, ...styles.mb_25, ...styles.button}} 
+                              onPress={() =>  onChangePasswordClickHandler() }>
+                              <Text style={[styles.color_white, styles.font_16]}>Change Password</Text>
+                          </TouchableOpacity>
+                      </View></>}
+                  </ScrollView>
+                </View>
+              </View>
+            </ScrollView>
+          </Root>
       </SafeAreaView>
     )
 }

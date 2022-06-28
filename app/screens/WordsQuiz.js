@@ -55,7 +55,8 @@ const WordQuiz = (props) => {
     setLoader(true);
     showMatchWordsPuzzle({
       category_id: props.route.params.cat_id,
-    }).then((res) => {    
+    }).then((res) => {   
+      console.log(res.data.data, "props.route.params.cat_id", props.route.params.cat_id); 
       if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         const ENTRIES = res.data.data.map((r) => {
         return {
@@ -154,12 +155,12 @@ const WordQuiz = (props) => {
       correct_answers: entries.map((m) => m.answer),
     };
 
-    const correct_answer = 0;
-    answers.map((ans, ind) => {
-      if(ans == data["question_options"][ind][OUTPUT[ind]]) {
+    var correct_answer = 0;
+    data["question_options"].map((ques, ind) =>{
+      if(ques[data["user_answers"][ind]] == data["correct_answers"][ind]) {
         correct_answer += 1;
       }
-    });
+    })
 
     setLoader(true);
     addWordsQuizResult(data).then((res) => {
