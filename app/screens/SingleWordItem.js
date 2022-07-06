@@ -20,10 +20,10 @@ const image_not_available = require("../../assets/image_not_available.png");
 const renderItem = ({item, index}, parallaxProps) => {
   return (
     <View style={styles.item}>
-      <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
-        [{item.title}]
+      <Text style={{fontSize: 22, marginLeft: -20, textAlign: 'center', color: 'grey'}} numberOfLines={2}>
+        {item.title}
       </Text>
-      <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
+      <Text style={{fontSize: 17, marginLeft: -20, textAlign: 'center', color: '#82A4B7'}} numberOfLines={2}>
       {item.subtitle}
       </Text>
 

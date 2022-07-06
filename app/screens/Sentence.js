@@ -24,6 +24,7 @@ const Sentence = (props) =>{
     listData({category_id: cat_id, param: 's'})
       .then((response) => { 
         setData(response.data.data);
+        console.log(response.data.data)
         if(response.data.data.length > 0) {
           setSelectedData(response.data.data[0]);
         }
@@ -100,7 +101,7 @@ const Sentence = (props) =>{
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Slang Arabic: {selectedData?.slanged_arabic}</Text>
+                          <Text style={styles.plan_label}>Slang Arabic:{selectedData?.slanged_arabic}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         backgroundColor: '#ffffff',
         borderRadius: 25,
-        marginTop: 85
+        marginTop: 15
     },
     plans_div: {
         width: '100%',
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     plan_label: {
-        fontSize: 17,
+        fontSize: 22,
         color: '#82A4B7',
         fontWeight: 'bold',
         marginLeft: 10

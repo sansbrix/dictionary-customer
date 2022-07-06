@@ -254,8 +254,8 @@ const WordQuiz = (props) => {
   const renderImageData = (item) => {
     return(
       <View style={{flex: 0.6, marginRight: 10, marginLeft: 10, marginBottom: 20}}>
-        <Text style={{fontSize: 13, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}}>
-          [{item.title}]
+        <Text style={{fontSize: 22, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}}>
+          {item.title}
         </Text>
         <Text style={{fontSize: 17, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: '#82A4B7'}}>
           {item.subtitle}
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   plan_label: {
-    fontSize: 12,
+    fontSize: 22,
     color: "grey",
     fontWeight: "bold",
     marginLeft: 12,
