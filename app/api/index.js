@@ -21,7 +21,8 @@ const showUsersSubscriptions = () => api.post('/showUsersSubscriptions');
 const sendForgetPasswordOTP = (data) => api.post('/sendForgetPasswordOTP', data);
 const matchForgetPasswordOTP = data => api.post('/matchForgetPasswordOTP', data);
 const changeForgetPassword = data => api.post('/changeForgetPassword', data);
-
+const confirmPaymentAgent = data => api.post('/confirm-payment', data);
+const createPaymentIntent = data => api.post('/create-payment-intent', data);
 export {
     UserSignup,
     UserLogin,
@@ -43,5 +44,7 @@ export {
     showUsersSubscriptions,
     sendForgetPasswordOTP,
     matchForgetPasswordOTP,
-    changeForgetPassword
+    changeForgetPassword,
+    confirmPaymentAgent,
+    createPaymentIntent
 }

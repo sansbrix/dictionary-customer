@@ -48,13 +48,14 @@ const TranslateWord = (props) => {
     translateWordApi(data).then(res => {
       console.log(res.data);
       if(res.data.data) {
+        console.log("Data", res.data.data)
         setSelectedWord(res.data.data);
         setWordNotFound(null);
       } else {
         setSelectedWord(null);
         setWordNotFound("true");
       }
-    }).catch(err => consoleErrors(err)); 
+    }).catch(err => consoleErrors(err, props)); 
   }
 
 
@@ -65,7 +66,7 @@ const TranslateWord = (props) => {
         setArabicLangId(response.data.arabic.id);
       }
       setData({...data, from: response.data.data[0].id, to: response.data.data[1].id})
-    });
+    }).catch((err) => consoleErrors(err,  props));
   }, []);
  
   // Dropdown search
@@ -162,14 +163,12 @@ const TranslateWord = (props) => {
                 </View>}
                 {selectedWord ? 
                   <View style={styles.innerContainer}> 
-                    <Text style={styles.bottom_heading}> Arabic</Text>  
                         <Text style={styles.bottom_heading}>{data.from == arabicLangId ? selectedWord.word : selectedWord.arabic_word}</Text>  
                     {data.from != arabicLangId ?
                     <>
-                        <Text style={styles.bottom_heading}>Slanged</Text>  
-                        <Text style={styles.bottom_heading}>{selectedWord.slanged_arabic}</Text>  
-                        {/* <Text style={styles.bottom_heading}>{selectedWord.latin_slanged} (Latin)</Text>  
-                        <Text style={styles.bottom_heading}>{selectedWord.latin_formal} (Formal latin)</Text> */}
+                        <Text style={styles.bottom_heading}>{selectedWord.latin_formal}</Text>
+                        <Text style={styles.bottom_heading}>Slang: {selectedWord.slanged_arabic}</Text>     
+                        <Text style={styles.bottom_heading}>{selectedWord.latin_slanged}</Text>
                     </> : null}
                   </View>: null}
             </ScrollView>

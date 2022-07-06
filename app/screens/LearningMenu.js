@@ -11,8 +11,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const LearningMenu = (props) => {
   const  cat_id  = props.route.params.cat_id;
-
-  console.log("LearningMenu", cat_id);
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <ScrollView>

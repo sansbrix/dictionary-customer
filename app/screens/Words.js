@@ -57,8 +57,8 @@ const Words = (props) => {
       if(res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         const ENTRIES = res.data.data.map((r) => {
         return {
-          title: r.word,
-          subtitle: r.arabic_word,
+          title: r.slanged_arabic,
+          subtitle: r.latin_formal,
           illustration: r.image ? BASE_URI + '/word-images/' + r.image : null,
           audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
         }});

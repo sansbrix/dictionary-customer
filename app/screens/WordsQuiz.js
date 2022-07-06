@@ -61,8 +61,8 @@ const WordQuiz = (props) => {
         const ENTRIES = res.data.data.map((r) => {
         return {
           id: r.id,
-          title: r.word,
-          subtitle: r.arabic_word,
+          title: r.slanged_arabic,
+          subtitle: r.latin_formal,
           options: r.options,
           illustration: r.image ? BASE_URI + '/word-images/' + r.image : null,
           audio: r.audio ? BASE_URI + '/word-audios/' + r.audio : null,
@@ -74,7 +74,7 @@ const WordQuiz = (props) => {
         setSelectedItem(ENTRIES[0]);
         setTimer(TIME_ELLAPSED);
       }
-    }).catch((err) => consoleErrors(err))
+    }).catch((err) => consoleErrors(err, props))
     .finally(() => setLoader(false));
   }, []);
 
@@ -169,7 +169,7 @@ const WordQuiz = (props) => {
         `You've scored ${correct_answer} from ${data["question_ids"].length}`, 
         false, 
         function () {
-          props.navigation.replace("LearningMenu", {cat_id: 1})
+          props.navigation.replace("LearningMenu", {cat_id: props.route.params.cat_id})
         }
       );
     }).catch((err) => consoleErrors(err))
@@ -191,12 +191,12 @@ const WordQuiz = (props) => {
   const renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
-        <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}} numberOfLines={2}>
+        {/* <Text style={{fontSize: 15, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: 'grey'}} numberOfLines={2}>
           [{item.title}]
         </Text>
         <Text style={{fontSize: 20, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: '#82A4B7'}} numberOfLines={2}>
           {item.subtitle}
-        </Text>
+        </Text> */}
         <ParallaxImage
           source={{uri: item.illustration}}
           containerStyle={styles.imageContainer}

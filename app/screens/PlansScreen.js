@@ -9,77 +9,87 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { showUsersSubscriptions } from "../api";
 import Spinner from 'react-native-loading-spinner-overlay';
+import { showPopUp, showToast } from "../helper";
+import { Root } from 'react-native-popup-confirm-toast';
 
 function PlansScreen(props) {
   const [loader, setLoader] = React.useState(false);
   const [subs, setSubs] = React.useState([]);
-  
+  // const subscription_expired = props.route.params.subscription_expired;
+
+  if(props.route.params 
+    && props.route.params.subscription_expired
+   ) {
+    showPopUp("Your subscription has been expired, Please chose a plan to continue", true);
+  }
+
   React.useEffect(() => {
     setLoader(true);
     showUsersSubscriptions().then((res) => {
-      console.log(res.data.data);
       setSubs(res.data.data);
       setLoader(false);
-    });
+    }); 
   },[]);
    
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      {loader ? <Spinner
-           visible={loader}
-           textStyle={styles.spinnerTextStyle}
-         /> : null}
-      <View styles={styles.container}>
-        <View style={styles.bg_white}>
-          <View style={styles.view}>
-            <TouchableOpacity
-              style={{
-                ...styles.back,
-                borderRadius: 100,
-                backgroundColor: "#9D908D",
-                marginTop: 50,
-                marginLeft: 20,
-                width: 35,
-                height: 35,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => props.navigation.navigate("ProfileMenu")}
-            >
-              <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-                <Text style={styles.back}>
-                  <Ionicons name="md-arrow-back" size={24} color="#756765" />
+      <Root>
+        {loader ? <Spinner
+            visible={loader}
+            textStyle={styles.spinnerTextStyle}
+          /> : null}
+        <View styles={styles.container}>
+          <View style={styles.bg_white}>
+            <View style={styles.view}>
+              <TouchableOpacity
+                style={{
+                  ...styles.back,
+                  borderRadius: 100,
+                  backgroundColor: "#9D908D",
+                  marginTop: 50,
+                  marginLeft: 20,
+                  width: 35,
+                  height: 35,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={() => props.navigation.navigate("ProfileMenu")}
+              >
+                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+                  <Text style={styles.back}>
+                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                  </Text>
                 </Text>
-              </Text>
-            </TouchableOpacity>
-            <Text style={styles.heading}>More Subscriptions</Text>
-            {/* <Text style={styles.register}>
-              Congratulations! Enjoy your free trial for 1 day!!!
-            </Text> */}
-           
+              </TouchableOpacity>
+              <Text style={styles.heading}>More Subscriptions</Text>            
+            </View>
           </View>
-        </View>
-        <View style={styles.darkContainer}>
-          <View style={styles.innerContainer}>
-            <View style={[styles.p_20, styles.outer_container]}>
-              {subs.map((subs_) => 
-                <TouchableOpacity
-                  key={'subs' + subs_.id}
-                  onPress={() => props.navigation.navigate("Plan Payment")}
-                  >
-                  <View style={styles.plans_div}>
-                    <View style={styles.dot}></View>
-                    <View>
-                      <Text style={styles.plan_label}>{subs_.name}</Text>
-                      <Text style={styles.plan_sub_label_paid}>{subs_.price} €</Text>
+          <View style={styles.darkContainer}>
+            <View style={styles.innerContainer}>
+              <View style={[styles.p_20, styles.outer_container]}>
+                {subs.map((subs_) => 
+                  <TouchableOpacity
+                    key={'subs' + subs_.id}
+                    onPress={() => props.navigation.navigate("Plan Payment", {plan: subs_})}
+                    >
+                    <View style={styles.plans_div}>
+                      <View style={styles.dot}></View>
+                      <View style={{display: 'flex', flexDirection: 'row', flex: 1}}>
+                        <View style={{flex: 0.7}}>
+                          <Text style={styles.plan_label}>{subs_.name}</Text>
+                        </View>
+                        <View style={{flex: 0.3}}>
+                          <Text style={styles.plan_sub_label_paid}>{subs_.price} €</Text>
+                        </View>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              )}
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </Root>
     </SafeAreaView>
   );
 }
@@ -187,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F9EB",
     display: "flex",
     flexDirection: "row",
-    marginTop: "auto",
+    marginTop: 10,
     marginBottom: 4,
     borderRadius: 10,
   },
@@ -196,7 +206,7 @@ const styles = StyleSheet.create({
     width: 20,
     backgroundColor: "#756765",
     borderRadius: 50,
-    marginTop: 13,
+    marginTop: 8,
   },
   plan_label: {
     fontSize: 17,

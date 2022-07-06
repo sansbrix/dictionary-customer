@@ -53,36 +53,32 @@ function UserDefinedWord(props) {
           };
         });
         setCat(categories)
+
+        listData({param: 'l'})
+        .then((response) => {
+          const languages = response.data.data.map((lng) => {
+            return {
+              label: lng["language"],
+              value: lng["id"]
+            };
+          });
+          setLngs(languages)
+          listData({param: 'c'})
+          .then((response) => {
+            const countries = response.data.data.map((cntry) => {
+              return {
+                label: cntry["country"],
+                value: cntry["id"]
+              };
+            });
+            setCntry(countries)
+          })
+          .catch((error) => {consoleErrors(error, props)})
+          .finally(() => setLoader(false));
+
+        }).catch((error) => {consoleErrors(error, props); setLoader(false)})
       })
-      .catch((error) => {consoleErrors(error)})
-      .finally(() => setLoader(false));
-      setLoader(true);
-      listData({param: 'l'})
-      .then((response) => {
-        const languages = response.data.data.map((lng) => {
-          return {
-            label: lng["language"],
-            value: lng["id"]
-          };
-        });
-        setLngs(languages)
-        console.log(languages)
-      })
-      .catch((error) => {consoleErrors(error)})
-      .finally(() => setLoader(false));
-      setLoader(true);
-      listData({param: 'c'})
-      .then((response) => {
-        const countries = response.data.data.map((cntry) => {
-          return {
-            label: cntry["country"],
-            value: cntry["id"]
-          };
-        });
-        setCntry(countries)
-      })
-      .catch((error) => {consoleErrors(error)})
-      .finally(() => setLoader(false));
+      .catch((error) => {consoleErrors(error, props); setLoader(false)})
   }, []);
 
   const onAddUserDefinedClickHandler = () => {

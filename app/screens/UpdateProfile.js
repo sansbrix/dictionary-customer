@@ -45,7 +45,7 @@ const UpdateProfile = (props) => {
       setData({
         ...response.data.user,
       })
-    }).catch((error) => consoleErrors(error))
+    }).catch((error) => consoleErrors(error, props))
     .finally(() => setLoader(false));
   }, []);   
 
@@ -82,7 +82,7 @@ const UpdateProfile = (props) => {
       }
       
     }).catch((error) => {
-      consoleErrors(error);
+      consoleErrors(error, props);
     }).finally(() => setLoader(false));
     
   }

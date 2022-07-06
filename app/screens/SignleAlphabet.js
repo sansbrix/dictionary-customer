@@ -45,7 +45,7 @@ const SingleAlphabet = (props) => {
       .then((response) => {
         setData(response.data.data);
       })
-      .catch((error) => consoleErrors(error)).finally(() => setLoader(false));
+      .catch((error) => consoleErrors(error, props)).finally(() => setLoader(false));
   }, []);
   
   return (

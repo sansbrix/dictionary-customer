@@ -30,7 +30,7 @@ function InviteFriend(props) {
     ...defaultErrors
   })
 
-  onInviteFriendClickHandler = () => {
+  const onInviteFriendClickHandler = () => {
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
@@ -71,7 +71,7 @@ function InviteFriend(props) {
       }
       
     }).catch((err) => {
-      consoleErrors(err);
+      consoleErrors(err, props);
       // console.log("err1", err.status)
       // console.log("err", JSON.stringify(err));
     }).finally(() => setLoader(false));

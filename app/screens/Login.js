@@ -65,7 +65,7 @@ const Login = (props) => {
       }
       
     }).catch((err) => {
-      consoleErrors(err);
+      consoleErrors(err, props);
       showToast("Something went wrong. Try again later.");
     }).finally(() => setLoader(false));
     

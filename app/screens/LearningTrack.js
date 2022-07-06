@@ -27,10 +27,10 @@ const LearningTrack = (props) => {
       setData([
         ...response.data?.data,
       ])
-    }).catch((error) => consoleErrors(error)).finally(() => setLoader(false));
+    }).catch((error) => consoleErrors(error, props)).finally(() => setLoader(false));
   }, []);
 
-  onLessonClickHandler = (cat_id) => {
+  const onLessonClickHandler = (cat_id) => {
     props.navigation.navigate('LearningMenu', {cat_id : cat_id})
   }
   

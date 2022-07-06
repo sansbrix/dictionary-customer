@@ -23,7 +23,7 @@ const ProfileMenu = (props) => {
     getUserProfile().then((response) => {
       setData(response.data.user);
     }).catch((error) => {
-      console.log(error);consoleErrors(error,)});
+      console.log(error);consoleErrors(error, props)});
   }, []);
 
   const onLogoutClickHandler = async () => {
@@ -74,7 +74,7 @@ const ProfileMenu = (props) => {
                 </Text>
               </TouchableOpacity>
           <Text style={styles.heading}>Profile Menu</Text>
-          <Text style={styles.levelLabel}>{data.first_name} {data.last_name} {data.first_name ? ":" : ""} Level</Text> 
+          <Text style={styles.levelLabel}>{data?.first_name} {data?.last_name} {data.first_name ? ":" : ""} Level</Text> 
         </View>
         <View style={{ flex: 0.7, backgroundColor: "#82A4B7" }}>
           <View

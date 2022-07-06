@@ -29,14 +29,22 @@ const Sentence = (props) =>{
         }
       }) 
       .catch((err) => {
-        consoleErrors(err);
+        consoleErrors(err, props);
       }).finally(() => setLoader(false));
   }, []);
 
+  const clickPreviousButtonHandler = () => {
+    const findIndex = data.findIndex((d) => d.id == selectedData.id);
+    if(findIndex == 0) {
+      return;
+    } else{
+      setSelectedData(selectedData[findIndex - 1]);
+    }
+  }
   const clickNextButtonHandler = () => {
     const findIndex = data.findIndex((d) => d.id == selectedData.id);
     if(findIndex + 1 == data.length) {
-      setEndOfSentences(true);
+      return;
     } else{
       setSelectedData(selectedData[findIndex + 1]);
     }
@@ -74,31 +82,31 @@ const Sentence = (props) =>{
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Sentence: {selectedData.sentence_in_english}</Text>
+                          <Text style={styles.plan_label}>{selectedData.sentence_in_english}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Arabic sentence: {selectedData?.sentence_in_arabic}</Text>
+                          <Text style={styles.plan_label}>{selectedData?.sentence_in_arabic}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Slanged Arabic: {selectedData?.slanged_arabic}</Text>
+                          <Text style={styles.plan_label}>{selectedData?.latin_formal}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Latin Formal: {selectedData?.latin_formal}</Text>
+                          <Text style={styles.plan_label}>Slang Arabic: {selectedData?.slanged_arabic}</Text>
                       </View>
                     </View>
                     <View style={styles.plans_div}> 
                       <View style={styles.dot}></View>
                       <View>
-                          <Text style={styles.plan_label}>Latin Slanged: {selectedData?.latin_slanged}</Text>
+                          <Text style={styles.plan_label}>{selectedData?.latin_slanged}</Text>
                       </View>
                     </View>
                     {/* <View style={styles.plans_div}> 
@@ -112,13 +120,25 @@ const Sentence = (props) =>{
               </View>
               <View style={styles.darkContainer}>
                   <View style={styles.innerContainer}>
-                  <TouchableOpacity style={styles.mt_10} onPress={() => clickNextButtonHandler()}>
-                      <View style={styles.button}>
-                        <Text style={[styles.color_white, styles.font_16]}>Next</Text>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                      <View style={{flex: 0.5}}>
+                        <TouchableOpacity disabled={data.length == 0} style={styles.mt_10} onPress={() => clickPreviousButtonHandler()}>
+                            <View style={styles.button}>
+                              <Text style={[styles.color_white, styles.font_16]}>Previous</Text>
+                            </View>
+                        </TouchableOpacity>
                       </View>
-                  </TouchableOpacity>
+
+                      <View style={{flex: 0.5}}>
+                        <TouchableOpacity disabled={data.length == 0} style={styles.mt_10} onPress={() => clickNextButtonHandler()}>
+                            <View style={styles.button}>
+                              <Text style={[styles.color_white, styles.font_16]}>Next</Text>
+                            </View>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
-                </View>
+              </View>
             </View>
         </SafeAreaView>
     );
@@ -266,7 +286,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     mt_10: {
-        marginTop: 17
+        marginTop: 10
     }
   });
 

@@ -1,110 +1,135 @@
 import React from "react";
 import {
+  View,
+  Button,
   StyleSheet,
   Text,
-  TextInput,
-  View,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
-  Image
+  TouchableOpacity
 } from "react-native";
+import { confirmPaymentAgent, createPaymentIntent } from "../api";
+import { consoleErrors, showPopUp } from "../helper";
+import { CardField, useStripe } from '@stripe/stripe-react-native';
+import {StripeProvider,  useConfirmPayment } from '@stripe/stripe-react-native';
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Root } from 'react-native-popup-confirm-toast';
 
 const cardImage = require('../../assets/cards.png');
 
-function PlanPayment(props) {
+const PlanPayment = (props) => {
+  const {confirmPayment, loading} = useConfirmPayment();
+
+  const handlePayPress = async () => { 
+    // Gather the customer's billing information (e.g., email)
+    const billingDetails = {
+      email: 'jenny.rosen@example.com',
+    };
+
+    // Fetch the intent client secret from the backend
+    const clientSecret = await fetchPaymentIntentClientSecret();
+    console.log("clientSecret", clientSecret);
+    // Confirm the payment with the card details
+    const {paymentIntent, error} = await confirmPayment(clientSecret, {
+      type: 'Card',
+      billingDetails,
+    });
+
+    if (error) {
+      showPopUp(error.message, true);
+      console.log('Payment confirmation error', error);
+    } else if (paymentIntent) {
+      console.log("PaymnetIntent", paymentIntent);
+      const paymentConfirmDB = await confirmPaymentAgent(props.route.params.plan);
+      if(paymentConfirmDB) {
+        showPopUp("Subscription has been activated");
+      } else {
+        showPopUp("Something went wrong. Try again later.", true);
+      }
+    }
+  };
+
+  const fetchPaymentIntentClientSecret = async () => {
+    const response = await createPaymentIntent({
+      ...props.route.params.plan
+    });
+    return response.data.client_secret;
+  };
+
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
-      <ScrollView>
-        <View styles={styles.container}>
-          <View style={styles.bg_white}>
-            <View style={styles.view}>
-              <TouchableOpacity
-                style={{
-                  ...styles.back,
-                  borderRadius: 100,
-                  backgroundColor: "#9D908D",
-                  marginTop: 50,
-                  marginLeft: 1,
-                  width: 35,
-                  height: 35,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => props.navigation.navigate("Plans")}
-              >
-                <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
-                  <Text style={styles.back}>
-                    <Ionicons name="md-arrow-back" size={24} color="#756765" />
+      <Root>
+        <ScrollView>
+          <View styles={styles.container}>
+            <View style={styles.bg_white}>
+              <View style={styles.view}>
+                <TouchableOpacity
+                  style={{
+                    ...styles.back,
+                    borderRadius: 100,
+                    backgroundColor: "#9D908D",
+                    marginTop: 50,
+                    marginLeft: 1,
+                    width: 35,
+                    height: 35,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={() => props.navigation.navigate("Plans")}
+                >
+                  <Text style={{ color: "#D3CFD6", fontWeight: "700" }}>
+                    <Text style={styles.back}>
+                      <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                    </Text>
                   </Text>
+                </TouchableOpacity>
+                <Text style={styles.register}>
+                  Enter your details to proceed
                 </Text>
-              </TouchableOpacity>
-              <Text style={styles.register}>
-                Payment details for #subscription plan
-              </Text>
-              <Text style={styles.heading}>Payment Details</Text>
+
+              </View>
             </View>
-          </View>
-          <View style={styles.darkContainer}>
-            <View style={styles.innerContainer}>
-              <View style={styles.p_20}>
-                <View>
-                  <Text style={styles.label}>Card Number</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
-                    placeholder="424242 424242 424242"
-                  />
-                </View>
-                <View>
-                  <Text style={styles.label}>Name on card</Text>
-                  <TextInput
-                    style={[styles.input, styles.color_white]}
-                    placeholder="Ex: Anonymous"
-                  />
-                </View>
-                <View style={{display: 'flex', flexDirection: 'row'}}>
-                  <View style={{flex: 0.5}}>
-                    <Text style={styles.label}>Expiry</Text>
-                    <TextInput
-                      style={[styles.input, styles.color_white]}
-                      placeholder="Expiry"
-                    />
-                  </View>
-                  <View style={{flex: 0.5}}>
-                    <Text style={styles.label}>CVC</Text>
-                    <TextInput
-                      style={[styles.input, styles.color_white]}
-                      placeholder="CVC"
-                    />
-                  </View>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={styles.mt_25}
-                    onPress={() =>
-                      props.navigation.navigate("Payment Verification")
-                    }
+            <View style={styles.darkContainer}>
+              <View style={styles.innerContainer}>
+                <View style={styles.p_20}>
+                  <StripeProvider
+                    publishableKey="pk_test_51JsPtZSFIEz1CbIeM6ziAtoHu8tKLnxPdskn0pu36fWEHJXkGe0J9Wy480tcsaP1YRKut5wymnrz3xPlkNDVbRDO00udjZztjZ"
+                    urlScheme="your-url-scheme" 
+                    // required for 3D Secure and bank redirects
+                    merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" 
+                    // required for Apple Pay
                   >
-                    <View style={styles.button}>
-                      <Text style={[styles.color_white, styles.font_16]}>
-                        Pay #amount
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={{}}>
-                  <Image 
-                    source={cardImage} 
-                    resizeMode="contain"
-                    style={{height: 50, width: 'auto'}}
-                  />
+                  
+                    <CardField
+                      postalCodeEnabled={true}
+                      placeholder={{
+                        number: '4242 4242 4242 4242',
+                      }}
+                      cardStyle={{
+                        backgroundColor: '#FFFFFF',
+                        textColor: '#000000',
+                      }}
+                      style={{
+                        width: '100%',
+                        height: 50,
+                        marginVertical: 30,
+                      }}
+                      onCardChange={(cardDetails) => {
+                        console.log('cardDetails', cardDetails);
+                      }}
+                      onFocus={(focusedField) => {
+                        console.log('focusField', focusedField);
+                      }}
+                    />
+                    <Button onPress={handlePayPress} title="Pay" disabled={loading} />
+                  
+                  </StripeProvider>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </Root>
     </SafeAreaView>
   );
 }
@@ -162,6 +187,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     fontSize: 15,
     color: "#ffffff",
+    marginBottom: 20
   },
   button: {
     alignItems: "center",
@@ -188,6 +214,7 @@ const styles = StyleSheet.create({
   },
   p_20: {
     padding: 20,
+    marginTop: 100
   },
   another_link: {
     marginTop: 5,

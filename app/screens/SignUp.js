@@ -11,7 +11,7 @@ import {
 import Checkbox from 'expo-checkbox';
 import {sendOtp, UserSignup} from "../api";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { consoleErrors, showToast } from "../helper";
+import { consoleErrors, showPopUp, showToast } from "../helper";
 import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CountryPicker from "react-native-country-codes-picker";
@@ -26,7 +26,7 @@ const SignUp = (props) => {
     mobile_number: "", 
     invite_by_code: "",
     extension: "+91",
-    termsAndConditionSelected: false,
+    termsAndConditionSelected: null,
   });
 
   const defaultErrors = {
@@ -43,12 +43,16 @@ const SignUp = (props) => {
   })
   
   const onSignUpClickHandler = () => {
+    if(!data.termsAndConditionSelected) {
+      showPopUp("Terms And Conditions should be checked", false);
+      return;
+    }
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
     UserSignup({
       ...data,
-    tandc: data.termsAndConditionSelected
+      tandc: data.termsAndConditionSelected
     }).then((response_) => {
       const response = response_.data;
       console.log(response_)
@@ -176,8 +180,8 @@ const SignUp = (props) => {
                     <Checkbox 
                       style={{display: 'flex', flex: 0.01, marginTop: 5 }}
                       value={data.termsAndConditionSelected} 
-                      onValueChange={() => setData({...data, termsAndConditionSelected: !data.termsAndConditionSelected})}
-                      color={data.termsAndConditionSelected ? '#4630EB' : undefined}
+                      onValueChange={() => setData({...data, termsAndConditionSelected: data.termsAndConditionSelected ? null : true})}
+                      color={data.termsAndConditionSelected ? '#4630EB' : undefined} 
                     />
                   </View>
                   <View style={{display: 'flex', flex: 0.99 }}>

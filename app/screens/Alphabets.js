@@ -40,7 +40,7 @@ const Alphabets = (props) => {
         }
       })
       .catch((error) => {
-        consoleErrors(error);
+        consoleErrors(error, props);
         setLoader(false);
       });
   }, []);

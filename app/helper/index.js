@@ -8,6 +8,11 @@ export const consoleErrors = (error, props=null) => {
         if(error.response.status == 401 && props) {
           props.navigation.replace("Login");
         }
+
+        if(error.response.status == 402 && props) {
+          props.navigation.replace("Plans", {subscription_expired: true});
+        }
+
       } else if (error.request) {
         // The request was made but no response was received
         console.log(error.request);
