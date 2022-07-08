@@ -163,12 +163,12 @@ const TranslateWord = (props) => {
                 </View>}
                 {selectedWord ? 
                   <View style={styles.innerContainer}> 
-                        <Text style={styles.bottom_heading}>{data.from == arabicLangId ? selectedWord.word : selectedWord.arabic_word}</Text>  
+                        <Text style={data.from == arabicLangId ? styles.bottom_heading : [styles.bottom_heading, styles.font_22]}>{data.from == arabicLangId ? selectedWord.word : selectedWord.arabic_word}</Text>  
                     {data.from != arabicLangId ?
                     <>
-                        <Text style={styles.bottom_heading}>{selectedWord.latin_formal}</Text>
-                        <Text style={styles.bottom_heading}>Slang: {selectedWord.slanged_arabic}</Text>     
-                        <Text style={styles.bottom_heading}>{selectedWord.latin_slanged}</Text>
+                        <Text style={[styles.bottom_heading]}>{selectedWord.latin_formal}</Text>
+                        <Text style={[styles.bottom_heading, styles.font_22]}>Slang: {selectedWord.slanged_arabic}</Text>     
+                        <Text style={[styles.bottom_heading]}>{selectedWord.latin_slanged}</Text>
                     </> : null}
                   </View>: null}
             </ScrollView>
@@ -289,6 +289,9 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 12
-},
+  },
+  font_22: {
+    fontSize: 22,
+  }
 });
 export default TranslateWord;
