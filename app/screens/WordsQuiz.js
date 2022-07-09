@@ -303,9 +303,9 @@ const WordQuiz = (props) => {
               borderRadius: 100,
               backgroundColor: "#9D908D",
               marginTop: 50,
-              marginLeft: 17,
-              width: 25,
-              height: 25,
+              marginLeft: 20,
+              width: 35,
+              height: 35,
               justifyContent: "center",
               alignItems: "center",
             }}

@@ -14,10 +14,12 @@
     "@react-native-picker/picker": "^2.4.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
+    "@stripe/stripe-react-native": "0.2.3",
     "@types/react-native-snap-carousel": "^3.8.5",
     "axios": "^0.27.2",
     "expo": "~44.0.0",
     "expo-av": "~10.2.0",
+    "expo-checkbox": "~2.0.0",
     "expo-dev-client": "^1.0.0",
     "expo-secure-store": "^11.2.0",
     "expo-status-bar": "~1.2.0",
@@ -29,6 +31,7 @@
     "react-native-autocomplete-input": "^5.1.0",
     "react-native-blob-util": "^0.16.0",
     "react-native-country-codes-picker": "^1.4.1",
+    "react-native-datepicker": "^1.7.2",
     "react-native-dropdown-picker": "2.1.1",
     "react-native-flash-message": "^0.2.1",
     "react-native-loading-spinner-overlay": "^3.0.0",
@@ -41,9 +44,7 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
-    "react-native-webview": "^11.22.2",
-    "expo-checkbox": "~2.0.0",
-    "@stripe/stripe-react-native": "0.2.3"
+    "react-native-webview": "^11.22.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

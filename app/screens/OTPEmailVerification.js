@@ -49,7 +49,7 @@ function OTPEmailVerification(props) {
       console.log("response", response);
       setErrors({ ...defaultErrors, message: response.message, status: response.status });
       setTimeout(() => {
-        // props.navigation.navigate("Email Verification", {email: data.email});
+        showToast("OTP has been sent.");
       }, 3000);
     }).catch((err) => consoleErrors(err));
   }
@@ -149,10 +149,11 @@ function OTPEmailVerification(props) {
               <View style={styles.view}>
                 <TouchableOpacity
                   style={{
+                    ...styles.back,
                     borderRadius: 100,
                     backgroundColor: "#9D908D",
                     marginTop: 50,
-                    marginLeft: 1,
+                    marginLeft: 20,
                     width: 35,
                     height: 35,
                     justifyContent: "center",
@@ -236,9 +237,11 @@ const styles = StyleSheet.create({
 
   heading: {
     marginTop: "1%",
+    marginLeft: 80,
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
+    marginBottom: 15,
   },
   input: {
     width: "15%",
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
   },
   bg_white: {
     backgroundColor: "#ffffff",
-    height: "40%",
+    height: "37%",
     width: "100%",
   },
   innerContainer: {
@@ -281,9 +284,12 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   register: {
-    marginTop: "12%",
+    marginTop: "-11%",
+    marginLeft: 80,
     fontSize: 15,
-    color: "#ffffff",
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 15,
   },
   button: {
     alignItems: "center",
