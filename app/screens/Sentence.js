@@ -14,17 +14,15 @@ import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const Sentence = (props) =>{
-  const [loader, setLoader] = React.useState(false);
+  const [loader, setLoader] = React.useState(true);
   const [data, setData] = React.useState([]);
   const [selectedData, setSelectedData] = React.useState(null);
   const [endOfSentences, setEndOfSentences] = React.useState(false);
   const cat_id = props.route.params.cat_id;
   React.useEffect(() => {
-    setLoader(true);
     listData({category_id: cat_id, param: 's'})
       .then((response) => { 
         setData(response.data.data);
-        console.log(response.data.data)
         if(response.data.data.length > 0) {
           setSelectedData(response.data.data[0]);
         }
@@ -39,108 +37,113 @@ const Sentence = (props) =>{
     if(findIndex == 0) {
       return;
     } else{
-      setSelectedData(selectedData[findIndex - 1]);
+      setSelectedData(data[findIndex - 1]);
     }
   }
-  const clickNextButtonHandler = () => {
-    const findIndex = data.findIndex((d) => d.id == selectedData.id);
-    if(findIndex + 1 == data.length) {
-      return;
-    } else{
-      setSelectedData(selectedData[findIndex + 1]);
+    const clickNextButtonHandler = () => {
+      const findIndex = data.findIndex((d) => d.id == selectedData.id);
+      if(findIndex + 1 == data.length) {
+        return;
+      } else{
+        setSelectedData(data[findIndex + 1]);
+      }
     }
-  }
+    const findIndex = selectedData && data.length > 0 ? data.findIndex((d) => d.id == selectedData.id) : null;
     return (
         <SafeAreaView style={[styles.container,
             {flexDirection: "column"}
             ]}>
-            <View styles={styles.container}>
-              <View style={styles.bg_white}>
-                <View style={styles.view}>
-                <TouchableOpacity style={{ ...styles.back,
-                    borderRadius: 100, 
-                    backgroundColor: "#9D908D", 
-                    marginTop: 50, 
-                    marginLeft: 20, 
-                    width: 35,height: 35, 
-                    justifyContent: "center", 
-                    alignItems: "center" 
-                    }}
-                    onPress={() => props.navigation.navigate('LearningMenu', {cat_id: cat_id})}>
-                    <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
-                      <Text style={styles.back}>
-                          <Ionicons name="md-arrow-back" size={24} color="#756765" />
+            <Root>
+              {loader ? <Spinner
+                visible={loader}
+                textStyle={styles.spinnerTextStyle}
+              /> : null}
+              <View styles={styles.container}>
+                <View style={styles.bg_white}>
+                  <View style={styles.view}>
+                  <TouchableOpacity style={{ ...styles.back,
+                      borderRadius: 100, 
+                      backgroundColor: "#9D908D", 
+                      marginTop: 50, 
+                      marginLeft: 20, 
+                      width: 35,height: 35, 
+                      justifyContent: "center", 
+                      alignItems: "center" 
+                      }}
+                      onPress={() => props.navigation.navigate('LearningMenu', {cat_id: cat_id})}>
+                      <Text style={{color: "#D3CFD6", fontWeight:"700"}}>
+                        <Text style={styles.back}>
+                            <Ionicons name="md-arrow-back" size={24} color="#756765" />
+                        </Text>
                       </Text>
-                    </Text>
-                  </TouchableOpacity>
-                  <Text style={styles.heading}>Sentences</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.heading}>Sentences</Text>
 
-                  {endOfSentences && <View style={[styles.p_20, styles.outer_container]}>
-                    <Text>No Other Sentences Available</Text>
-                  </View>}
-                  {selectedData && !endOfSentences && 
-                  <View style={[styles.p_20, styles.outer_container]}>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>{selectedData.sentence_in_english}</Text>
+                    {!loader && data.length == 0 && <View style={[styles.p_20, styles.outer_container]}>
+                      <Text>No Sentences Available</Text>
+                    </View>}
+                    {selectedData && !endOfSentences && 
+                    <View style={[styles.p_20, styles.outer_container]}>
+                      <View style={styles.plans_div}> 
+                        <View style={styles.dot}></View>
+                        <View>
+                            <Text style={styles.plan_label}>{selectedData.sentence_in_english}</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>{selectedData?.sentence_in_arabic}</Text>
+                      <View style={styles.plans_div}> 
+                        <View style={styles.dot}></View>
+                        <View>
+                            <Text style={[styles.plan_label, {fontSize: 22}]}>{selectedData?.sentence_in_arabic}</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>{selectedData?.latin_formal}</Text>
+                      <View style={styles.plans_div}> 
+                        <View style={styles.dot}></View>
+                        <View>
+                            <Text style={styles.plan_label}>{selectedData?.latin_formal}</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>Slang Arabic:{selectedData?.slanged_arabic}</Text>
+                      <View style={styles.plans_div}> 
+                        <View style={styles.dot}></View>
+                        <View>
+                            <Text style={styles.plan_label}>Slang Arabic: <Text style={[styles.plan_label, {fontSize: 22}]}>{selectedData?.slanged_arabic}</Text></Text>
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                          <Text style={styles.plan_label}>{selectedData?.latin_slanged}</Text>
+                      <View style={styles.plans_div}> 
+                        <View style={styles.dot}></View>
+                        <View>
+                            <Text style={styles.plan_label}>{selectedData?.latin_slanged}</Text>
+                        </View>
                       </View>
-                    </View>
-                    {/* <View style={styles.plans_div}> 
-                      <View style={styles.dot}></View>
-                      <View>
-                      <Text style={styles.plan_label}>Audio</Text>
-                      </View>
-                    </View> */}
-                  </View>}
+                    </View>}
+                  </View>
                 </View>
-              </View>
-              <View style={styles.darkContainer}>
-                  <View style={styles.innerContainer}>
-                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                      <View style={{flex: 0.5}}>
-                        <TouchableOpacity disabled={data.length == 0} style={styles.mt_10} onPress={() => clickPreviousButtonHandler()}>
+                <View style={styles.darkContainer}>
+                    <View style={styles.innerContainer}>
+                    {!loader && data.length > 0 && (
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <View style={{flex: 0.5}}>
+                          <TouchableOpacity disabled={data.length == 0} style={[styles.mt_10, {
+                            display : findIndex && findIndex != 0 ? 'flex' : 'none'
+                          }]} onPress={() => clickPreviousButtonHandler()}>
                             <View style={styles.button}>
                               <Text style={[styles.color_white, styles.font_16]}>Previous</Text>
                             </View>
-                        </TouchableOpacity>
-                      </View>
-
-                      <View style={{flex: 0.5}}>
-                        <TouchableOpacity disabled={data.length == 0} style={styles.mt_10} onPress={() => clickNextButtonHandler()}>
-                            <View style={styles.button}>
-                              <Text style={[styles.color_white, styles.font_16]}>Next</Text>
-                            </View>
-                        </TouchableOpacity>
-                      </View>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 0.5}}>
+                          <TouchableOpacity disabled={data.length == 0} style={[styles.mt_10, {
+                            display: findIndex != data.length -1 ? 'flex' : 'none'
+                          }]} onPress={() => clickNextButtonHandler()}>
+                              <View style={styles.button}>
+                                <Text style={[styles.color_white, styles.font_16]}>Next</Text>
+                              </View>
+                          </TouchableOpacity>
+                        </View>
+                      </View>)}
                     </View>
-                  </View>
+                </View>
               </View>
-            </View>
+            </Root>
         </SafeAreaView>
     );
 }
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         backgroundColor: '#ffffff',
         borderRadius: 25,
-        marginTop: 15
+        marginTop: 80
     },
     plans_div: {
         width: '100%',
@@ -262,7 +265,7 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     plan_label: {
-        fontSize: 22,
+        fontSize: 17,
         color: '#82A4B7',
         fontWeight: 'bold',
         marginLeft: 10

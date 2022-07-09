@@ -18,7 +18,6 @@ import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
 import { consoleErrors, showPopUp } from '../helper';
 Feather.loadFont();
-
 const {width: screenWidth} = Dimensions.get('window');
 import { Root } from 'react-native-popup-confirm-toast';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -133,7 +132,7 @@ const WordQuiz = (props) => {
     }
   }
 
-  async function playSound() {
+  async function playSound(selectedItem) {
     const { sound } = await Audio.Sound.createAsync({uri: selectedItem.audio});
     setSound(sound);
     await sound.playAsync(); 
@@ -260,9 +259,11 @@ const WordQuiz = (props) => {
         <Text style={{fontSize: 17, marginLeft: -20, textAlign: 'center', position:'relative', top: -5, color: '#82A4B7'}}>
           {item.subtitle}
         </Text>
-        {item.illustration ? 
-          <Image source={{ uri: item.illustration}} resizeMode="cover" style={{height: '80%', width: '100%'}}/> :
-          <Image source={image} resizeMode="contain" style={{height: '100%', width: '100%'}}/>}
+        <TouchableOpacity onPress={() => playSound(item)}>
+          {item.illustration ?
+          <Image source={{ uri: item.illustration}} resizeMode="cover" style={{height: '80%', width: '100%'}}/> 
+           :<Image source={image} resizeMode="contain" style={{height: '100%', width: '100%'}}/>}
+        </TouchableOpacity>
       </View>
     )
   }
@@ -330,7 +331,7 @@ const WordQuiz = (props) => {
             }}
           >
             <View style={{display: 'flex'}}>
-              <Text style={styles.timerStyle}>{timer}</Text>
+              <Text style={styles.timerStyle}>{entries.length  > 0 ? timer : null}</Text>
             </View>
             {!isQuestion ? renderImagesBeforeQuiz() : <Carousel
               sliderHeight={Dimensions.get('screen').height}

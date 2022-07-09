@@ -14,13 +14,17 @@ import { CardField, useStripe } from '@stripe/stripe-react-native';
 import {StripeProvider,  useConfirmPayment } from '@stripe/stripe-react-native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Root } from 'react-native-popup-confirm-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const cardImage = require('../../assets/cards.png');
 
 const PlanPayment = (props) => {
+  const [loader, setLoader] = React.useState(false);
+
   const {confirmPayment, loading} = useConfirmPayment();
 
   const handlePayPress = async () => { 
+    setLoader(true);
     // Gather the customer's billing information (e.g., email)
     const billingDetails = {
       email: 'jenny.rosen@example.com',
@@ -37,9 +41,7 @@ const PlanPayment = (props) => {
 
     if (error) {
       showPopUp(error.message, true);
-      console.log('Payment confirmation error', error);
     } else if (paymentIntent) {
-      console.log("PaymnetIntent", paymentIntent);
       const paymentConfirmDB = await confirmPaymentAgent(props.route.params.plan);
       if(paymentConfirmDB) {
         showPopUp("Subscription has been activated");
@@ -47,6 +49,8 @@ const PlanPayment = (props) => {
         showPopUp("Something went wrong. Try again later.", true);
       }
     }
+
+    setLoader(false);
   };
 
   const fetchPaymentIntentClientSecret = async () => {
@@ -59,6 +63,10 @@ const PlanPayment = (props) => {
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
       <Root>
+        {loader ? <Spinner
+          visible={loader}
+          textStyle={styles.spinnerTextStyle}
+        /> : null}
         <ScrollView>
           <View styles={styles.container}>
             <View style={styles.bg_white}>

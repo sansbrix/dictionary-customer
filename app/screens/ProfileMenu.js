@@ -113,7 +113,7 @@ const ProfileMenu = (props) => {
                 </View>
               </TouchableOpacity> */}
                 
-              <TouchableOpacity onPress={() => props.navigation.navigate('Update Profile')}>
+              <TouchableOpacity onPress={() => props.navigation.replace('Update Profile')}>
                 <View style={styles.plans_div}>
                   <View style={styles.cat_image_container}>
                   <Ionicons name="md-settings" size={32} color="#756765" />

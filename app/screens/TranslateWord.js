@@ -16,22 +16,24 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { consoleErrors } from "../helper";
 import {Picker} from '@react-native-picker/picker';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-
+import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
+import { BASE_URI } from "../api/api";
+
 Feather.loadFont()
 
 const TranslateWord = (props) => {
+  const [sound, setSound] = React.useState();
   const [selectedWord, setSelectedWord] = React.useState(null);
   const [arabicLangId, setArabicLangId] = React.useState(null);
   const [wordNotFound, setWordNotFound] = React.useState(null);
-
   const [languages, setLanguages] = React.useState([]);
-  
   const [data, setData] = React.useState({
     from : "arabic",
     to : "other",
     word : ""
   });
+  
   const defaultErrors = {
     from : "",
     word : "",
@@ -43,12 +45,25 @@ const TranslateWord = (props) => {
     ...defaultErrors
   });
 
+  const [playing, setPlaying] = React.useState("false");
+  async function playSound() {
+    const AUDIO_URL = BASE_URI + '/word-audios/' + selectedWord.audio;
+    const { sound } = await Audio.Sound.createAsync({uri: AUDIO_URL});
+    setSound(sound);
+    await sound.playAsync(); 
+    setPlaying("true");
+  }
+
+  async function stopSound() {
+    await sound.stopAsync();
+    setPlaying("false");
+  }
+
   const onTranslateClickHandler = () => {
     console.log("MyDataaa", data);
     translateWordApi(data).then(res => {
       console.log(res.data);
       if(res.data.data) {
-        console.log("Data", res.data.data)
         setSelectedWord(res.data.data);
         setWordNotFound(null);
       } else {
@@ -69,10 +84,25 @@ const TranslateWord = (props) => {
     }).catch((err) => consoleErrors(err,  props));
   }, []);
  
-  // Dropdown search
-  const [loading, setLoading] = useState(false)
-  const [suggestionsList, setSuggestionsList] = useState(null)
-  const [selectedItem, setSelectedItem] = useState(null)
+  const onFromChangeHandler = (itemValue) => {
+    const {to} = data;
+    if(itemValue != arabicLangId && (to != arabicLangId || to == arabicLangId)) {
+      setData({...data, to: arabicLangId, from: itemValue  });
+    } else if(itemValue == arabicLangId && to == arabicLangId) {
+      const data = languages.filter((lang) => lang.id != arabicLangId);
+      setData({...data, from: arabicLangId, to: data[0].id  });
+    } 
+  }
+
+  const onToChangeHandler = (itemValue) => {
+    const {from} = data;
+    if(itemValue != arabicLangId && (from != arabicLangId || from == arabicLangId)) {
+      setData({...data, from: arabicLangId, to: itemValue  });
+    } else if(itemValue == arabicLangId && from == arabicLangId) {
+      const data = languages.filter((lang) => lang.id != arabicLangId);
+      setData({...data, to: arabicLangId, from: data[0].id  });
+    }
+  }
 
   return (
     <SafeAreaView style={[styles.container, { flexDirection: "column" }]}>
@@ -126,9 +156,9 @@ const TranslateWord = (props) => {
                     <Picker
                       style={styles.input}
                       selectedValue={data.from}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setData({...data, to: itemValue == data.to ? data.from : itemValue, from: itemValue  })
-                      }>
+                      onValueChange={(itemValue, itemIndex) =>{
+                        onFromChangeHandler(itemValue);
+                      }}>
                       {languages && languages.map((lang) => <Picker.Item key={"lang" + lang.id} label={lang.language} value={lang.id} />)}
                     </Picker>
                     {errors.from ? <Text style={{color: 'red'}}>{errors.from}</Text> : null}
@@ -139,9 +169,9 @@ const TranslateWord = (props) => {
                     <Picker
                       style={styles.input}
                       selectedValue={data.to}
-                      onValueChange={(itemValue, itemIndex) => 
-                        setData({...data, to: itemValue, from: data.from == itemValue ? data.to : itemValue })
-                      }>
+                      onValueChange={(itemValue, itemIndex) => {
+                        onToChangeHandler(itemValue);
+                      }}>
                         {languages && languages.map((lang) => <Picker.Item key={"lang" + lang.id} label={lang.language} value={lang.id} />)}
                     </Picker>
                     {errors.to ? <Text style={{color: 'red'}}>{errors.to}</Text> : null}
@@ -171,6 +201,13 @@ const TranslateWord = (props) => {
                         <Text style={[styles.bottom_heading]}>{selectedWord.latin_slanged}</Text>
                     </> : null}
                   </View>: null}
+                {selectedWord && (<View style={[styles.row, {backgroundColor: '#FFF'}]}>
+                  <TouchableOpacity onPress={() => playSound()}>
+                    <Text style={{fontSize : 20,  textAlign: 'center', paddingTop: 15}}>
+                      {selectedWord?.audio ? <Feather style={{marginRight:'10', fontSize: 20}} name={"play"} size={20} color="#82A4B7" /> : null}{!selectedWord?.audio ? "Audio Not Available" : "Play" }
+                    </Text>
+                  </TouchableOpacity>
+                </View>)}
             </ScrollView>
           </View>
         </View>

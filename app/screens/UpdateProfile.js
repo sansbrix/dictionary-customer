@@ -49,7 +49,7 @@ const UpdateProfile = (props) => {
     .finally(() => setLoader(false));
   }, []);   
 
-  onProfileUpdateClickHandler = () => {
+  const onProfileUpdateClickHandler = () => {
     setLoader(true);
     // Change the state
     setErrors({ ...defaultErrors });
@@ -74,7 +74,7 @@ const UpdateProfile = (props) => {
           showToast(response.message);
           setErrors({ ...defaultErrors });
           setTimeout(() => {
-            props.navigation.navigate('ProfileMenu')
+            props.navigation.replace('ProfileMenu')
           }, 2000);
         }
       } catch(e) {
