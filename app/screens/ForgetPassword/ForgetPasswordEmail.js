@@ -211,9 +211,8 @@ const styles = StyleSheet.create({
     },
 
     heading: {
-      marginTop: "19%",
-      marginLeft: 30,
-      fontSize: 30,
+      marginTop: "-11%",
+      marginLeft: 80,
       fontWeight: "bold",
       color: "#FFFFFF",
       marginBottom: 15,

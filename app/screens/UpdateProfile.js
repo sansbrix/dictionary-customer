@@ -13,6 +13,7 @@ import {getUserProfile, UpdateUserProfile} from "../api";
 import { consoleErrors, showToast } from "../helper";
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Root } from 'react-native-popup-confirm-toast';
+import DatePicker from 'react-native-datepicker';
 
 const UpdateProfile = (props) => {
   const [loader, setLoader] = React.useState(false);
@@ -212,12 +213,28 @@ const UpdateProfile = (props) => {
                   </View>
                   <View>
                     <Text style={styles.label}>DOB</Text>
-                    <TextInput
-                      onChangeText={(value) => setData({...data, date_of_birth: value})}
-                      style={[styles.input]}
-                      placeholder="DOB"
-                      value={data.date_of_birth}
-                    />
+                    <DatePicker
+                        style={[styles.input]}
+                        date={data.date_of_birth}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                          dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                          },
+                          dateInput: {
+                            marginLeft: 36
+                          }
+                          // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={(value) => setData({...data, date_of_birth: value})}
+                      />
                     {errors.date_of_birth ? <Text style={{color: 'red'}}>{errors.date_of_birth}</Text> : null}
                   </View>
                   <View>

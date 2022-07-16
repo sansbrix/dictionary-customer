@@ -54,6 +54,11 @@ const PlanPayment = (props) => {
   };
 
   const fetchPaymentIntentClientSecret = async () => {
+    createPaymentIntent({
+      ...props.route.params.plan
+    }).catch((error) => {
+      consoleErrors(error);
+    });
     const response = await createPaymentIntent({
       ...props.route.params.plan
     });
