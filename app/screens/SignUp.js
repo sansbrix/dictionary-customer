@@ -119,6 +119,28 @@ const SignUp = (props) => {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
               >
+              <View>
+                  {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+                  <Text style={styles.label}>First Name</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, first_name: value})}
+                    style={[styles.input]}
+                    value={data.first_name}
+                    placeholder="First Name"
+                  />
+                  {errors.first_name ? <Text style={{color: 'red'}}>{errors.first_name}</Text> : null}
+                </View>
+                <View>
+                  {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
+                  <Text style={styles.label}>Last Name</Text>
+                  <TextInput
+                    onChangeText={(value) => setData({...data, last_name: value})}
+                    style={[styles.input]}
+                    value={data.last_name}
+                    placeholder="Last Name"
+                  />
+                  {errors.last_name ? <Text style={{color: 'red'}}>{errors.last_name}</Text> : null}
+                </View>
                 <View>
                   {errors.status != undefined ? <Text style={{color: errors.status ? 'green' : 'red' }}>{errors.message}</Text> : null}
                   <Text style={styles.label}>Email</Text>
