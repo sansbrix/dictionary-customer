@@ -75,11 +75,11 @@ function PlansScreen(props) {
                     <View style={styles.plans_div}>
                       <View style={styles.dot}></View>
                       <View style={{display: 'flex', flexDirection: 'row', flex: 1}}>
-                        <View style={{flex: 0.7}}>
+                        <View style={{flex: 0.6}}>
                           <Text style={styles.plan_label}>{subs_.name}</Text>
                         </View>
-                        <View style={{flex: 0.3}}>
-                          <Text style={styles.plan_sub_label_paid}>{subs_.price} €</Text>
+                        <View style={{flex: 0.4}}>
+                          <Text style={styles.plan_sub_label_paid}>{subs_.price} € / {subs_.duration} days</Text>
                         </View>
                       </View>
                     </View>
