@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
       marginTop: "-11%",
       marginLeft: 80,
       fontWeight: "bold",
+      fontSize: 30,
       color: "#FFFFFF",
       marginBottom: 15,
     },
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     },
     bg_white: {
       backgroundColor: '#ffffff',
-      height: '27%',
+      height: '40%',
       width: '100%',
     },
     innerContainer: {
